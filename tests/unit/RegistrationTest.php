@@ -2,7 +2,7 @@
 
 namespace app\tests\unit;
 
-use charlesportwoodii\yii2\api\forms\Registration;
+use yrc\api\forms\Registration;
 use Yii;
 
 class RegistrationTest extends \tests\codeception\TestCase

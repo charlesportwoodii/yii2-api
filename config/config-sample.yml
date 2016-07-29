@@ -14,6 +14,3 @@ yii2:
     password: 
     port: 587
     encryption: 'tls'
-
-user:
-  class: 'charlesportwoodii/yii2/api/models/User'

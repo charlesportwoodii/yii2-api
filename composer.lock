@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ac73dcd89ae6f88f459aa1935100e9d4",
-    "content-hash": "47d5a9a4898ee4fc19967fb48693e4fa",
+    "hash": "7c4e6a807f92f044e8be3dddb7c7a039",
+    "content-hash": "8e0bd7871da4bfc58c01b1b58968ab8d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -316,7 +316,7 @@
             "dist": {
                 "type": "path",
                 "url": "../yii2-api-rest-components",
-                "reference": "b44464ea8ebb8b29d687a51a7b0b900e8b82d7eb",
+                "reference": "e5bf0908e7409d7023684578186134e609f7a9aa",
                 "shasum": null
             },
             "require": {
@@ -337,7 +337,7 @@
             "type": "yii2-extension",
             "autoload": {
                 "psr-4": {
-                    "charlesportwoodii\\yii2\\": ""
+                    "yrc\\": ""
                 }
             },
             "license": [
@@ -362,7 +362,7 @@
                 "source": "https://github.com/charlesportwoodii/yii2-api-rest-components"
             },
             "transport-options": {
-                "symlink": false
+                "symlink": true
             }
         },
         {

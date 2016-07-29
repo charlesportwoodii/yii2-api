@@ -64,7 +64,7 @@ $config = [
             ]
         ],
         'user' => [
-            'identityClass' => $yaml['user']['class']
+            'identityClass' => '\app\models\User'
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
