@@ -1,0 +1,45 @@
+{
+    "name": "charlesportwoodii/yii2-api",
+    "description": "Yii2 API Skeleton",
+    "license": "BSD-3-Clause",
+    "authors": [{
+            "name": "Charles R. Portwood II",
+            "email": "charlesportwoodii@erianna.com"
+    }],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../yii2-api-rest-components",
+            "options": {
+                "symlink": false
+            }
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "ext-curl": "*",
+        "ext-openssl": "*",
+        "ext-pdo_mysql": "*",
+        "ext-PDO": "*",
+        "ext-Reflection": "*",
+        "yiisoft/yii2": ">=2.0.9",
+        "symfony/yaml": "^3.0",
+        "charlesportwoodii/yii2-api-rest-components": "dev-master",
+        "dmstr/yii2-migrate-command": "*",
+        "fzaninotto/faker": "^1.6"
+    },
+    "require-dev": {
+        "yiisoft/yii2-gii": "^2.0",
+        "yiisoft/yii2-codeception": "^2.0",
+        "codeception/codeception": "^2.2.3",
+        "yiisoft/yii2-faker": "^2.0",
+        "codeception/specify": "*",
+        "codeception/verify": "*"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "mkdir -p runtime/logs",
+            "mkdir -p runtime/cache"
+        ]
+    }
+}

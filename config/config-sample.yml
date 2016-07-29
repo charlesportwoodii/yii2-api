@@ -1,0 +1,19 @@
+---
+database:
+  driver:
+  database:
+  host: 127.0.0.1
+  username:
+  password:
+
+yii2:
+  debug: true
+  swiftmailer:
+    host: 127.0.0.1
+    username: 
+    password: 
+    port: 587
+    encryption: 'tls'
+
+user:
+  class: 'charlesportwoodii/yii2/api/models/User'

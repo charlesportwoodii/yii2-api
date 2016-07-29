@@ -1,0 +1,28 @@
+---
+# Allow for container based builds
+sudo: false
+
+# Test on PHP7 and PHP-Nightly
+language: php
+php:
+  - '7.0'
+
+# Cache composer dependencies
+cache:
+  directories:
+    - tests/extensions
+
+services:
+  - mysql
+  - redis-server
+
+# Install the CLI tasks
+install: 
+  - phpenv config-rm xdebug.ini
+  - mysql -u root -e "CREATE DATABASE root;"
+  - cp tests/travis.yml config/config.yml
+  - composer install -ovn --no-interaction --prefer-source
+  - ./yii migrate/up --interactive=0
+
+script:
+  - ./vendor/bin/codecept run

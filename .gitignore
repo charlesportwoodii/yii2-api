@@ -1,0 +1,11 @@
+._*
+config/config.yml
+runtime/logs/*
+runtime/cache/*
+runtime/*
+web/assets/*
+.AppleDouble
+/vendor/
+.DS_Store
+
+tests/_output/*

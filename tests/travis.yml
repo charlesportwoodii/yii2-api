@@ -1,0 +1,8 @@
+--- 
+database: 
+  database: root
+  driver: mysql
+  host: "127.0.0.1"
+  password: 
+  username: root
+debug: true

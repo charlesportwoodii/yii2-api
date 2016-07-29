@@ -1,0 +1,10 @@
+database:
+  driver: mysql
+  database: root
+  host: 127.0.0.1
+  username: root
+  password: root
+debug: true
+canRegister: true
+relayMethod: app\components\relay\v1\CurlRelayEvent
+deliveryMethod: app\components\delivery\v1\NothingDeliveryEvent
