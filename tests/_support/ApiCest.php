@@ -1,25 +1,30 @@
 <?php
 
 namespace tests\_support;
+
 use ApiTester;
 
 use app\tests\_support\app\HMAC;
+use app\models\User;
+use app\models\User\Token;
+use app\forms\Registration;
+use Faker\Factory;
 
 /**
  * Supporter class for API Cests
  * @class ApiCest
  */
 class ApiCest
-{ 
+{
     /**
      * The URI to implement
      * @var string $uri
      */
-    protected $uri = NULL;
+    protected $uri = null;
     
     /**
      * Token data
-     * @var UserToken $_tokens
+     * @var Token $_tokens
      */
     protected $tokens;
     
@@ -36,7 +41,6 @@ class ApiCest
     public function _before(ApiTester $I)
     {
         User::deleteAll();
-        //RegistrationToken::deleteAll();
         expect('uri is set', $this->uri)->notEquals(null);
     }
     
@@ -47,16 +51,18 @@ class ApiCest
      */
     protected function register($username = 'example', $password = 'example1234')
     {
-        //$form = new UserForm(['scenario' => 'register']);
-        $form->username = $username;
-        $form->password = $password;
-        //$form->registrationToken = RegistrationToken::generate($form->username);
+        $faker = Factory::create();
+        $form = new Registration;
+        $form->email = $faker->email;
+        $form->username = $faker->username;
+        $form->password = $faker->password;
+        $form->password_verify = $form->password;
 
-        expect('registration token is set', $form->registrationToken)->notEquals(false);
         expect('form registers', $form->register())->true();
-        $this->user = $form->getUser();
+        $this->user = User::findOne(['email' => $form->email]);
         
-        $this->tokens = UserToken::generate(User::findOne(['username' => 'example'])->id);
+        expect('user is not null', $user !== null)->true();
+        $this->tokens = Token::generate($user->id);
         
         return true;
     }

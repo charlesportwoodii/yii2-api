@@ -2,4 +2,4 @@
 
 namespace app\models;
 
-class User extends \yrc\api\models\User {}
+final class User extends \yrc\api\models\User {}

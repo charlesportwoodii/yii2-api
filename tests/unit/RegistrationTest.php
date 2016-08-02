@@ -2,9 +2,12 @@
 
 namespace app\tests\unit;
 
-use yrc\api\forms\Registration;
+use app\forms\Registration;
 use Yii;
 
+/**
+ * Tests implementation of the Registration form
+ */
 class RegistrationTest extends \tests\codeception\TestCase
 {
     use \Codeception\Specify;
@@ -15,7 +18,7 @@ class RegistrationTest extends \tests\codeception\TestCase
     public function testValidator()
     {
         $faker = \Faker\Factory::create();
-        $this->specify('tests required fields', function() use ($faker) {
+        $this->specify('tests required fields', function () use ($faker) {
             $form = new Registration;
             expect('form fails to validate', $form->validate())->false();
 
@@ -25,8 +28,9 @@ class RegistrationTest extends \tests\codeception\TestCase
             expect('form has password_verify error', $form->getErrors())->hasKey('password_verify');
         });
 
-        $this->specify('tests username must have length > 4', function() use ($faker) {
+        $this->specify('tests username must have length > 4', function () use ($faker) {
             $form = new Registration;
+            $form->email = $faker->email;
             $form->username = 'tet';
             expect('form fails to validate', $form->validate())->false();
 
@@ -34,8 +38,9 @@ class RegistrationTest extends \tests\codeception\TestCase
             expect('form has username error', $form->getErrors())->hasKey('username');
         });
 
-        $this->specify('tests passwords must match', function() use ($faker) {
+        $this->specify('tests passwords must match', function () use ($faker) {
             $form = new Registration;
+            $form->email = $faker->email;
             $form->username = $faker->username;
             $form->password = 'badpass1';
             $form->password_verify = 'badpass2';
@@ -45,23 +50,14 @@ class RegistrationTest extends \tests\codeception\TestCase
             expect('form has password_verify error', $form->getErrors())->hasKey('password_verify');
         });
 
-        $this->specify('tests password entrophy', function() use ($faker) {
-            $form = new Registration;
-            $form->username = $faker->username;
-            $form->password = 'weakpass';
-            $form->password_verify = 'weakpass';
-            expect('form fails to validate', $form->validate())->false();
-
-            expect('form has errors', $form->hasErrors())->true();
-            expect('form has password error', $form->getErrors())->hasKey('password');
-        });
-
-        $this->specify('tests model validation', function() use ($faker) {
+        $this->specify('tests model validation', function () use ($faker) {
             $form = new Registration;
             $password = 'correct horse battery stable';
+            $form->email = $faker->email;
             $form->username = $faker->username;
             $form->password = $password;
             $form->password_verify = $password;
+
             expect('form validate', $form->validate())->true();
         });
     }
@@ -72,9 +68,10 @@ class RegistrationTest extends \tests\codeception\TestCase
     public function testRegistration()
     {
         $faker = \Faker\Factory::create();
-        $this->specify('tests registration', function() use ($faker) {
+        $this->specify('tests registration', function () use ($faker) {
             $form = new Registration;
-            $password = 'correct horse battery stable';
+            $password = $faker->password;
+            $form->email = $faker->email;
             $form->username = $faker->username;
             $form->password = $password;
             $form->password_verify = $password;
