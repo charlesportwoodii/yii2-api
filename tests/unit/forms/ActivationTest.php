@@ -3,9 +3,7 @@
 namespace app\tests\unit;
 
 use app\forms\Activation;
-use app\forms\Registration;
 use Base32\Base32;
-use Faker\Factory;
 use Yii;
 
 class ActivationTest extends \tests\codeception\TestCase
@@ -20,36 +18,12 @@ class ActivationTest extends \tests\codeception\TestCase
     }
 
     /**
-     * Creates a new user
-     * @return User
-     */
-    private function registerUser()
-    {
-        $faker = \Faker\Factory::create();
-        $form = new Registration;
-
-        $password = $faker->password(24);
-        
-        $form->email = $faker->email;
-        $form->password = $password;
-        $form->password_verify = $password;
-
-        expect('form validates', $form->validate())->true();
-        expect('user can be registered', $form->register())->true();
-
-        $config = require  Yii::getAlias('@app') . '/config/loader.php';
-        $userClass = $config['yii2']['user'];
-        
-        return $userClass::findOne(['email' => $form->email]);
-    }
-
-    /**
      * Tests activation
      */
     public function testActivation()
     {
         $this->specify('test invalid activation token', function () {
-            $user = $this->registerUser();
+            $user = $this->createUser();
             
             $form = new Activation;
             $form->load(['Activation' => [
@@ -60,7 +34,7 @@ class ActivationTest extends \tests\codeception\TestCase
         });
 
         $this->specify('test valid activation token', function () {
-            $user = $this->registerUser();
+            $user = $this->createUser();
             $token = Base32::encode(\random_bytes(64));
             Yii::$app->cache->set($token, [
                 'id' => $user->id
