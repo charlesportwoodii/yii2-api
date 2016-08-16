@@ -12,6 +12,13 @@ class RegistrationTest extends \tests\codeception\TestCase
 {
     use \Codeception\Specify;
 
+    protected function _before()
+    {
+        parent::_before();
+        Yii::$app->cache->flush();
+        \app\models\User::deleteAll();
+    }
+    
     /**
      * Tests various validation states
      */
@@ -23,7 +30,6 @@ class RegistrationTest extends \tests\codeception\TestCase
             expect('form fails to validate', $form->validate())->false();
 
             expect('form has errors', $form->hasErrors())->true();
-            expect('form has username error', $form->getErrors())->hasKey('username');
             expect('form has password error', $form->getErrors())->hasKey('password');
             expect('form has password_verify error', $form->getErrors())->hasKey('password_verify');
         });
@@ -31,17 +37,14 @@ class RegistrationTest extends \tests\codeception\TestCase
         $this->specify('tests username must have length > 4', function () use ($faker) {
             $form = new Registration;
             $form->email = $faker->email;
-            $form->username = 'tet';
             expect('form fails to validate', $form->validate())->false();
 
             expect('form has errors', $form->hasErrors())->true();
-            expect('form has username error', $form->getErrors())->hasKey('username');
         });
 
         $this->specify('tests passwords must match', function () use ($faker) {
             $form = new Registration;
             $form->email = $faker->email;
-            $form->username = $faker->username;
             $form->password = 'badpass1';
             $form->password_verify = 'badpass2';
             expect('form fails to validate', $form->validate())->false();
@@ -54,7 +57,6 @@ class RegistrationTest extends \tests\codeception\TestCase
             $form = new Registration;
             $password = 'correct horse battery stable';
             $form->email = $faker->email;
-            $form->username = $faker->username;
             $form->password = $password;
             $form->password_verify = $password;
 
@@ -72,7 +74,6 @@ class RegistrationTest extends \tests\codeception\TestCase
             $form = new Registration;
             $password = $faker->password;
             $form->email = $faker->email;
-            $form->username = $faker->username;
             $form->password = $password;
             $form->password_verify = $password;
 

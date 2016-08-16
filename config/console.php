@@ -6,8 +6,8 @@ Yii::setAlias('@tests', dirname(__DIR__) . '/tests');
 Yii::setAlias('@restcomponents', dirname(__DIR__) . '/vendor/charlesportwoodii/yii2-api-rest-components');
 
 $config = [
-    'id' => 'yii2-console',
-    'name' => 'Yii2-Console',
+    'id' => $yaml['app']['id'] . '-console',
+    'name' => $yaml['app']['name'] . '-console',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'enableCoreCommands' => YII_DEBUG,
@@ -16,9 +16,6 @@ $config = [
         'migrate' => 'dmstr\console\controllers\MigrateController'
     ],
     'components' => [
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

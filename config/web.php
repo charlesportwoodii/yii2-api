@@ -5,8 +5,8 @@ $yaml = require __DIR__ . '/loader.php';
 Yii::setAlias('@restcomponents', dirname(__DIR__) . '/vendor/charlesportwoodii/yii2-api-rest-components');
 
 $config = [
-    'id' => 'mmxp-server',
-    'name' => 'Modern Messenger Exchange Server',
+    'id' => $yaml['app']['id'],
+    'name' => $yaml['app']['name'],
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
@@ -14,12 +14,22 @@ $config = [
             'class' => 'yii\swiftmailer\Mailer',
             'transport' => [
                 'class'     => 'Swift_SmtpTransport',
-                'host'          => $config['yii2']['swiftmailer']['host'],
-                'username'      => $config['yii2']['swiftmailer']['username'],
-                'password'      => $config['yii2']['swiftmailer']['password'],
-                'port'          => $config['yii2']['swiftmailer']['port'],
-                'encryption'    => $config['yii2']['swiftmailer']['encryption'],
+                'host'          => $yaml['yii2']['swiftmailer']['host'],
+                'username'      => $yaml['yii2']['swiftmailer']['username'],
+                'password'      => $yaml['yii2']['swiftmailer']['password'],
+                'port'          => $yaml['yii2']['swiftmailer']['port'],
+                'encryption'    => $yaml['yii2']['swiftmailer']['encryption'],
             ],
+        ],
+        'cache' => [
+            'class' => 'yii\redis\Cache',
+            'redis' => 'redis'
+        ],
+        'redis' => [
+            'class'     => 'yii\redis\Connection',
+            'hostname'  => $yaml['yii2']['redis']['host'],
+            'port'      => $yaml['yii2']['redis']['port'],
+            'database'  => $yaml['yii2']['redis']['database'],
         ],
         'view' => [
             'class' => 'yii\web\View',
@@ -45,9 +55,6 @@ $config = [
             'format'         => yii\web\Response::FORMAT_JSON,
             'charset'        => 'UTF-8'
         ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -64,7 +71,7 @@ $config = [
             ]
         ],
         'user' => [
-            'identityClass' => '\app\models\User'
+            'identityClass' => $yaml['yii2']['user']
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

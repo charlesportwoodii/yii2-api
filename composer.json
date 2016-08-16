@@ -25,14 +25,15 @@
         "yiisoft/yii2": ">=2.0.9",
         "symfony/yaml": "^3.0",
         "charlesportwoodii/yii2-api-rest-components": "dev-master",
-        "dmstr/yii2-migrate-command": "*",
-        "fzaninotto/faker": "^1.6"
+        "yiisoft/yii2-redis": "~2.0.0",
+        "dmstr/yii2-migrate-command": "*"
     },
     "require-dev": {
         "yiisoft/yii2-gii": "^2.0",
         "yiisoft/yii2-codeception": "^2.0",
         "codeception/codeception": "^2.2.3",
         "yiisoft/yii2-faker": "^2.0",
+        "fzaninotto/faker": "^1.6",
         "codeception/specify": "*",
         "codeception/verify": "*"
     },

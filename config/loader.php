@@ -3,11 +3,13 @@
 use Symfony\Component\Yaml\Yaml;
 
 $configFile = __DIR__ . '/config.yml';
+$defaultConfig = __DIR__ . '/config-default.yml';
 
 if (!file_exists($configFile)) {
     throw new Exception('Missing config/config.yml file.');
 }
 
+$default = Yaml::parse(file_get_contents($configFile));
 $config = Yaml::parse(file_get_contents($configFile));
 
-return $config;
+return array_merge($default, $config);

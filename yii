@@ -8,8 +8,8 @@ require __DIR__ . '/vendor/autoload.php';
 
 $config = require __DIR__ . '/config/loader.php';
 
-defined('YII_DEBUG') or define('YII_DEBUG', $config['yii2']['debug']);
-defined('YII_ENV') or define('YII_ENV', $config['yii2']['env'] ?? 'prod');
+defined('YII_DEBUG') or define('YII_DEBUG', $config['app']['debug']);
+defined('YII_ENV') or define('YII_ENV', $config['app']['env'] ?? 'prod');
 defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 

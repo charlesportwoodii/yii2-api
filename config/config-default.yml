@@ -1,0 +1,30 @@
+---
+# Application specific configuration
+app:
+  id: "yii2-api"
+  name: "Yii2 API Skeleton"
+  debug: true
+  env: 'prod'
+
+# Yii2 specific configuration
+yii2:
+  # Database configuration
+  database:
+    driver:
+    database:
+    host: 127.0.0.1
+    username:
+    password:
+  # Redis Configuration
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+  # SwiftMailer configuration
+  swiftmailer:
+    host: 127.0.0.1
+    username: 
+    password: 
+    port: 587
+    encryption: 'tls'
+  user: 'app\models\User'
