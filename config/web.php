@@ -10,6 +10,10 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+        'yrc' => [
+            'class' => 'yrc\components\YRC',
+            'userClass' => $yaml['yii2']['user'],
+        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'transport' => [

@@ -1,8 +1,19 @@
---- 
-database: 
-  database: root
-  driver: mysql
-  host: "127.0.0.1"
-  password: 
-  username: root
-debug: true
+---
+# Application specific configuration
+app:
+  id: "yii2-api-test-travis"
+  name: "TravisCI test"
+  debug: true
+
+yii2:
+  database:
+    driver: mysql
+    database: root
+    host: 127.0.0.1
+    username: root
+    password: api
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+  user: '\app\models\User'

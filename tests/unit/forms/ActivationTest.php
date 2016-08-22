@@ -36,7 +36,7 @@ class ActivationTest extends \tests\codeception\TestCase
         $this->specify('test valid activation token', function () {
             $user = $this->createUser();
             $token = Base32::encode(\random_bytes(64));
-            Yii::$app->cache->set($token, [
+            Yii::$app->cache->set(hash('sha256', $token . '_activation_token'), [
                 'id' => $user->id
             ]);
             $form = new Activation;
