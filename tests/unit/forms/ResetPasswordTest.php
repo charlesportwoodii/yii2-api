@@ -62,7 +62,7 @@ class ResetPasswordTest extends \tests\codeception\TestCase
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
             $form->setUser($user);
-            $form->reset_token = 1;
+            $form->reset_token = false;
             $form->password = $faker->password;
             $form->password_verify = $form->password;
             

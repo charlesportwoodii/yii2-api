@@ -56,8 +56,15 @@ $config = [
             ]
         ],
         'response' => [
-            'format'         => yii\web\Response::FORMAT_JSON,
-            'charset'        => 'UTF-8'
+            'format'     => yii\web\Response::FORMAT_JSON,
+            'charset'    => 'UTF-8',
+            'formatters' => [
+                \yii\web\Response::FORMAT_JSON => [
+                    'class'         => 'yrc\components\JsonResponseFormatter',
+                    'prettyPrint'   => YII_DEBUG,
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                ],
+            ],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

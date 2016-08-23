@@ -19,7 +19,36 @@ class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
 
-   /**
-    * Define custom actions here
-    */
+    /**
+     * Helper method to send an authenticated Request
+     * @param string $uri
+     * @param string $method    HTTP method
+     * @param array $payload
+     * @return void
+     */
+    public function sendAuthenticatedRequest($uri, $method, $payload = [])
+    {
+        $now = new \DateTime();
+        $time = $now->format(\DateTime::RFC1123);
+
+        $HMAC = HMAC::generate(
+            $uri,
+            $this->tokens,
+            $method,
+            $time,
+            $payload
+        );
+
+        $this->haveHttpHeader('X-DATE', $time);
+        $this->haveHttpHeader('Authorization', 'HMAC ' . $this->tokens['access_token'] . ',' . $HMAC);
+        $httpMethod = 'send' . $method;
+
+        if (empty($payload)) {
+            $this->$httpMethod($uri);
+        } else {
+            $this->$httpMethod($uri, $payload);
+        }
+
+        return $this;
+    }
 }

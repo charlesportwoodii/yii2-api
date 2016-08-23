@@ -2,8 +2,8 @@
 
 namespace app\controllers\api\v1;
 
-use charlesportwoodii\yii2\filters\auth\HMACSignatureAuth;
-use charlesportwoodii\yii2\rest\Controller;
+use yrc\filters\auth\HMACSignatureAuth;
+use yrc\rest\Controller;
 
 use yii\web\HttpException;
 use Yii;
@@ -17,9 +17,12 @@ class UserController extends Controller
     public function actions()
     {
         return [
-            'authenticate'  => 'charlesportwoodii\yii2\api\actions\AuthenticationAction',
-            'refresh'       => 'charlesportwoodii\yii2\api\actions\RefreshAction',
-            'otp'           => 'charlesportwoodii\yii2\api\actions\OTPAction',
+            'authenticate'  => 'yrc\api\actions\AuthenticationAction',
+            'refresh'       => 'yrc\api\actions\RefreshAction',
+            'otp'           => 'yrc\api\actions\OTPAction',
+            'activate'      => 'yrc\api\actions\ActivationAction',
+            'register'      => 'yrc\api\actions\RegistrationAction',
+            //'reset_password'=> 'yrc\api\actions\PasswordResetAction',
         ];
     }
 
@@ -34,7 +37,7 @@ class UserController extends Controller
         $behaviors['authenticator'] = [
             'class'     => HMACSignatureAuth::className(),
             'only'      => ['refresh', 'authenticate', 'otp'],
-            'optional'  => ['authenticate'],
+            'optional'  => ['authenticate', 'refresh'],
             'except'    => ['options']
         ];
 
