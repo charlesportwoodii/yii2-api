@@ -78,7 +78,7 @@ class AuthenticateCest extends AbstractApiCest
      * Tests an authenticated request to the API to deauthenticate the current request
      * @param ApiTester $I
      */
-    public function testDeuathenticate(\ApiTester $I)
+    public function testDeauthenticate(\ApiTester $I)
     {
         $this->register(true, $I);
         $I->wantTo('verify users can de-authenticate via HMAC authentication');
@@ -94,6 +94,10 @@ class AuthenticateCest extends AbstractApiCest
             'data' => 'boolean',
             'status' => 'integer'
         ]);
+
+        $I->seeHttpHeaderOnce('X-Rate-Limit-Limit');
+        $I->seeHttpHeaderOnce('X-Rate-Limit-Remaining');
+        $I->seeHttpHeaderOnce('X-Rate-Limit-Reset');
     }
 
     /**
