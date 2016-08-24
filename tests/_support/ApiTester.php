@@ -15,9 +15,20 @@
  *
  * @SuppressWarnings(PHPMD)
 */
+use app\tests\_support\app\HMAC;
+
 class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
+
+    /**
+     * Sets tokens
+     * @param array $tokens
+     */
+    public function addTokens($tokens)
+    {
+        $this->tokens = $tokens;
+    }
 
     /**
      * Helper method to send an authenticated Request
@@ -26,7 +37,7 @@ class ApiTester extends \Codeception\Actor
      * @param array $payload
      * @return void
      */
-    public function sendAuthenticatedRequest($uri, $method, $payload = [])
+    public function sendAuthenticatedRequest($uri, $method, $token, $payload = [])
     {
         $now = new \DateTime();
         $time = $now->format(\DateTime::RFC1123);
@@ -40,7 +51,7 @@ class ApiTester extends \Codeception\Actor
         );
 
         $this->haveHttpHeader('X-DATE', $time);
-        $this->haveHttpHeader('Authorization', 'HMAC ' . $this->tokens['access_token'] . ',' . $HMAC);
+        $this->haveHttpHeader('Authorization', 'HMAC ' . $this->tokens['accessToken'] . ',' . $HMAC);
         $httpMethod = 'send' . $method;
 
         if (empty($payload)) {

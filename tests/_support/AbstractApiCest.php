@@ -4,7 +4,6 @@ namespace tests\_support;
 
 use ApiTester;
 
-use app\tests\_support\app\HMAC;
 use app\forms\Registration;
 use app\models\Token;
 use Faker\Factory;
@@ -100,12 +99,12 @@ abstract class AbstractApiCest
      * Register a new user for testing
      * @return bool
      */
-    protected function register($activate = true)
+    protected function register($activate = true, \ApiTester $I = null)
     {
         $faker = Factory::create();
         $form = new Registration;
         $form->email = $faker->email;
-        $form->password = $faker->password;
+        $form->password = $faker->password(20);
         $form->password_verify = $form->password;
 
         expect('form registers', $form->register())->true();
@@ -117,6 +116,9 @@ abstract class AbstractApiCest
 
         expect('user is not null', $this->user !== null)->true();
         $this->tokens = Token::generate($this->user->id);
+        if ($I !== null) {
+            $I->addTokens($this->tokens);
+        }
         
         return $form->password;
     }
