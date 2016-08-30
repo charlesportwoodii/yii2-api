@@ -34,7 +34,7 @@ class RegistrationTest extends \tests\codeception\TestCase
             expect('form has password_verify error', $form->getErrors())->hasKey('password_verify');
         });
 
-        $this->specify('tests username must have length > 4', function () use ($faker) {
+        $this->specify('tests email must have length > 4', function () use ($faker) {
             $form = new Registration;
             $form->email = $faker->email;
             expect('form fails to validate', $form->validate())->false();
@@ -59,6 +59,7 @@ class RegistrationTest extends \tests\codeception\TestCase
             $form->email = $faker->email;
             $form->password = $password;
             $form->password_verify = $password;
+            $form->username = $faker->username;
 
             expect('form validate', $form->validate())->true();
         });
@@ -74,6 +75,7 @@ class RegistrationTest extends \tests\codeception\TestCase
             $form = new Registration;
             $password = $faker->password;
             $form->email = $faker->email;
+            $form->username = $faker->username;
             $form->password = $password;
             $form->password_verify = $password;
 

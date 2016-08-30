@@ -31,7 +31,8 @@ class TestCase extends \yii\codeception\TestCase
 
         $password = $faker->password(24);
         
-        $form->email = $faker->email;
+        $form->email = $faker->safeEmail;
+        $form->username = $faker->username;
         $form->password = $password;
         $form->password_verify = $password;
 

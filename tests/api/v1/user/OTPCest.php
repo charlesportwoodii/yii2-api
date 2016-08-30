@@ -44,13 +44,13 @@ class OTPCest extends AbstractApiCest
 
         
         $code = \parse_url(\json_decode($I->grabResponse(), true)['data']['provisioning_code']);
-        $email = ltrim($code['path'], '/');
+        $username = ltrim($code['path'], '/');
         $options = [];
         \parse_str($code['query'], $options);
 
         // Convert the the otp string into an otp object
         $totp = new TOTP(
-            $email,
+            $username,
             $options['secret'],
             30,             // 30 second window
             $options['algorithm'],
@@ -127,7 +127,7 @@ class OTPCest extends AbstractApiCest
 
         // Convert the the otp string into an otp object
         $totp = new TOTP(
-            $I->getUser()->email,
+            $I->getUser()->username,
             $I->getUser()->otp_secret,
             30,
             'sha256',

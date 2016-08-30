@@ -18,6 +18,7 @@ class RegisterCest extends AbstractApiCest
         $I->wantTo('verify user registration fails');
         $I->sendPOST($this->uri, [
             'email'             => $faker->email,
+            'username'          => $faker->username,
             'password'          => $faker->password(24),
             'password_verify'   => $faker->password(24),
         ]);
@@ -47,6 +48,7 @@ class RegisterCest extends AbstractApiCest
         $password = $faker->password(24);
         $payload = [
             'email'             => $faker->email,
+            'username'          => $faker->username,
             'password'          => $password,
             'password_verify'   => $password
         ];

@@ -81,7 +81,8 @@ class ApiTester extends \Codeception\Actor
     {
         $faker = Factory::create();
         $form = new Registration;
-        $form->email = $faker->email;
+        $form->email = $faker->safeEmail;
+        $form->username = $faker->username(10);
         $form->password = $faker->password(20);
         $form->password_verify = $form->password;
 

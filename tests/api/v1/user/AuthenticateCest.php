@@ -114,7 +114,7 @@ class AuthenticateCest extends AbstractApiCest
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
 
         $totp = new TOTP(
-            $I->getUser()->email,
+            $I->getUser()->username,
             $I->getUser()->otp_secret,
             30,             // 30 second window
             'sha256',       // SHA256 for the hashing algorithm
@@ -152,7 +152,7 @@ class AuthenticateCest extends AbstractApiCest
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
 
         $totp = new TOTP(
-            $I->getUser()->email,
+            $I->getUser()->username,
             $I->getUser()->otp_secret,
             30,             // 30 second window
             'sha256',       // SHA256 for the hashing algorithm

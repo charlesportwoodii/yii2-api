@@ -1,5 +1,6 @@
 # Yii2 API Skeleton Project
 
+[![Latest Version](https://img.shields.io/packagist/v/charlesportwoodii/yii2-api.svg?style=flat-square)]()
 [![TravisCI](https://img.shields.io/travis/charlesportwoodii/yii2-api.svg?style=flat-square "TravisCI")](https://travis-ci.org/charlesportwoodii/yii2-api)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/charlesportwoodii/yii2-api.svg?style=flat-square)](https://scrutinizer-ci.com/g/charlesportwoodii/yii2-api/)
 [![Gittip](https://img.shields.io/gittip/charlesportwoodii.svg?style=flat-square "Gittip")](https://www.gittip.com/charlesportwoodii/)
