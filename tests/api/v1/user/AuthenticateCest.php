@@ -23,10 +23,10 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testLoginWithValidCredentials(\ApiTester $I)
     {
-        $password = $this->register(true);
+        $password = $I->register(true);
         $I->wantTo('verify users can authenticate against the API');
         $I->sendPOST($this->uri, [
-            'email' => $this->user->email,
+            'email' => $I->getUser()->email,
             'password' => $password
         ]);
 
@@ -51,12 +51,12 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testLoginWithInvalidCredentials(\ApiTester $I)
     {
-        $this->register(true);
+        $I->register(true);
         $faker = Factory::create();
 
         $I->wantTo('verify authentication API endpoint work');
         $I->sendPOST($this->uri, [
-            'email' => $this->user->email,
+            'email' => $I->getUser()->email,
             'password' => $faker->password(20)
         ]);
 
@@ -82,7 +82,7 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testDeauthenticate(\ApiTester $I)
     {
-        $this->register(true, $I);
+        $I->register(true);
         $I->wantTo('verify users can de-authenticate via HMAC authentication');
         $I->sendAuthenticatedRequest($this->uri, 'DELETE');
         $I->seeResponseIsJson();
@@ -108,21 +108,21 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testLoginWithOTP(\ApiTester $I)
     {
-        $password = $this->register(true);
+        $password = $I->register(true);
         $I->wantTo('verify users can authenticate against the API with 2FA enabled');
-        expect('OTP is provisioned', $this->user->provisionOTP())->notEquals(false);
-        expect('OTP is enabled', $this->user->enableOTP())->true();
+        expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
+        expect('OTP is enabled', $I->getUser()->enableOTP())->true();
 
         $totp = new TOTP(
-            $this->user->email,
-            $this->user->otp_secret,
+            $I->getUser()->email,
+            $I->getUser()->otp_secret,
             30,             // 30 second window
             'sha256',       // SHA256 for the hashing algorithm
             6               // 6 digits
         );
 
         $I->sendPOST($this->uri, [
-            'email' => $this->user->email,
+            'email' => $I->getUser()->email,
             'password' => $password,
             'otp' => $totp->now()
         ]);
@@ -146,21 +146,21 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testLoginWithBadOTP(\ApiTester $I)
     {
-        $password = $this->register(true);
+        $password = $I->register(true);
         $I->wantTo('verify users can authenticate against the API with 2FA enabled');
-        expect('OTP is provisioned', $this->user->provisionOTP())->notEquals(false);
-        expect('OTP is enabled', $this->user->enableOTP())->true();
+        expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
+        expect('OTP is enabled', $I->getUser()->enableOTP())->true();
 
         $totp = new TOTP(
-            $this->user->email,
-            $this->user->otp_secret,
+            $I->getUser()->email,
+            $I->getUser()->otp_secret,
             30,             // 30 second window
             'sha256',       // SHA256 for the hashing algorithm
             6               // 6 digits
         );
 
         $I->sendPOST($this->uri, [
-            'email' => $this->user->email,
+            'email' => $I->getUser()->email,
             'password' => $password,
             'otp' => $totp->at(100)
         ]);

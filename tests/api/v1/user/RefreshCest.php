@@ -3,7 +3,6 @@
 namespace tests\api\v1\user;
 
 use tests\_support\AbstractApiCest;
-use tests\api\v1\user\AuthenticateCest;
 use Yii;
 
 class RefreshCest extends AbstractApiCest
@@ -14,15 +13,11 @@ class RefreshCest extends AbstractApiCest
 
     public function testRefreshWithValidToken(\ApiTester $I)
     {
-        // Tests refreshing tokens using existing authentication method
-        $cest = new AuthenticateCest;
-        $data = $cest->testLoginWithValidCredentials(clone $I);
+        $I->register(true);
         $I->wantTo('verify refresh token renews session token');
         $payload = [
-            'refresh_token' => $data['refresh_token']
+            'refresh_token' => $I->getTokens()['refreshToken']
         ];
-        
-        $I->addTokens($data);
 
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
@@ -47,7 +42,7 @@ class RefreshCest extends AbstractApiCest
         // Verify the tokens are wiped and that existing tokens cannot be reused
         $I->wantTo('verify refresh token is wiped');
         $payload = [
-            'refresh_token' => $data['refresh_token']
+            'refresh_token' => $I->getTokens()['refreshToken']
         ];
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
@@ -82,15 +77,11 @@ class RefreshCest extends AbstractApiCest
     
     public function testRefreshWithInvalidToken(\ApiTester $I)
     {
-        // Tests refreshing tokens using existing authentication method
-        $cest = new AuthenticateCest;
-        $data = $cest->testLoginWithValidCredentials(clone $I);
+        $I->register(true);
         $I->wantTo('verify refresh token does not renew with invalid tokens');
         $payload = [
-            'refresh_token' => $data['access_token']
+            'refresh_token' => $I->getTokens()['accessToken']
         ];
-        
-        $I->addTokens($data);
 
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
@@ -107,26 +98,11 @@ class RefreshCest extends AbstractApiCest
         ]);
     }
 
-    public function testRefreshRequiresAuthentication(\ApiTester $I)
+    public function testAuthenticationIsRequired(\ApiTester $I)
     {
-        // Tests refreshing tokens using existing authentication method
-        $cest = new AuthenticateCest;
-        $data = $cest->testLoginWithValidCredentials(clone $I);
-        $I->wantTo('verify refresh token does not renew with invalid tokens');
-        $payload = [
-            'refresh_token' => $data['refresh_token']
-        ];
-
-        $data['access_token'] = 'foo';
-        
-        $I->addTokens($data);
-        $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
+        $I->wantTo('verify authentication is required');
+        $I->sendPOST($this->uri);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(401);
-
-        $I->seeResponseContainsJson([
-            'status' => 401,
-            'data' => null,
-        ]);
     }
 }

@@ -3,11 +3,6 @@
 namespace tests\_support;
 
 use ApiTester;
-
-use app\forms\Registration;
-use app\models\Token;
-use Faker\Factory;
-
 use Yii;
 
 /**
@@ -33,19 +28,7 @@ abstract class AbstractApiCest
      * @var array $allowedVerbs
      */
     protected $allowedVerbs = [];
-    
-    /**
-     * Token data
-     * @var Token $tokens
-     */
-    protected $tokens = [];
-    
-    /**
-     * Instance of user to reduce lookups
-     * @var User
-     */
-    protected $user;
-    
+        
     /**
      * Before the test, clear all users form the database, and flush the cache to ensure a clean slate
      * @param ApiTester
@@ -69,7 +52,12 @@ abstract class AbstractApiCest
             $method = 'send' . $verb;
             $I->$method($this->uri);
             $I->seeResponseIsJson();
-            $I->seeResponseCodeIs(405);
+            $statusCode = \json_decode($I->grabResponse(), true)['status'];
+            if (in_array($statusCode, [401, 405])) {
+                $I->seeResponseCodeIs($statusCode);
+            }
+
+            expect('status code is not right', $statusCode)->notEquals(200);
         }
     }
 
@@ -93,33 +81,5 @@ abstract class AbstractApiCest
         $I->seeResponseEquals('');
 
         return $I;
-    }
-
-    /**
-     * Register a new user for testing
-     * @return bool
-     */
-    protected function register($activate = true, \ApiTester $I = null)
-    {
-        $faker = Factory::create();
-        $form = new Registration;
-        $form->email = $faker->email;
-        $form->password = $faker->password(20);
-        $form->password_verify = $form->password;
-
-        expect('form registers', $form->register())->true();
-        $this->user = Yii::$app->yrc->userClass::findOne(['email' => $form->email]);
-
-        if ($activate === true) {
-            $this->user->activate();
-        }
-
-        expect('user is not null', $this->user !== null)->true();
-        $this->tokens = Token::generate($this->user->id);
-        if ($I !== null) {
-            $I->addTokens($this->tokens);
-        }
-        
-        return $form->password;
     }
 }

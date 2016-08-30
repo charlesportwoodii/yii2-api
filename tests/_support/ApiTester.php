@@ -17,9 +17,44 @@
 */
 use app\tests\_support\app\HMAC;
 
+use app\forms\Registration;
+use app\models\Token;
+use Faker\Factory;
+
 class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
+
+    /**
+     * Instance of user to reduce lookups
+     * @var User
+     */
+    protected $user;
+
+    /**
+     * The tokens
+     * @var array
+     */
+    protected $tokens = [];
+
+    /**
+     * Retrieves the user
+     * @return User
+     */
+    public function getUser()
+    {
+        $this->user->refresh();
+        return $this->user;
+    }
+
+    /**
+     * Retrieves the token
+     * @return array
+     */
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
 
     /**
      * Sets tokens
@@ -39,6 +74,32 @@ class ApiTester extends \Codeception\Actor
     }
 
     /**
+     * Register a new user for testing
+     * @return bool
+     */
+    public function register($activate = true)
+    {
+        $faker = Factory::create();
+        $form = new Registration;
+        $form->email = $faker->email;
+        $form->password = $faker->password(20);
+        $form->password_verify = $form->password;
+
+        expect('form registers', $form->register())->true();
+        $this->user = Yii::$app->yrc->userClass::findOne(['email' => $form->email]);
+
+        if ($activate === true) {
+            $this->user->activate();
+        }
+
+        expect('user is not null', $this->user !== null)->true();
+        $this->tokens = Token::generate($this->user->id);
+        $this->addTokens($this->tokens);
+        
+        return $form->password;
+    }
+
+    /**
      * Helper method to send an authenticated Request
      * @param string $uri
      * @param string $method    HTTP method
@@ -50,16 +111,17 @@ class ApiTester extends \Codeception\Actor
         $now = new \DateTime();
         $time = $now->format(\DateTime::RFC1123);
 
+        $tokens = $this->getTokens();
         $HMAC = HMAC::generate(
             $uri,
-            $this->tokens,
+            $tokens,
             $method,
             $time,
             $payload
         );
 
         $this->haveHttpHeader('X-DATE', $time);
-        $this->haveHttpHeader('Authorization', 'HMAC ' . $this->tokens['accessToken'] . ',' . $HMAC);
+        $this->haveHttpHeader('Authorization', 'HMAC ' . $tokens['accessToken'] . ',' . $HMAC);
         $httpMethod = 'send' . $method;
 
         if (empty($payload)) {
