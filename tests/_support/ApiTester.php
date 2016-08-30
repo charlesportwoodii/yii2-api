@@ -27,7 +27,15 @@ class ApiTester extends \Codeception\Actor
      */
     public function addTokens($tokens)
     {
-        $this->tokens = $tokens;
+        if (isset($tokens['accessToken'])) {
+            $this->tokens = $tokens;
+        } else {
+            $this->tokens = [
+                'accessToken'   => $tokens['access_token'],
+                'refreshToken'  => $tokens['refresh_token'],
+                'ikm'           => $tokens['ikm']
+            ];
+        }
     }
 
     /**
@@ -37,7 +45,7 @@ class ApiTester extends \Codeception\Actor
      * @param array $payload
      * @return void
      */
-    public function sendAuthenticatedRequest($uri, $method, $token, $payload = [])
+    public function sendAuthenticatedRequest($uri, $method, $payload = [])
     {
         $now = new \DateTime();
         $time = $now->format(\DateTime::RFC1123);

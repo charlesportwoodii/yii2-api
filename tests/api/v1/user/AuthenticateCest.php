@@ -41,6 +41,8 @@ class AuthenticateCest extends AbstractApiCest
             ],
             'status' => 'integer'
         ]);
+
+        return \json_decode($I->grabResponse(), true)['data'];
     }
 
     /**
@@ -82,7 +84,7 @@ class AuthenticateCest extends AbstractApiCest
     {
         $this->register(true, $I);
         $I->wantTo('verify users can de-authenticate via HMAC authentication');
-        $I->sendAuthenticatedRequest($this->uri, 'DELETE', $this->tokens);
+        $I->sendAuthenticatedRequest($this->uri, 'DELETE');
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([

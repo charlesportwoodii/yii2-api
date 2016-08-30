@@ -17,11 +17,11 @@ class UserController extends Controller
     public function actions()
     {
         return [
-            'authenticate'  => 'yrc\api\actions\AuthenticationAction',
-            'refresh'       => 'yrc\api\actions\RefreshAction',
-            'otp'           => 'yrc\api\actions\OTPAction',
             'activate'      => 'yrc\api\actions\ActivationAction',
-            'register'      => 'yrc\api\actions\RegistrationAction',
+            'authenticate'  => 'yrc\api\actions\AuthenticationAction',
+            'register'      => 'yrc\api\actions\RegisterAction',
+            'refresh'       => 'yrc\api\actions\RefreshAction',
+            //'otp'           => 'yrc\api\actions\OTPAction',
             //'reset_password'=> 'yrc\api\actions\PasswordResetAction',
         ];
     }
