@@ -16,4 +16,12 @@ yii2:
     host: 127.0.0.1
     port: 6379
     database: 0
+  swiftmailer:
+    host: 127.0.0.1
+    username: 
+    password: 
+    port: 587
+    encryption: 'tls'
+    realSend: false
   user: '\app\models\User'
+  originEmail: 'tests-results@travis-ci.org'

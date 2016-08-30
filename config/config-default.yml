@@ -27,4 +27,6 @@ yii2:
     password: 
     port: 587
     encryption: 'tls'
+    realSend: true
   user: 'app\models\User'
+  originEmail:

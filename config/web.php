@@ -9,10 +9,37 @@ $config = [
     'name' => $yaml['app']['name'],
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language' => 'en-US',
+    'sourceLanguage' => 'en-US',
     'components' => [
         'yrc' => [
             'class' => 'yrc\components\YRC',
             'userClass' => $yaml['yii2']['user'],
+            'fromEmail' => $yaml['yii2']['originEmail'],
+            'realSend' => $yaml['yii2']['swiftmailer']['realSend'],
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'sourceLanguage' => 'en-US',
+                    'basePath' => '@app/messages',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                    'on missingTranslation' => ['yrc\components\TranslationEventHandler', 'handleMissingTranslation']
+                ],
+                'yrc*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'sourceLanguage' => 'en-US',
+                    'basePath' => '@app/vendor/charlesportwoodii/yii2-api-reset-components/messages',
+                    'fileMap' => [
+                        'yrc' => 'yrc.php',
+                    ],
+                    'on missingTranslation' => ['yrc\components\TranslationEventHandler', 'handleMissingTranslation']
+                ],
+            ],
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -62,7 +89,7 @@ $config = [
                 \yii\web\Response::FORMAT_JSON => [
                     'class'         => 'yrc\components\JsonResponseFormatter',
                     'prettyPrint'   => YII_DEBUG,
-                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION,
                 ],
             ],
         ],
