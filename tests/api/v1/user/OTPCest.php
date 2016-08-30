@@ -3,7 +3,6 @@
 namespace tests\api\v1\user;
 
 use tests\_support\AbstractApiCest;
-use tests\api\v1\user\AuthenticateCest;
 use OTPHP\TOTP;
 
 use Yii;

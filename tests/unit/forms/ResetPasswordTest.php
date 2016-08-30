@@ -29,7 +29,7 @@ class ResetPasswordTest extends \tests\codeception\TestCase
             $form->email = $user->email;
 
             expect('form validates', $form->validate())->true();
-            expect('form does init', $form->initReset())->true();
+            expect('form does init', $form->reset())->true();
         });
 
         $this->specify('test init scenario (with invalid email)', function () {
@@ -38,7 +38,7 @@ class ResetPasswordTest extends \tests\codeception\TestCase
             $form->email = $user->email;
 
             expect('form does not validate', $form->validate())->false();
-            expect('form does not init', $form->initReset())->false();
+            expect('form does not init', $form->reset())->false();
         });
 
         $this->specify('test reset scenario (with token)', function () use ($user) {
@@ -62,7 +62,11 @@ class ResetPasswordTest extends \tests\codeception\TestCase
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
             $form->setUser($user);
-            $form->reset_token = false;
+            $token = Base32::encode(\random_bytes(64));
+            Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
+                'id' => $user->id
+            ]);
+            $form->reset_token = $token;
             $form->password = $faker->password;
             $form->password_verify = $form->password;
             

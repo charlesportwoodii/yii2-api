@@ -19,10 +19,10 @@ class UserController extends Controller
         return [
             'activate'      => 'yrc\api\actions\ActivationAction',
             'authenticate'  => 'yrc\api\actions\AuthenticationAction',
-            'register'      => 'yrc\api\actions\RegisterAction',
-            'refresh'       => 'yrc\api\actions\RefreshAction',
             'otp'           => 'yrc\api\actions\OTPAction',
-            //'reset_password'=> 'yrc\api\actions\PasswordResetAction',
+            'refresh'       => 'yrc\api\actions\RefreshAction',
+            'register'      => 'yrc\api\actions\RegisterAction',
+            'reset_password'=> 'yrc\api\actions\ResetPasswordAction',
         ];
     }
 
@@ -37,7 +37,7 @@ class UserController extends Controller
         $behaviors['authenticator'] = [
             'class'     => HMACSignatureAuth::className(),
             'only'      => ['refresh', 'authenticate', 'otp', 'reset_password'],
-            'optional'  => ['authenticate']
+            'optional'  => ['authenticate', 'reset_password']
         ];
 
         return $behaviors;
