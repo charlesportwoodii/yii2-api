@@ -11,7 +11,7 @@ yii2:
     database: root
     host: 127.0.0.1
     username: root
-    password: api
+    password: 
   redis:
     host: 127.0.0.1
     port: 6379
