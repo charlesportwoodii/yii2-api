@@ -70,7 +70,7 @@ Header:
 
 ### Date time drift
 
-The ```X-DATE``` header is a [RFC1123](https://tools.ietf.org/html/rfc1123) formatted date, and exists to prevent certain relay attacks (an adversary gaining access to the authentication information and replaying it). Consequently, if the date header drifts more than 300 seconds from the server time, the request will be denied.
+The ```X-DATE``` header is a [RFC1123](https://tools.ietf.org/html/rfc1123) formatted date, and exists to prevent certain relay attacks (an adversary gaining access to the authentication information and replaying it). Consequently, if the date header drifts more than 90 seconds from the server time, the request will be denied.
 
 ### Generating HMAC Signatures
 
