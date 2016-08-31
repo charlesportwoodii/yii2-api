@@ -42,6 +42,11 @@ return [
         '.hgignore',
         '.hgkeep',
         '/messages',
+        '/vendor',
+        '/config',
+        '/tests',
+        '/web',
+        '/runtime'
     ],
 
     // 'php' output format is for saving messages to php files.
