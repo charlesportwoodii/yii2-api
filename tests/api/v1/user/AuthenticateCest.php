@@ -147,7 +147,7 @@ class AuthenticateCest extends AbstractApiCest
     public function testLoginWithBadOTP(\ApiTester $I)
     {
         $password = $I->register(true);
-        $I->wantTo('verify users can authenticate against the API with 2FA enabled');
+        $I->wantTo('verify a valid TOTP 2FA code is required');
         expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
 
@@ -177,6 +177,54 @@ class AuthenticateCest extends AbstractApiCest
             'error' => [
                 'message' => 'string',
                 'code' => 'integer'
+            ]
+        ]);
+    }
+
+    /**
+     * Tests logging into the API with OTP enabled, but not provided
+     * @param ApiTester $I
+     */
+    public function testLoginWithoutOTP(\ApiTester $I)
+    {
+        $password = $I->register(true);
+        $I->wantTo('verify if 2FA is enabled the correct status code is returned');
+        expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
+        expect('OTP is enabled', $I->getUser()->enableOTP())->true();
+
+        $totp = new TOTP(
+            $I->getUser()->username,
+            $I->getUser()->otp_secret,
+            30,             // 30 second window
+            'sha256',       // SHA256 for the hashing algorithm
+            6               // 6 digits
+        );
+
+        $I->sendPOST($this->uri, [
+            'email' => $I->getUser()->email,
+            'password' => $password
+        ]);
+
+        $I->seeResponseIsJson();
+        $I->seeResponseCodeIs(401);
+        $I->seeResponseContainsJson([
+            'status' => 401
+        ]);
+
+        $I->seeResponseMatchesJsonType([
+            'data' => 'null',
+            'status' => 'integer',
+            'error' => [
+                'message' => 'string',
+                'code' => 'integer'
+            ]
+        ]);
+
+        $I->seeResponseContainsJson([
+            'status' => 401,
+            'data' => null,
+            'error' => [
+                'code' => 1
             ]
         ]);
     }
