@@ -6,15 +6,6 @@
             "name": "Charles R. Portwood II",
             "email": "charlesportwoodii@erianna.com"
     }],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../yii2-api-rest-components",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "require": {
         "php": ">=7.0.0",
         "ext-curl": "*",

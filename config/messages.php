@@ -46,7 +46,8 @@ return [
         '/config',
         '/tests',
         '/web',
-        '/runtime'
+        '/runtime',
+        '/docs'
     ],
 
     // 'php' output format is for saving messages to php files.
@@ -56,12 +57,10 @@ return [
     // boolean, whether the message file should be overwritten with the merged messages
     'overwrite' => true,
 
-    /*
     // Message categories to ignore
     'ignoreCategories' => [
         'yii',
     ],
-     */
 
     /*
     // 'db' output format is for saving messages to database.

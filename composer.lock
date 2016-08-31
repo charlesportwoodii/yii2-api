@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "036c0b49768d835fa66789d02d7716d4",
-    "content-hash": "2e3bc5d21944ca8ef35c2c574dc3ae7e",
+    "hash": "58d1ad9d21716d5b848e05fe239e1358",
+    "content-hash": "e1f0fffa0cd98b4deb2763e26a752d5a",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -268,11 +268,16 @@
         {
             "name": "charlesportwoodii/yii2-api-rest-components",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charlesportwoodii/yii2-api-rest-components.git",
+                "reference": "98eed5e656add6e3b025e78c22a74675583c24a1"
+            },
             "dist": {
-                "type": "path",
-                "url": "../yii2-api-rest-components",
-                "reference": "968c540b24a9e06275fdc83e06ce56972ebd6cbf",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/98eed5e656add6e3b025e78c22a74675583c24a1",
+                "reference": "98eed5e656add6e3b025e78c22a74675583c24a1",
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0",
@@ -293,6 +298,7 @@
                     "yrc\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -310,13 +316,7 @@
                 "rest",
                 "yii2"
             ],
-            "support": {
-                "issues": "https://github.com/charlesportwoodii/yii2-api-rest-components/issues",
-                "source": "https://github.com/charlesportwoodii/yii2-api-rest-components"
-            },
-            "transport-options": {
-                "symlink": true
-            }
+            "time": "2016-08-30 21:02:55"
         },
         {
             "name": "christian-riesen/base32",
