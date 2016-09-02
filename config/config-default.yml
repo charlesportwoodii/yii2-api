@@ -30,3 +30,5 @@ yii2:
     realSend: true
   user: 'app\models\User'
   originEmail:
+  accessHeader: null
+  accessHeaderSecret: null

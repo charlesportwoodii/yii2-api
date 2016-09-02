@@ -2,7 +2,7 @@
 
 The API supports rate limiting for all authenticated API endpoints via the standard Yii2 API rate limiting. The default values are 150 requests every 900 seconds, and can by tweaked by adjusting the following values in `app/models/User`
 
-```
+```php
 <?php
 
 namespace app\models;

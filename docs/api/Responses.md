@@ -2,7 +2,7 @@
 
 This API skeleton will always provide the following API response in JSON format:
 
-```
+```json
 {
     "status": <int_http_status_code>,
     "data": null|true|false|{}|[]

@@ -35,12 +35,12 @@ class ResetPasswordCest extends AbstractApiCest
         // Verify reset token needs to be valid
         $I->wantTo('verify a password cannot be reset without a valid reset token');
         $payload = [
-            'password' => $faker->password(20),
-            'reset_token' => 'foo'
+            'password'          => $faker->password(20),
+            'password_current'  => $oldPassword
         ];
         $payload['password_verify'] = $payload['password'];
 
-        $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
+        $I->sendAuthenticatedRequest($this->uri . '?reset_token=foo', 'POST', $payload);
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
@@ -50,8 +50,7 @@ class ResetPasswordCest extends AbstractApiCest
         ]);
 
         $I->wantTo('verify a user can reset their password');
-        $payload['reset_token'] = $token;
-        $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
+        $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
@@ -92,11 +91,11 @@ class ResetPasswordCest extends AbstractApiCest
         $I->wantTo('verify a password cannot be reset without a valid reset token');
         $payload = [
             'password' => $faker->password(20),
-            'reset_token' => 'foo'
+            'password_current'  => $oldPassword
         ];
         $payload['password_verify'] = $payload['password'];
 
-        $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
+        $I->sendAuthenticatedRequest($this->uri . '?reset_token=foo', 'POST', $payload);
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
@@ -106,8 +105,7 @@ class ResetPasswordCest extends AbstractApiCest
         ]);
 
         $I->wantTo('verify a user can reset their password');
-        $payload['reset_token'] = $token;
-        $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
+        $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);

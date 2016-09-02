@@ -4,7 +4,7 @@
 
 To authenticate into the API, you simply need to provide a valid email address and password pair as a JSON request to `/api/v1/user/authenticate`.
 
-```
+```json
 POST /api/v1/user/authenticate
 {
     "email": "clara.oswald@tardis.io",
@@ -14,7 +14,7 @@ POST /api/v1/user/authenticate
 
 If two-factor authentication is enabled, a third parameter, `otp` is required, which should be the string value of the TOTP code provided by the user's authenticator app.
 
-```
+```json
 POST /api/v1/user/authenticate
 {
     "email": "clara.oswald@tardis.io",
@@ -25,7 +25,7 @@ POST /api/v1/user/authenticate
 
 If the username or password is not valid, an HTTP 401 will be returned with the following response body:
 
-```
+```json
 {
     "data": null,
     "error": {
@@ -40,7 +40,7 @@ If the username or password is not valid, an HTTP 401 will be returned with the 
 
 For successful authentications, you'll be presented with the following response body. The attributes outlined in this section are necessary to provide authentication for all other API endpoints that require authentication:
 
-```
+```json
 {
     "data": {
         "access_token": "7XF56VIP7ZQQOLGHM6MRIK56S2QS363ULNB5UKNFMJRQVYHQH7IA",

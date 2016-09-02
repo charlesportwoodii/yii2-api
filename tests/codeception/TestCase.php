@@ -10,6 +10,8 @@ class TestCase extends \yii\codeception\TestCase
 {
     public $appConfig = "@tests/config/unit.php";
 
+    private $password;
+
     protected function _before()
     {
         $this->mockApplication();
@@ -18,6 +20,11 @@ class TestCase extends \yii\codeception\TestCase
     protected function _after()
     {
         $this->mockApplication();
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
     }
 
     /**
@@ -49,6 +56,8 @@ class TestCase extends \yii\codeception\TestCase
             $user->refresh();
             expect('user is activated', $user->isActivated())->true();
         }
+
+        $this->password = $password;
 
         return $user;
     }

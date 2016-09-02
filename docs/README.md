@@ -48,7 +48,7 @@ Before you can start using the API, you'll need to configure it. This project pr
 cp config/config-default.yml config/config.yml
 ```
 
-Be sure to configure each section before continuing.
+Be sure to configure each section before continuing. For more information see [Configuration.md](Configuration.md).
 
 ### Migrations
 

@@ -17,6 +17,8 @@ $config = [
             'userClass' => $yaml['yii2']['user'],
             'fromEmail' => $yaml['yii2']['originEmail'],
             'realSend' => $yaml['yii2']['swiftmailer']['realSend'],
+            'accessHeader' => $yaml['yii2']['accessHeader'],
+            'accessHeaderSecret' => $yaml['yii2']['accessHeaderSecret']
         ],
         'i18n' => [
             'translations' => [
@@ -109,7 +111,8 @@ $config = [
             ]
         ],
         'user' => [
-            'identityClass' => $yaml['yii2']['user']
+            'identityClass' => $yaml['yii2']['user'],
+            'enableSession' => false
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

@@ -52,6 +52,7 @@ class ResetPasswordTest extends \tests\codeception\TestCase
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
             $form->password = $faker->password;
             $form->password_verify = $form->password;
+            $form->password_current = $this->getPassword();
             $form->reset_token = $token;
             
             expect('form validates', $form->validate())->true();
@@ -69,6 +70,7 @@ class ResetPasswordTest extends \tests\codeception\TestCase
             $form->reset_token = $token;
             $form->password = $faker->password;
             $form->password_verify = $form->password;
+            $form->password_current = $this->getPassword();
             
             expect('form validates', $form->validate())->true();
             expect('form resets', $form->reset())->true();
