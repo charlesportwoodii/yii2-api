@@ -25,3 +25,5 @@ yii2:
     realSend: false
   user: '\app\models\User'
   originEmail: 'tests-results@travis-ci.org'
+  accessHeader:
+  accessHeaderSecret:
