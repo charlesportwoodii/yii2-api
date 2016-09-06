@@ -73,7 +73,7 @@ class RegistrationTest extends \tests\codeception\TestCase
         $faker = \Faker\Factory::create();
         $this->specify('tests registration', function () use ($faker) {
             $form = new Registration;
-            $password = $faker->password;
+            $password = $faker->password(22);
             $form->email = $faker->email;
             $form->username = $faker->username;
             $form->password = $password;
