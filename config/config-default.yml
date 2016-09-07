@@ -4,7 +4,7 @@ app:
   id: "yii2-api"
   name: "Yii2 API Skeleton"
   debug: true
-  env: 'prod'
+  env: 'dev'
 
 # Yii2 specific configuration
 yii2:
@@ -28,7 +28,12 @@ yii2:
     port: 587
     encryption: 'tls'
     realSend: true
+    # The email address that system notifications should be delivered from
+    origin_email:
+    # The name to associate with the origin
+    origin_email_name:
+  # User Model
   user: 'app\models\User'
-  originEmail:
-  accessHeader: null
-  accessHeaderSecret: null
+  access_control:
+    header: null
+    secret: null

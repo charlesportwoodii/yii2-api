@@ -3,6 +3,7 @@
 This document outlines all the configuration options for your application as defined in `config/config.yml`.
 
 > Unless otherwise specified, all configuration options are required
+> Note that if a option is not specified, the origin specified in `config/config-default.yml` will be used.
 
 | Configuration Options    | Description                                |
 |--------------------------|--------------------------------------------|
@@ -24,7 +25,8 @@ This document outlines all the configuration options for your application as def
 | `yii2:swiftmailer:port`   | The port number of the SMTP server        |
 | `yii2:swiftmailer:encryption` | The encryption method to use. `tls` is prefered |
 | `yii2:swiftmailer:realSend` | Whether or not the API should send emails or not. Set to `true` for production instances. During debugging or when running tests this should be to set to `false |
+| `yii2:swiftmailer:origin_email` | The email address notifications should be sent from |
+| `yii2:swiftmailer:origin_email_name` | The name to associate with the origin email|
 | `yii2:user` | The class of your user identity model                   |
-| `yii2:originEmail` | The email address notifiations should be sent from |
-| `yii2:accessHeader` | The secret global access  header                |
-| `yii2:accessHeaderSecret` | The secret value for the access header    |
+| `yii2:access_control:header` | The secret global access header                |
+| `yii2:access_control:secret` | The secret value for the access header    |

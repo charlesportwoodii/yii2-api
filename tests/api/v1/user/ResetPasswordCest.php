@@ -10,7 +10,9 @@ use Yii;
 class ResetPasswordCest extends AbstractApiCest
 {
     protected $uri = '/api/v1/user/reset_password';
-
+    protected $blockedVerbs = ['put', 'get', 'patch', 'delete'];
+    protected $allowedVerbs = ['post'];
+    
     public function testAuthenticatedPasswordResetFlow(\ApiTester $I)
     {
         $faker = Factory::create();

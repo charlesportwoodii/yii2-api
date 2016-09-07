@@ -33,7 +33,7 @@ class TestCase extends \yii\codeception\TestCase
      */
     protected function createUser($activate = false)
     {
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
         $form = new Registration;
 
         $password = $faker->password(24);
