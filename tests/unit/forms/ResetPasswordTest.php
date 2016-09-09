@@ -4,6 +4,7 @@ namespace app\tests\unit;
 
 use app\forms\ResetPassword;
 use Faker\Factory;
+use OTPHP\TOTP;
 use Base32\Base32;
 use Yii;
 
@@ -50,9 +51,8 @@ class ResetPasswordTest extends \tests\codeception\TestCase
 
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
-            $form->password = $faker->password;
+            $form->password = $faker->password(24);
             $form->password_verify = $form->password;
-            $form->password_current = $this->getPassword();
             $form->reset_token = $token;
             
             expect('form validates', $form->validate())->true();
@@ -68,9 +68,63 @@ class ResetPasswordTest extends \tests\codeception\TestCase
                 'id' => $user->id
             ]);
             $form->reset_token = $token;
-            $form->password = $faker->password;
+            $form->password = $faker->password(24);
             $form->password_verify = $form->password;
-            $form->password_current = $this->getPassword();
+            
+            expect('form validates', $form->validate())->true();
+            expect('form resets', $form->reset())->true();
+        });
+
+        $this->specify('test that password cannot be reset if OTP is enabled', function () use ($user) {
+            // Enable OTP on the account
+            $user->provisionOTP();
+            $user->enableOTP();
+
+            expect('OTP is enabled', $user->isOTPEnabled())->true();
+
+            $faker = Factory::create();
+            $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
+            $form->setUser($user);
+            $token = Base32::encode(\random_bytes(64));
+            Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
+                'id' => $user->id
+            ]);
+
+            $form->reset_token = $token;
+            $form->password = $faker->password(24);
+            $form->password_verify = $form->password;
+            
+            expect('form validates', $form->validate())->false();
+            expect('form has OTP error', $form->getErrors())->hasKey('otp');
+        });
+
+        $this->specify('tests password reset with valid OTP code', function () use ($user) {
+            // Enable OTP on the account
+            $user->provisionOTP();
+            $user->enableOTP();
+
+            expect('OTP is enabled', $user->isOTPEnabled())->true();
+
+            $totp = new TOTP(
+                $user->username,
+                $user->otp_secret,
+                30,
+                'sha256',
+                6
+            );
+
+            $faker = Factory::create();
+            $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
+            $form->setUser($user);
+            $token = Base32::encode(\random_bytes(64));
+            Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
+                'id' => $user->id
+            ]);
+
+            $form->reset_token = $token;
+            $form->password = $faker->password(24);
+            $form->password_verify = $form->password;
+            $form->otp = $totp->now();
             
             expect('form validates', $form->validate())->true();
             expect('form resets', $form->reset())->true();
