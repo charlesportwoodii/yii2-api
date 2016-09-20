@@ -68,7 +68,7 @@ If successful, a new set of tokens will be generated with an HTTP 200 status cod
 
 If the refresh token is invalid, an HTTP 200 status code will be returned with the `data` attribute set to `false`.
 
-``json
+```json
 {
     "data": false,
     "status": 200
