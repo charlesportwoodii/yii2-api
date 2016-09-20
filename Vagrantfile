@@ -59,10 +59,6 @@ Vagrant.configure(2) do |config|
     echo "Creating MySQL database if it is not present"
     mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS root;"
 
-    # Copy the necessary configuration files
-    echo "Copying _db and _env configuration files"
-    cp /var/www/config/.vagrant/config.yml /var/www/config/config.yml
-
     # Update composer
     /home/vagrant/.bin/composer self-update
 
