@@ -24,7 +24,7 @@ final class HMAC
      */
     public static function generate($uri, $tokens, $method, $date, $payload = [])
     {
-        $accessToken = $tokens['accessToken'];
+        $accessToken = $tokens['access_token'];
         $ikm = \base64_decode($tokens['ikm']);
 
         if ($method === 'GET') {

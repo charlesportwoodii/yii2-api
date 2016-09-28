@@ -62,13 +62,13 @@ class ApiTester extends \Codeception\Actor
      */
     public function addTokens($tokens)
     {
-        if (isset($tokens['accessToken'])) {
+        if (isset($tokens['access_token'])) {
             $this->tokens = $tokens;
         } else {
             $this->tokens = [
-                'accessToken'   => $tokens['access_token'],
-                'refreshToken'  => $tokens['refresh_token'],
-                'ikm'           => $tokens['ikm']
+                'access_token'   => $tokens['access_token'],
+                'refresh_token'  => $tokens['refresh_token'],
+                'ikm'            => $tokens['ikm']
             ];
         }
     }
@@ -122,7 +122,7 @@ class ApiTester extends \Codeception\Actor
         );
 
         $this->haveHttpHeader('X-DATE', $time);
-        $this->haveHttpHeader('Authorization', 'HMAC ' . $tokens['accessToken'] . ',' . $HMAC);
+        $this->haveHttpHeader('Authorization', 'HMAC ' . $tokens['access_token'] . ',' . $HMAC);
         $httpMethod = 'send' . $method;
 
         if (empty($payload)) {
@@ -134,3 +134,4 @@ class ApiTester extends \Codeception\Actor
         return $this;
     }
 }
+

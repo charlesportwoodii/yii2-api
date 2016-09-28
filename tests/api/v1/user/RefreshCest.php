@@ -16,7 +16,7 @@ class RefreshCest extends AbstractApiCest
         $I->register(true);
         $I->wantTo('verify refresh token renews session token');
         $payload = [
-            'refresh_token' => $I->getTokens()['refreshToken']
+            'refresh_token' => $I->getTokens()['refresh_token']
         ];
 
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
@@ -42,7 +42,7 @@ class RefreshCest extends AbstractApiCest
         // Verify the tokens are wiped and that existing tokens cannot be reused
         $I->wantTo('verify refresh token is wiped');
         $payload = [
-            'refresh_token' => $I->getTokens()['refreshToken']
+            'refresh_token' => $I->getTokens()['refresh_token']
         ];
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
@@ -80,7 +80,7 @@ class RefreshCest extends AbstractApiCest
         $I->register(true);
         $I->wantTo('verify refresh token does not renew with invalid tokens');
         $payload = [
-            'refresh_token' => $I->getTokens()['accessToken']
+            'refresh_token' => $I->getTokens()['access_token']
         ];
 
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);

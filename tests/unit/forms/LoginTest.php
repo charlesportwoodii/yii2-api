@@ -90,10 +90,10 @@ class LoginTest extends \tests\codeception\TestCase
             expect('form validates', $form->validate())->true();
             $details = $form->authenticate();
             expect('user authenticates', $details)->notEquals(null);
-            expect('details have accessToken key', $details)->hasKey('accessToken');
-            expect('details have refreshToken key', $details)->hasKey('refreshToken');
+            expect('details have access_token key', $details)->hasKey('access_token');
+            expect('details have refresh_token key', $details)->hasKey('refresh_token');
             expect('details have ikm key', $details)->hasKey('ikm');
-            expect('details have expiration date', $details)->hasKey('expiresAt');
+            expect('details have expiration date', $details)->hasKey('expires_at');
         });
 
         $this->specify('test login OTP', function () {
@@ -125,10 +125,10 @@ class LoginTest extends \tests\codeception\TestCase
             expect('form validates', $form->validate())->true();
             $details = $form->authenticate();
             expect('user authenticates', $details)->notEquals(null);
-            expect('details have accessToken key', $details)->hasKey('accessToken');
-            expect('details have refreshToken key', $details)->hasKey('refreshToken');
+            expect('details have access_token key', $details)->hasKey('access_token');
+            expect('details have refresh_token key', $details)->hasKey('refresh_token');
             expect('details have ikm key', $details)->hasKey('ikm');
-            expect('details have expiration date', $details)->hasKey('expiresAt');
+            expect('details have expiration date', $details)->hasKey('expires_at');
         });
     }
 }
