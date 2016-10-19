@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$config = require __DIR__ . '/config/loader.php';
+$config = require __DIR__ . '/../config/loader.php';
 
 // comment out the following two lines when deployed to production
 defined('YII_DEBUG') or define('YII_DEBUG', $config['app']['debug']);
