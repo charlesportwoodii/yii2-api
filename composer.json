@@ -13,7 +13,7 @@
         "ext-pdo_mysql": "*",
         "ext-PDO": "*",
         "ext-Reflection": "*",
-        "yiisoft/yii2": ">=2.0.9",
+        "yiisoft/yii2": ">=2.0.10",
         "symfony/yaml": "^3.0",
         "charlesportwoodii/yii2-api-rest-components": "dev-master",
         "yiisoft/yii2-redis": "~2.0.0",
