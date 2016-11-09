@@ -63,6 +63,17 @@ class RefreshCest extends AbstractApiCest
             ],
             'status' => 'integer'
         ]);
+
+        $newTokens = \json_decode($I->grabResponse(), true)['data'];
+        
+        // Verify the tokens are wiped and that existing tokens cannot be reused
+        $I->wantTo('verify refresh token is wiped');
+        $payload = [
+            'refresh_token' => $I->getTokens()['refresh_token']
+        ];
+        $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
+        $I->seeResponseIsJson();
+        $I->seeResponseCodeIs(401);
     }
     
     public function testRefreshWithInvalidToken(\ApiTester $I)
