@@ -31,10 +31,29 @@ class ResetPasswordCest extends AbstractApiCest
 
         // Generate a random token since we can't pull this directly from Redis
         $token = Base32::encode(\random_bytes(64));
-        Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
+        $hash = hash('sha256', $token . '_reset_token');
+        Yii::$app->cache->set($hash, [
             'id' => $I->getUser()->id
         ]);
 
+        $payload = [
+            'password'          => $faker->password(20)
+        ];
+        $payload['password_verify'] = $payload['password'];
+
+        $I->wantTo('verify a user can reset their password');
+        $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
+
+        $I->seeResponseIsJson();
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            'status' => 200,
+            'data' => true
+        ]);
+
+        expect('old password does not validate', $I->getUser()->validatePassword($oldPassword))->false();
+        expect('new password validates', $I->getUser()->validatePassword($payload['password']))->true();
+        
         // Verify reset token needs to be valid
         $I->wantTo('verify a password cannot be reset without a valid reset token');
         $payload = [
@@ -50,19 +69,6 @@ class ResetPasswordCest extends AbstractApiCest
             'status' => 400,
             'data' => null
         ]);
-
-        $I->wantTo('verify a user can reset their password');
-        $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
-
-        $I->seeResponseIsJson();
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
-            'status' => 200,
-            'data' => true
-        ]);
-
-        expect('old password does not validate', $I->getUser()->validatePassword($oldPassword))->false();
-        expect('new password validates', $I->getUser()->validatePassword($payload['password']))->true();
     }
 
     public function testUnauthenticatedPasswordResetFlow(\ApiTester $I)
@@ -85,25 +91,15 @@ class ResetPasswordCest extends AbstractApiCest
 
         // Generate a random token since we can't pull this directly from Redis
         $token = Base32::encode(\random_bytes(64));
-        Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
+        $hash = hash('sha256', $token . '_reset_token');
+        Yii::$app->cache->set($hash, [
             'id' => $I->getUser()->id
         ]);
 
-        // Verify reset token needs to be valid
-        $I->wantTo('verify a password cannot be reset without a valid reset token');
         $payload = [
             'password' => $faker->password(20)
         ];
         $payload['password_verify'] = $payload['password'];
-
-        $I->sendAuthenticatedRequest($this->uri . '?reset_token=foo', 'POST', $payload);
-
-        $I->seeResponseIsJson();
-        $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
-            'status' => 400,
-            'data' => null
-        ]);
 
         $I->wantTo('verify a user can reset their password');
         $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
@@ -117,6 +113,18 @@ class ResetPasswordCest extends AbstractApiCest
 
         expect('old password does not validate', $I->getUser()->validatePassword($oldPassword))->false();
         expect('new password validates', $I->getUser()->validatePassword($payload['password']))->true();
+
+        // Verify reset token needs to be valid
+        $I->wantTo('verify a password cannot be reset without a valid reset token');
+
+        $I->sendAuthenticatedRequest($this->uri . '?reset_token=foo', 'POST', $payload);
+
+        $I->seeResponseIsJson();
+        $I->seeResponseCodeIs(400);
+        $I->seeResponseContainsJson([
+            'status' => 400,
+            'data' => null
+        ]);
     }
 
     public function testResetWithOTP(\ApiTester $I)

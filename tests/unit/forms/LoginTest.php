@@ -7,16 +7,9 @@ use OTPHP\TOTP;
 use Faker\Factory;
 use Yii;
 
-class LoginTest extends \tests\codeception\TestCase
+class LoginTest extends \app\tests\codeception\Unit
 {
     use \Codeception\Specify;
-
-    protected function _before()
-    {
-        parent::_before();
-        Yii::$app->cache->flush();
-        \app\models\User::deleteAll();
-    }
 
     public function testValidator()
     {

@@ -8,16 +8,9 @@ use Yii;
 /**
  * Tests implementation of the Registration form
  */
-class RegistrationTest extends \tests\codeception\TestCase
+class RegistrationTest extends \app\tests\codeception\Unit
 {
     use \Codeception\Specify;
-
-    protected function _before()
-    {
-        parent::_before();
-        Yii::$app->cache->flush();
-        \app\models\User::deleteAll();
-    }
     
     /**
      * Tests various validation states

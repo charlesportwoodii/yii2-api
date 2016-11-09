@@ -6,16 +6,9 @@ use app\forms\Activation;
 use Base32\Base32;
 use Yii;
 
-class ActivationTest extends \tests\codeception\TestCase
+class ActivationTest extends \app\tests\codeception\Unit
 {
     use \Codeception\Specify;
-
-    protected function _before()
-    {
-        parent::_before();
-        Yii::$app->cache->flush();
-        \app\models\User::deleteAll();
-    }
 
     /**
      * Tests activation

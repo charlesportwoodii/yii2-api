@@ -6,16 +6,9 @@ use app\forms\ChangeEmail;
 use Faker\Factory;
 use Yii;
 
-class ChangeEmailTest extends \tests\codeception\TestCase
+class ChangeEmailTest extends \app\tests\codeception\Unit
 {
     use \Codeception\Specify;
-
-    protected function _before()
-    {
-        parent::_before();
-        Yii::$app->cache->flush();
-        \app\models\User::deleteAll();
-    }
 
     public function testValidate()
     {

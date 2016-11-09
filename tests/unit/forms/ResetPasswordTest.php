@@ -8,16 +8,9 @@ use OTPHP\TOTP;
 use Base32\Base32;
 use Yii;
 
-class ResetPasswordTest extends \tests\codeception\TestCase
+class ResetPasswordTest extends \app\tests\codeception\Unit
 {
     use \Codeception\Specify;
-
-    protected function _before()
-    {
-        parent::_before();
-        Yii::$app->cache->flush();
-        \app\models\User::deleteAll();
-    }
 
     /**
      * Tests the scenarios

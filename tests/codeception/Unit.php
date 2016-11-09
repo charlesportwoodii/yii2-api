@@ -1,25 +1,22 @@
 <?php
 
-namespace tests\codeception;
+namespace app\tests\codeception;
+
+use \Codeception\Test\Unit as UnitTest;
 
 use Faker\Factory;
 use app\forms\Registration;
 use Yii;
 
-class TestCase extends \yii\codeception\TestCase
+class Unit extends UnitTest
 {
-    public $appConfig = "@tests/config/unit.php";
-
     private $password;
 
     protected function _before()
     {
-        $this->mockApplication();
-    }
-    
-    protected function _after()
-    {
-        $this->mockApplication();
+        parent::_before();
+        Yii::$app->cache->flush();
+        \app\models\User::deleteAll();
     }
 
     public function getPassword()
