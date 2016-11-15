@@ -66,6 +66,43 @@ public static function options($params) {}
 
 This powerful framework allows you to group API endpoints in a single action and easily separate logic based upon the HTTP verb requested.
 
+### Advanced Actions
+
+Additional properties can be passed to the class using the standard Yii2 syntax
+
+```php
+public function actions()
+{
+    return [
+        'example' => [
+            'class' => 'app\actions\v1\ExampleAction',
+            'property' => 'prop'
+        ]
+    ];
+}
+```
+
+Within your class, you would declare the public properties as shown in the following example.
+
+```php
+namespace yrc\api\actions;
+
+use yrc\rest\Action as RestAction;
+
+use yii\web\HttpException;
+use Yii;
+
+class ExampleActions extends RestAction
+{
+    /**
+     * This is your custom property
+     */
+    public $property;
+}
+```
+
+If you're using static actions, these properties can be retrieved from `$params['class']`. 
+
 ## Authentication
 
 API authentication is handled through the inclusion of an `authenticator` behavior. The bundled behavior includes a HMAC signature authentication method, which is vasty superior to many common API authentication methods. To use this authentication, simply specify it in your `authenticator` behavior and specify the actions you wish it to apply to.
