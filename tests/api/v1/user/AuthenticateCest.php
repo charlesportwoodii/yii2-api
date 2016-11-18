@@ -96,10 +96,6 @@ class AuthenticateCest extends AbstractApiCest
             'data' => 'boolean',
             'status' => 'integer'
         ]);
-
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Limit');
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Remaining');
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Reset');
     }
 
     /**

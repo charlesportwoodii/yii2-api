@@ -8,6 +8,8 @@ use OTPHP\TOTP;
 use Faker\Factory;
 use Yii;
 
+use yrc\api\models\Code;
+
 class ResetPasswordCest extends AbstractApiCest
 {
     protected $uri = '/api/v1/user/reset_password';
@@ -31,10 +33,12 @@ class ResetPasswordCest extends AbstractApiCest
 
         // Generate a random token since we can't pull this directly from Redis
         $token = Base32::encode(\random_bytes(64));
-        $hash = hash('sha256', $token . '_reset_token');
-        Yii::$app->cache->set($hash, [
-            'id' => $I->getUser()->id
-        ]);
+        
+        $code = new Code;
+        $code->hash = hash('sha256', $token . '_reset_token');
+        $code->user_id = $I->getUser()->id;
+
+        expect('code saves', $code->save())->true();
 
         $payload = [
             'password'          => $faker->password(20)
@@ -91,10 +95,11 @@ class ResetPasswordCest extends AbstractApiCest
 
         // Generate a random token since we can't pull this directly from Redis
         $token = Base32::encode(\random_bytes(64));
-        $hash = hash('sha256', $token . '_reset_token');
-        Yii::$app->cache->set($hash, [
-            'id' => $I->getUser()->id
-        ]);
+        $code = new Code;
+        $code->hash = hash('sha256', $token . '_reset_token');
+        $code->user_id = $I->getUser()->id;
+
+        expect('code saves', $code->save())->true();
 
         $payload = [
             'password' => $faker->password(20)
@@ -146,9 +151,11 @@ class ResetPasswordCest extends AbstractApiCest
 
         // Generate a random token since we can't pull this directly from Redis
         $token = Base32::encode(\random_bytes(64));
-        Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
-            'id' => $I->getUser()->id
-        ]);
+        $code = new Code;
+        $code->hash = hash('sha256', $token . '_reset_token');
+        $code->user_id = $I->getUser()->id;
+
+        expect('code saves', $code->save())->true();
 
         $payload = [
             'password'          => $faker->password(20)
@@ -195,9 +202,11 @@ class ResetPasswordCest extends AbstractApiCest
 
         // Generate a random token since we can't pull this directly from Redis
         $token = Base32::encode(\random_bytes(64));
-        Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
-            'id' => $I->getUser()->id
-        ]);
+        $code = new Code;
+        $code->hash = hash('sha256', $token . '_reset_token');
+        $code->user_id = $I->getUser()->id;
+
+        expect('code saves', $code->save())->true();
 
         $payload = [
             'password'          => $faker->password(20)
@@ -211,6 +220,6 @@ class ResetPasswordCest extends AbstractApiCest
         $I->seeResponseContainsJson([
             'status' => 400,
             'data' => null
-        ]);    
+        ]);
     }
 }

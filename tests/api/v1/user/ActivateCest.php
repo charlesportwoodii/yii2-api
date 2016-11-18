@@ -4,6 +4,7 @@ namespace tests\api\v1\user;
 
 use tests\_support\AbstractApiCest;
 use tests\api\v1\user\RegisterCest;
+use yrc\api\models\Code;
 use Base32\Base32;
 use Yii;
 
@@ -45,9 +46,11 @@ class ActivateCest extends AbstractApiCest
         $user = $cest->testRegistration(clone $I);
 
         $token = Base32::encode(\random_bytes(64));
-        Yii::$app->cache->set(hash('sha256', $token . '_activation_token'), [
-            'id' => $user->id
-        ]);
+        $code = new Code();
+        $code->hash = hash('sha256', $token . '_activation_token');
+        $code->user_id = $user->id;
+
+        expect('code saves', $code->save())->true();
 
         $I->wantTo('verify user can be activated with a valid activation code');
         $I->sendPOST($this->uri, [

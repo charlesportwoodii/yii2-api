@@ -21,10 +21,6 @@ class RefreshCest extends AbstractApiCest
 
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Limit');
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Remaining');
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Reset');
-
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
         $I->seeResponseMatchesJsonType([
@@ -47,10 +43,6 @@ class RefreshCest extends AbstractApiCest
         
         $I->addTokens($newTokens);
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
-
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Limit');
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Remaining');
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Reset');
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
@@ -85,10 +77,6 @@ class RefreshCest extends AbstractApiCest
         ];
 
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
-
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Limit');
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Remaining');
-        $I->seeHttpHeaderOnce('X-Rate-Limit-Reset');
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);

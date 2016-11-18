@@ -8,6 +8,8 @@ use OTPHP\TOTP;
 use Base32\Base32;
 use Yii;
 
+use yrc\api\models\Code;
+
 class ResetPasswordTest extends \app\tests\codeception\Unit
 {
     use \Codeception\Specify;
@@ -38,9 +40,11 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
         $this->specify('test reset scenario (with token)', function () use ($user) {
             // Generate a mock activation token
             $token = Base32::encode(\random_bytes(64));
-            Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
-                'id' => $user->id
-            ]);
+            $code = new Code();
+            $code->hash = hash('sha256', $token . '_reset_token');
+            $code->user_id = $user->id;
+            
+            expect('code saves', $code->save())->true();
 
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
@@ -57,9 +61,11 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
             $form->setUser($user);
             $token = Base32::encode(\random_bytes(64));
-            Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
-                'id' => $user->id
-            ]);
+            $code = new Code();
+            $code->hash = hash('sha256', $token . '_reset_token');
+            $code->user_id = $user->id;
+            
+            expect('code saves', $code->save())->true();
             $form->reset_token = $token;
             $form->password = $faker->password(24);
             $form->password_verify = $form->password;
@@ -79,9 +85,11 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
             $form->setUser($user);
             $token = Base32::encode(\random_bytes(64));
-            Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
-                'id' => $user->id
-            ]);
+            $code = new Code();
+            $code->hash = hash('sha256', $token . '_reset_token');
+            $code->user_id = $user->id;
+            
+            expect('code saves', $code->save())->true();
 
             $form->reset_token = $token;
             $form->password = $faker->password(24);
@@ -110,9 +118,11 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
             $form->setUser($user);
             $token = Base32::encode(\random_bytes(64));
-            Yii::$app->cache->set(hash('sha256', $token . '_reset_token'), [
-                'id' => $user->id
-            ]);
+            $code = new Code();
+            $code->hash = hash('sha256', $token . '_reset_token');
+            $code->user_id = $user->id;
+            
+            expect('code saves', $code->save())->true();
 
             $form->reset_token = $token;
             $form->password = $faker->password(24);

@@ -6,6 +6,8 @@ use app\forms\Activation;
 use Base32\Base32;
 use Yii;
 
+use yrc\api\models\Code;
+
 class ActivationTest extends \app\tests\codeception\Unit
 {
     use \Codeception\Specify;
@@ -29,9 +31,12 @@ class ActivationTest extends \app\tests\codeception\Unit
         $this->specify('test valid activation token', function () {
             $user = $this->createUser();
             $token = Base32::encode(\random_bytes(64));
-            Yii::$app->cache->set(hash('sha256', $token . '_activation_token'), [
-                'id' => $user->id
-            ]);
+            $code = new Code();
+            $code->hash = hash('sha256', $token . '_activation_token');
+            $code->user_id = $user->id;
+            
+            expect('code saves', $code->save())->true();
+
             $form = new Activation;
             $form->load(['Activation' => [
                 'activation_code' => $token
