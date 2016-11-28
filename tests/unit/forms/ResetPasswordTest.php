@@ -14,10 +14,7 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
 {
     use \Codeception\Specify;
 
-    /**
-     * Tests the scenarios
-     */
-    public function testScenario()
+    public function testInit()
     {
         $user = $this->createUser();
         $this->specify('test init scenario', function () use ($user) {
@@ -36,7 +33,11 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             expect('form does not validate', $form->validate())->false();
             expect('form does not init', $form->reset())->false();
         });
+    }
 
+    public function testReset()
+    {
+        $user = $this->createUser();
         $this->specify('test reset scenario (with token)', function () use ($user) {
             // Generate a mock activation token
             $token = Base32::encode(\random_bytes(64));
@@ -73,7 +74,11 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             expect('form validates', $form->validate())->true();
             expect('form resets', $form->reset())->true();
         });
+    }
 
+    public function testResetWithOTP()
+    {
+        $user = $this->createUser();
         $this->specify('test that password cannot be reset if OTP is enabled', function () use ($user) {
             // Enable OTP on the account
             $user->provisionOTP();
@@ -127,6 +132,55 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             $form->reset_token = $token;
             $form->password = $faker->password(24);
             $form->password_verify = $form->password;
+            $form->otp = $totp->now();
+            
+            expect('form validates', $form->validate())->true();
+            expect('form resets', $form->reset())->true();
+        });
+    }
+
+    public function testAuthenticatedResetScenario()
+    {
+        $user = $this->createUser();
+        $this->specify('test authenticated password reset', function () use ($user) {
+            $faker = Factory::create();
+            $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET_AUTHENTICATED]);
+            $form->setUser($user);
+            $form->user_id = $user;
+
+            $form->password = $faker->password(24);
+            $form->password_verify = $form->password;
+            $form->old_password = $this->getPassword();
+            
+            expect('form validates', $form->validate())->true();
+            expect('form resets', $form->reset())->true();
+        });
+
+        $user = $this->createUser();
+        $this->specify('test authenticated password reset with OTP', function () use ($user) {
+            $faker = Factory::create();
+            $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET_AUTHENTICATED]);
+
+            // Enable OTP on the account
+            $user->provisionOTP();
+            $user->enableOTP();
+
+            expect('OTP is enabled', $user->isOTPEnabled())->true();
+
+            $totp = new TOTP(
+                $user->username,
+                $user->otp_secret,
+                30,
+                'sha256',
+                6
+            );
+
+            $form->setUser($user);
+            $form->user_id = $user;
+
+            $form->password = $faker->password(24);
+            $form->password_verify = $form->password;
+            $form->old_password = $this->getPassword();
             $form->otp = $totp->now();
             
             expect('form validates', $form->validate())->true();

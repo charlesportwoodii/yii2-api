@@ -209,7 +209,7 @@ class ResetPasswordCest extends AbstractApiCest
         expect('code saves', $code->save())->true();
 
         $payload = [
-            'password'          => $faker->password(20)
+            'password' => $faker->password(20)
         ];
         $payload['password_verify'] = $payload['password'];
 

@@ -258,6 +258,67 @@ If any of the values listed are invalid, or do not pass validation rules, an HTT
 
 > Note that if you have enabled OTP on your account, and you forget both your password _and_ your OTP code you will be locked out of your account.
 
+## Authenticated password reset
+
+For convenience purposes, `yii2-api` comes with a second password reset flow suitable for authenticated users who possess both their old password (and their OTP code if necessary). This flow is suitable for authenticated users when you want to perform local validation, rather than forcing them to check their email for a one time token.
+
+> Note that for un-authenticated users you will still need to use the tokenized format outlined above. Additional, note that both flows can be used concurrently.
+
+To enable this flow, add the following action to your `actions()` method within your controller, and make the action required within your authenticator behavior.
+
+```php
+public function actions()
+{
+    return [
+        'reset_password_authenticated' => [
+            'class' => 'yrc\api\actions\ResetPasswordAction',
+            'scenario' => ResetPasswordAction::SCENARIO_AUTHENTICATED
+        ]
+    ]
+}
+
+public function behaviors()
+{
+    $behaviors = parent::behaviors();
+
+    $behaviors['authenticator'] = [
+        // [...]
+        'only'      => ['reset_password_authenticated'],
+        // [...]
+    ];
+
+    return $behaviors;
+}
+```
+
+The user's password can then be reset by sending an authenticated `POST` request with the following payload:
+
+```json
+Headers:
+    X-Date
+    Authorization
+
+POST /api/v1/user/reset_password_authenticated
+{
+    "old_password": "<users_current_password>",
+    "password": "<new_user_password>",
+    "password_verify": "<new_user_password_again>",
+    // "otp": "<otp_code_if_required>"
+}
+```
+
+> Note that if the two-factor authentication is enabled for the account, you'll need to send the OTP code along with the payload.
+If any of the values listed are invalid, or do not pass validation rules, an HTTP 400 status code will be returned with the standard error response, otherwise an HTTP 200 status code will be returned.
+
+```json
+{
+    "data": true,
+    "status": 200
+}
+```
+
+> Feel free to `yrc\api\actions\ResetPasswordAction` with a custom implementation if you want both workflows available on the same endpoint.
+
 ## Changing email address
 
 The email address associated to an account can be changed by sending an authenticated `POST` requested to `/api/v1/user/change_email` with the following payload.

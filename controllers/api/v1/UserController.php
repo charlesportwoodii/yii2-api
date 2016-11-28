@@ -5,6 +5,7 @@ namespace app\controllers\api\v1;
 use yrc\filters\auth\HMACSignatureAuth;
 use yrc\rest\Controller;
 
+use yrc\api\actions\ResetPasswordAction;
 use yii\web\HttpException;
 use Yii;
 
@@ -23,7 +24,15 @@ class UserController extends Controller
             'otp'           => 'yrc\api\actions\OTPAction',
             'refresh'       => 'yrc\api\actions\RefreshAction',
             'register'      => 'yrc\api\actions\RegisterAction',
-            'reset_password'=> 'yrc\api\actions\ResetPasswordAction',
+            
+            // If you want verifiable tokenized password resets (for authenticated and unauthenticated)
+            'reset_password' => 'yrc\api\actions\ResetPasswordAction',
+
+            // If you want password resets done for authenticated uses only
+            'reset_password_authenticated' => [
+                'class' => 'yrc\api\actions\ResetPasswordAction',
+                'scenario' => ResetPasswordAction::SCENARIO_AUTHENTICATED
+            ],
         ];
     }
 
@@ -37,7 +46,7 @@ class UserController extends Controller
 
         $behaviors['authenticator'] = [
             'class'     => HMACSignatureAuth::className(),
-            'only'      => ['refresh', 'authenticate', 'otp', 'reset_password', 'change_email'],
+            'only'      => ['refresh', 'authenticate', 'otp', 'reset_password', 'change_email', 'reset_password_authenticated'],
             'optional'  => ['authenticate', 'reset_password']
         ];
 
