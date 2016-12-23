@@ -30,3 +30,4 @@ This document outlines all the configuration options for your application as def
 | `yii2:user` | The class of your user identity model                   |
 | `yii2:access_control:header` | The secret global access header                |
 | `yii2:access_control:secret` | The secret value for the access header    |
+| `disque:clients`          | An array of Disque clients ` { host: <ip(127.0.0.1)>, port: <int(7711)>, password: <null|string>` |

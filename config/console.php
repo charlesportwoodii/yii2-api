@@ -16,6 +16,75 @@ $config = [
         'migrate' => 'dmstr\console\controllers\MigrateController'
     ],
     'components' => [
+        'yrc' => [
+            'class' => 'yrc\components\YRC',
+            'userClass' => $yaml['yii2']['user'],
+            'fromEmail' => $yaml['yii2']['swiftmailer']['origin_email'],
+            'fromName' => $yaml['yii2']['swiftmailer']['origin_email_name'],
+            'accessHeader' => $yaml['yii2']['access_control']['header'],
+            'accessHeaderSecret' => $yaml['yii2']['access_control']['secret']
+        ],
+        'queue' => [
+            'class' => 'yrc\components\Queue',
+            'clients' => $yaml['disque']['clients']
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'sourceLanguage' => 'en-US',
+                    'basePath' => '@app/messages',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                    'on missingTranslation' => ['yrc\components\TranslationEventHandler', 'handleMissingTranslation']
+                ],
+                'yrc*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'sourceLanguage' => 'en-US',
+                    'basePath' => '@app/vendor/charlesportwoodii/yii2-api-reset-components/messages',
+                    'fileMap' => [
+                        'yrc' => 'yrc.php',
+                    ],
+                    'on missingTranslation' => ['yrc\components\TranslationEventHandler', 'handleMissingTranslation']
+                ],
+            ],
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class'         => 'Swift_SmtpTransport',
+                'host'          => $yaml['yii2']['swiftmailer']['host'],
+                'username'      => $yaml['yii2']['swiftmailer']['username'],
+                'password'      => $yaml['yii2']['swiftmailer']['password'],
+                'port'          => $yaml['yii2']['swiftmailer']['port'],
+                'encryption'    => $yaml['yii2']['swiftmailer']['encryption'],
+            ],
+        ],
+        'cache' => [
+            'class' => 'yii\redis\Cache',
+            'redis' => 'redis'
+        ],
+        'redis' => [
+            'class'     => 'yii\redis\Connection',
+            'hostname'  => $yaml['yii2']['redis']['host'],
+            'port'      => $yaml['yii2']['redis']['port'],
+            'database'  => $yaml['yii2']['redis']['database'],
+        ],
+        'view' => [
+            'class' => 'yii\web\View',
+            'renderers' => [
+                'twig' => [
+                    'class' => 'yii\twig\ViewRenderer',
+                    'cachePath' => '@runtime/Twig/cache',
+                    'options' => [
+                        'auto_reload' => true,
+                    ],
+                    'globals' => ['html' => '\yii\helpers\Html'],
+                ],
+            ],
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

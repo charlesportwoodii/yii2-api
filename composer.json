@@ -17,7 +17,8 @@
         "symfony/yaml": "^3.0",
         "charlesportwoodii/yii2-api-rest-components": "dev-master",
         "yiisoft/yii2-redis": "~2.0.0",
-        "dmstr/yii2-migrate-command": "*"
+        "dmstr/yii2-migrate-command": "*",
+        "mariano/disque-php": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-gii": "^2.0",

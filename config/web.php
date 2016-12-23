@@ -17,9 +17,12 @@ $config = [
             'userClass' => $yaml['yii2']['user'],
             'fromEmail' => $yaml['yii2']['swiftmailer']['origin_email'],
             'fromName' => $yaml['yii2']['swiftmailer']['origin_email_name'],
-            'realSend' => $yaml['yii2']['swiftmailer']['realSend'],
             'accessHeader' => $yaml['yii2']['access_control']['header'],
             'accessHeaderSecret' => $yaml['yii2']['access_control']['secret']
+        ],
+        'queue' => [
+            'class' => 'yrc\components\Queue',
+            'clients' => $yaml['disque']['clients']
         ],
         'i18n' => [
             'translations' => [

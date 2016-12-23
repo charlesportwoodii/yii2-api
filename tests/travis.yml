@@ -27,3 +27,10 @@ yii2:
   originEmail: 'tests-results@travis-ci.org'
   accessHeader:
   accessHeaderSecret:
+
+disque: 
+  clients: 
+    - 
+      host: "127.0.0.1"
+      password: null
+      port: 7711

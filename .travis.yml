@@ -6,6 +6,7 @@ sudo: false
 language: php
 php:
   - '7.0'
+  - '7.1'
 
 # Cache composer dependencies
 cache:
@@ -17,7 +18,7 @@ services:
   - redis-server
 
 # Install the CLI tasks
-install: 
+install:
   - phpenv config-rm xdebug.ini
   - mysql -u root -e "CREATE DATABASE root;"
   - cp tests/travis.yml config/config.yml

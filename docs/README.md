@@ -37,6 +37,7 @@ For non-development environments, you'll need to install the following service d
 
 - Redis Server
 - MySQL
+- Disque
 
 > Note, SQLite and PostgreSQL support is coming soon.
 
