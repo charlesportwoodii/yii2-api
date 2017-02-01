@@ -8,22 +8,36 @@ php:
   - '7.0'
   - '7.1'
 
+env:
+  - TEST_SUITE=unit
+  - TEST_SUITE=api
+
+  - DB=mysql
+
 # Cache composer dependencies
 cache:
   directories:
     - tests/extensions
+    - $HOME/disque
 
 services:
   - mysql
   - redis-server
 
+before_install:
+  - chmod a+x tests/.travis/install_disque.sh
+  - bash tests/.travis/install_disque.sh
+
 # Install the CLI tasks
 install:
   - phpenv config-rm xdebug.ini
-  - mysql -u root -e "CREATE DATABASE root;"
+  - sh -c "if [ '$DB' == 'mysql' ]; then mysql -u root -e 'CREATE DATABASE IF NOT EXISTS root;'; fi"
   - cp tests/travis.yml config/config.yml
   - composer install -ovn --no-interaction --prefer-source
   - ./yii migrate/up --interactive=0
 
+before_script:
+  - /$HOME/disque/src/disque-server &2> /dev/null
+
 script:
-  - ./vendor/bin/codecept run
+  - ./vendor/bin/codecept run $TEST_SUITE
