@@ -33,7 +33,7 @@ before_install:
 # Install the CLI tasks
 install:
   - phpenv config-rm xdebug.ini
-  - sh -c "if [ '$DB' == 'mysql' ]; then mysql -u root -e 'CREATE DATABASE IF NOT EXISTS root;'; fi"
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -u root -e 'CREATE DATABASE IF NOT EXISTS root;'; fi"
   - cp tests/travis.yml config/config.yml
   - composer install -ovn --no-interaction --prefer-source
   - ./yii migrate/up --interactive=0
