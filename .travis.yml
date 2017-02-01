@@ -9,10 +9,12 @@ php:
   - '7.1'
 
 env:
-  - TEST_SUITE=unit
-  - TEST_SUITE=api
+  global:
+    - DB=mysql
+  matrix:
+    - TEST_SUITE=unit
+    - TEST_SUITE=api
 
-  - DB=mysql
 
 # Cache composer dependencies
 cache:
