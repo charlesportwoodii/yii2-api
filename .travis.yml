@@ -15,12 +15,11 @@ env:
     - TEST_SUITE=unit
     - TEST_SUITE=api
 
-
 # Cache composer dependencies
 cache:
   directories:
-    - tests/extensions
     - $HOME/disque
+    - vendor
 
 services:
   - mysql

@@ -16,7 +16,7 @@ class Unit extends UnitTest
     {
         parent::_before();
         Yii::$app->cache->flush();
-        \app\models\User::deleteAll();
+        Yii::$app->yrc->userClass::deleteAll();
     }
 
     public function getPassword()

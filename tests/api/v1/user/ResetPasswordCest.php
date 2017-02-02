@@ -37,7 +37,7 @@ class ResetPasswordCest extends AbstractApiCest
         $code = new Code;
         $code->hash = hash('sha256', $token . '_reset_token');
         $code->user_id = $I->getUser()->id;
-
+        
         expect('code saves', $code->save())->true();
 
         $payload = [

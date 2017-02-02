@@ -1,32 +1,41 @@
 ---
 # Application specific configuration
 app:
-  id: "yii2-api-test-travis"
-  name: "TravisCI test"
+  id: "yii2-api"
+  name: "Yii2 API Skeleton"
   debug: true
+  env: 'dev'
 
+# Yii2 specific configuration
 yii2:
+  # Database configuration
   database:
     driver: mysql
     database: root
     host: 127.0.0.1
     username: root
-    password: 
+    password:
+  # Redis Configuration
   redis:
     host: 127.0.0.1
     port: 6379
     database: 0
+  # SwiftMailer configuration
   swiftmailer:
     host: 127.0.0.1
     username: 
     password: 
     port: 587
     encryption: 'tls'
-    realSend: false
-  user: '\app\models\User'
-  originEmail: 'tests-results@travis-ci.org'
-  accessHeader:
-  accessHeaderSecret:
+    # The email address that system notifications should be delivered from
+    origin_email:
+    # The name to associate with the origin
+    origin_email_name:
+  # User Model
+  user: 'app\models\User'
+  access_control:
+    header: null
+    secret: null
 
 disque: 
   clients: 
@@ -34,3 +43,4 @@ disque:
       host: "127.0.0.1"
       password: null
       port: 7711
+
