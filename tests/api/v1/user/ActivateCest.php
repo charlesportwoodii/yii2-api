@@ -42,13 +42,12 @@ class ActivateCest extends AbstractApiCest
     public function testActivateWithValidToken(\ApiTester $I)
     {
         // Run the registration cest instead of rerunning existing tests
-        $cest = new RegisterCest;
-        $user = $cest->testRegistration(clone $I);
+        $I->register(false);
 
         $token = Base32::encode(\random_bytes(64));
         $code = new Code();
         $code->hash = hash('sha256', $token . '_activation_token');
-        $code->user_id = $user->id;
+        $code->user_id = $I->getUser()->id;
 
         expect('code saves', $code->save())->true();
 

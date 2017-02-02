@@ -66,14 +66,5 @@ class RegisterCest extends AbstractApiCest
             'status' => 200,
             'data' => true
         ]);
-
-        $user = Yii::$app->yrc->userClass::find([
-            'email' => $payload['email']
-        ])->one();
-        
-        expect('user is set', $user)->notEquals(null);
-        expect('user is not activated', $user->isActivated())->false();
-
-        return $user;
     }
 }

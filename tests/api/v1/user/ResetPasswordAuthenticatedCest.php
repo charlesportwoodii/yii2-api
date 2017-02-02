@@ -37,9 +37,6 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
             'status' => 200,
             'data' => true
         ]);
-
-        expect('old password does not validate', $I->getUser()->validatePassword($oldPassword))->false();
-        expect('new password validates', $I->getUser()->validatePassword($payload['password']))->true();
     }
 
     public function testAuthenticatedPasswordResetFlowWithOTPEnabled(\ApiTester $I)

@@ -24,7 +24,7 @@ class OTPCest extends AbstractApiCest
         }
     }
 
-    public function testEnablingOTP(\ApiTester $I)
+    public function testOTPProvision(\ApiTester $I)
     {
         $I->wantTo('provision and enable OTP');
         $I->register(true);
@@ -40,9 +40,14 @@ class OTPCest extends AbstractApiCest
             ],
             'status' => 'integer',
         ]);
+    }
 
-        
-        $code = \parse_url(\json_decode($I->grabResponse(), true)['data']['provisioning_code']);
+    public function testEnablingOPT(\ApiTester $I)
+    {
+        $I->register(true);
+
+        $uri = $I->getUser()->provisionOTP();
+        $code = \parse_url($uri);
         $username = ltrim($code['path'], '/');
         $options = [];
         \parse_str($code['query'], $options);
@@ -55,25 +60,6 @@ class OTPCest extends AbstractApiCest
             $options['algorithm'],
             6
         );
-
-        $payload = [
-            'code' => '7777'
-        ];
-
-        $I->wantTo('verify OTP cannot be enabled with a bad provisioning code');
-        $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
-        $I->seeResponseIsJson();
-        $I->seeResponseCodeIs(200);
-
-        $I->seeResponseMatchesJsonType([
-            'data' => 'boolean',
-            'status' => 'integer',
-        ]);
-
-        $I->seeResponseContainsJson([
-            'status' => 200,
-            'data' => false,
-        ]);
 
         $payload = [
             'code' => $totp->now()
@@ -92,6 +78,32 @@ class OTPCest extends AbstractApiCest
         $I->seeResponseContainsJson([
             'status' => 200,
             'data' => true,
+        ]);
+    }
+
+    public function testEnablingOPTWithBadProvisioningCode(\ApiTester $I)
+    {
+        $I->register(true);
+
+        $uri = $I->getUser()->provisionOTP();
+
+        $payload = [
+            'code' => '7777'
+        ];
+
+        $I->wantTo('enable OTP with badprovisioning code');
+        $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
+        $I->seeResponseIsJson();
+        $I->seeResponseCodeIs(200);
+
+        $I->seeResponseMatchesJsonType([
+            'data' => 'boolean',
+            'status' => 'integer',
+        ]);
+
+        $I->seeResponseContainsJson([
+            'status' => 200,
+            'data' => false,
         ]);
     }
 
