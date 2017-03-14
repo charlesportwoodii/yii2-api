@@ -7,5 +7,5 @@ web/assets/*
 .AppleDouble
 /vendor/
 .DS_Store
-
+.vagrant/
 tests/_output/*

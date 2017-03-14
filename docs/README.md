@@ -38,8 +38,11 @@ For non-development environments, you'll need to install the following service d
 - Redis Server
 - MySQL
 - Disque
+- MailCatcher
 
 > Note, SQLite and PostgreSQL support is coming soon.
+
+> Disque and MailCatcher Docker containers can be pulled from the provided `Vagrantfile`.
 
 ### Configuring
 

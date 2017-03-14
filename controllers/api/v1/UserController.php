@@ -28,7 +28,7 @@ class UserController extends Controller
             // If you want verifiable tokenized password resets (for authenticated and unauthenticated)
             'reset_password' => 'yrc\api\actions\ResetPasswordAction',
 
-            // If you want password resets done for authenticated uses only
+            // If you want password resets done for authenticated userss only
             'reset_password_authenticated' => [
                 'class' => 'yrc\api\actions\ResetPasswordAction',
                 'scenario' => ResetPasswordAction::SCENARIO_AUTHENTICATED

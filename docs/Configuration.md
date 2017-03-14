@@ -11,7 +11,7 @@ This document outlines all the configuration options for your application as def
 | `app:name`               | The Yii2 application name                  |
 | `app:debug`              | Set to `true` to enable debugging mode     |
 | `app:env`                | The Yii2 application environment           |
-| `yii2:database:driver`   | The database driver you want to use. Currently supported values are `mysql` |
+| `yii2:database:driver`   | The database driver you want to use. Currently supported values are `mysql`, `sqlite` |
 | `yii2:database:database` | The database name |
 | `yii2:database:host`     | The hostname or IP address of the database |
 | `yii2:database:username` | The username to access the database        |
@@ -22,8 +22,8 @@ This document outlines all the configuration options for your application as def
 | `yii2:swiftmailer:host`  | The hostname or IP address of the SMTP server |
 | `yii2:swiftmailer:username` | The username to access the SMTP server  |
 | `yii2:swiftmailer:password` | The password to access the SMTP server  |
-| `yii2:swiftmailer:port`   | The port number of the SMTP server        |
-| `yii2:swiftmailer:encryption` | The encryption method to use. `tls` is prefered |
+| `yii2:swiftmailer:port`   | The port number of the SMTP server. For MailCatcher use 1025        |
+| `yii2:swiftmailer:encryption` | The encryption method to use. `tls` is prefered. For MailCatcher set to `null` |
 | `yii2:swiftmailer:realSend` | Whether or not the API should send emails or not. Set to `true` for production instances. During debugging or when running tests this should be to set to `false |
 | `yii2:swiftmailer:origin_email` | The email address notifications should be sent from |
 | `yii2:swiftmailer:origin_email_name` | The name to associate with the origin email|

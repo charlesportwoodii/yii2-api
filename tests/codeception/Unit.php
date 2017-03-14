@@ -10,8 +10,14 @@ use Yii;
 
 class Unit extends UnitTest
 {
+    /**
+     * @var password : The generated password
+     */
     private $password;
 
+    /**
+     * Codeception _before test
+     */
     protected function _before()
     {
         parent::_before();
@@ -19,6 +25,10 @@ class Unit extends UnitTest
         Yii::$app->yrc->userClass::deleteAll();
     }
 
+    /**
+     * Helper method to get the password that was created for the user
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
@@ -43,7 +53,7 @@ class Unit extends UnitTest
         expect('form validates', $form->validate())->true();
         expect('user can be registered', $form->register())->true();
 
-        $config = require  Yii::getAlias('@app') . '/config/loader.php';
+        $config = require Yii::getAlias('@app') . '/config/loader.php';
         $userClass = $config['yii2']['user'];
         
         $user = $userClass::findOne(['email' => $form->email]);

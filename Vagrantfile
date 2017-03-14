@@ -19,9 +19,20 @@ Vagrant.configure(2) do |config|
 
     # Upgrade PHP & Nginx
     echo "Upgrading web server packages"
+
+    # Install Docker CE
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
     sudo apt-get update
-    sudo apt-get install -y php7.0-fpm nginx-mainline
+    sudo apt-get remove php7.0-fpm php5.6-fpm disque-server -y
+    sudo apt-get install -y php7.1-fpm nginx-mainline apt-transport-https ca-certificates curl docker-ce -y
     sudo ldconfig
+
+    # Generate an ed25519 key if one doesn't exists
+    if [ ! -f /home/vagrant/.ssh/id_ed25519 ]; then
+      cat /dev/zero | ssh-keygen -t ed25519 -f /home/vagrant/.ssh/id_ed25519 -q -N ""
+    fi
 
     # Update the user's path for the ~/.bin directory
     export BINDIR="$HOME/.bin"
@@ -67,8 +78,14 @@ Vagrant.configure(2) do |config|
     rm -rf /var/www/vendor
     /home/vagrant/.bin/composer install -ovn
 
-    # Run the migration
-    chmod a+x /var/www/yii
-    ./yii migrate/up --interactive=0
+    # Pull down the Disque and MailCatcher docker images
+    docker pull charlesportwoodii/xenial:disque
+    docker pull schickling/mailcatcher
+
+    # Start the Disque container
+    docker run -d -p 7711:7711 --name disque charlesportwoodii/xenial:disque
+
+    # Start the MailCatcher container
+    docker run -d -p 1025:1025 -p 1080:1080 --name mailcatcher schickling/mailcatcher
   SHELL
 end
