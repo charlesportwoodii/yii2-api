@@ -8,7 +8,7 @@ $config = [
     'id' => $yaml['app']['id'],
     'name' => $yaml['app']['name'],
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => [ 'log' ],
     'language' => 'en-US',
     'sourceLanguage' => 'en-US',
     'components' => [
@@ -77,7 +77,7 @@ $config = [
                     'options' => [
                         'auto_reload' => true,
                     ],
-                    'globals' => ['html' => '\yii\helpers\Html'],
+                    'globals' => ['html' => 'yii\helpers\Html'],
                 ],
             ],
         ],
@@ -86,17 +86,24 @@ $config = [
             'enableCsrfValidation'      => false,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
+                'application/json+25519' => 'yrc\web\Json25519Parser'
             ]
         ],
         'response' => [
-            'format'     => yii\web\Response::FORMAT_JSON,
+            'class'      => 'yrc\web\Response',
+            'format'     => \yrc\web\Response::FORMAT_JSON,
             'charset'    => 'UTF-8',
             'formatters' => [
-                \yii\web\Response::FORMAT_JSON => [
-                    'class'         => 'yrc\components\JsonResponseFormatter',
+                \yrc\web\Response::FORMAT_JSON25519 => [
+                    'class'         => 'yrc\web\Json25519ResponseFormatter',
                     'prettyPrint'   => YII_DEBUG,
                     'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION,
                 ],
+                \yrc\web\Response::FORMAT_JSON => [
+                    'class'         => 'yrc\web\JsonResponseFormatter',
+                    'prettyPrint'   => YII_DEBUG,
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION,
+                ]
             ],
         ],
         'errorHandler' => [
@@ -115,6 +122,7 @@ $config = [
             ]
         ],
         'user' => [
+            'class' => 'yrc\web\User',
             'identityClass' => $yaml['yii2']['user'],
             'enableSession' => false
         ],

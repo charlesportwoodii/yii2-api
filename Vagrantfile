@@ -30,8 +30,28 @@ Vagrant.configure(2) do |config|
     sudo ldconfig
 
     # Generate an ed25519 key if one doesn't exists
-    if [ ! -f /home/vagrant/.ssh/id_ed25519 ]; then
+    if [[ ! -f /home/vagrant/.ssh/id_ed25519 ]]; then
       cat /dev/zero | ssh-keygen -t ed25519 -f /home/vagrant/.ssh/id_ed25519 -q -N ""
+    fi
+
+    # Install libsodium if PHP doens't think it is installed
+    if [[ !-f /etc/php/7.1/conf.d/libsodium.ini ]]
+    then
+      # Download libsodium proper
+      cd /tmp
+      wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.12.tar.gz
+      tar -xzf libsodium-1.0.12.tar.gz
+      cd libsodium-1.0.12
+      ./configure && sudo make install
+
+      # Now the PHP extension
+      cd /tmp
+      git clone https://github.com/jedisct1/libsodium-php -b 1.0.6
+      cd libsodium-php
+      phpize
+      ./configure && sudo make install
+      echo "extension=libsodium.so" | sudo tee /etc/php/7.1/conf.d/libsodium.ini
+      sudo systemctl restart php-fpm-7.1
     fi
 
     # Update the user's path for the ~/.bin directory

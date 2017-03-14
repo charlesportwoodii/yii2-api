@@ -68,7 +68,7 @@ class ApiTester extends \Codeception\Actor
             $this->tokens = [
                 'access_token'   => $tokens['access_token'],
                 'refresh_token'  => $tokens['refresh_token'],
-                'ikm'            => $tokens['ikm']
+                'ikm'            => $tokens['ikm'],
             ];
         }
     }
@@ -94,7 +94,7 @@ class ApiTester extends \Codeception\Actor
         }
 
         expect('user is not null', $this->user !== null)->true();
-        $this->tokens = Token::generate($this->user->id);
+        $this->tokens = Token::generate($this->user->id, null);
         $this->addTokens($this->tokens);
         
         return $form->password;

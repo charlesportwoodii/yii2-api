@@ -13,6 +13,7 @@
         "ext-pdo_mysql": "*",
         "ext-PDO": "*",
         "ext-Reflection": "*",
+        "ext-libsodium": "*",
         "yiisoft/yii2": ">=2.0.10",
         "symfony/yaml": "^3.0",
         "charlesportwoodii/yii2-api-rest-components": "dev-master",
@@ -27,7 +28,7 @@
         "fzaninotto/faker": "^1.6",
         "codeception/specify": "*",
         "codeception/verify": "*",
-	"codeception/phpbuiltinserver": "*"
+	    "codeception/phpbuiltinserver": "*"
     },
     "scripts": {
         "post-install-cmd": [

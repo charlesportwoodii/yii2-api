@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8aba6c89f543b62e45c256b6cd10a96",
+    "content-hash": "1a70672e4d3087536eba0bd8cab63b38",
     "packages": [
         {
             "name": "beberlei/assert",
-            "version": "v2.7.3",
+            "version": "v2.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beberlei/assert.git",
-                "reference": "5972776d6a9eedfd3c55216341434e19cb50418f"
+                "reference": "3ee3bc468a3ce4bbfc3d74f53c6cdb5242d39d1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/assert/zipball/5972776d6a9eedfd3c55216341434e19cb50418f",
-                "reference": "5972776d6a9eedfd3c55216341434e19cb50418f",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/3ee3bc468a3ce4bbfc3d74f53c6cdb5242d39d1a",
+                "reference": "3ee3bc468a3ce4bbfc3d74f53c6cdb5242d39d1a",
                 "shasum": ""
             },
             "require": {
@@ -25,8 +25,8 @@
                 "php": ">=5.3"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.0",
-                "phpunit/phpunit": "@stable"
+                "friendsofphp/php-cs-fixer": "^2.1.1",
+                "phpunit/phpunit": "^4|^5"
             },
             "type": "library",
             "autoload": {
@@ -59,7 +59,7 @@
                 "assertion",
                 "validation"
             ],
-            "time": "2017-01-24T15:14:39+00:00"
+            "time": "2017-03-14T18:06:52+00:00"
         },
         {
             "name": "bower-asset/jquery",
@@ -273,12 +273,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/charlesportwoodii/yii2-api-rest-components.git",
-                "reference": "d03bbde623b9de10ff0c21011116fa755b33b703"
+                "reference": "5800286b774bb6df0ae9b3b7be86fbf604cb6a7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/d03bbde623b9de10ff0c21011116fa755b33b703",
-                "reference": "d03bbde623b9de10ff0c21011116fa755b33b703",
+                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/5800286b774bb6df0ae9b3b7be86fbf604cb6a7e",
+                "reference": "5800286b774bb6df0ae9b3b7be86fbf604cb6a7e",
                 "shasum": ""
             },
             "require": {
@@ -313,7 +313,7 @@
                 "rest",
                 "yii2"
             ],
-            "time": "2017-01-30 22:23:35"
+            "time": "2017-03-14 15:51:49"
         },
         {
             "name": "christian-riesen/base32",
@@ -3874,7 +3874,8 @@
         "ext-openssl": "*",
         "ext-pdo_mysql": "*",
         "ext-pdo": "*",
-        "ext-reflection": "*"
+        "ext-reflection": "*",
+        "ext-libsodium": "*"
     },
     "platform-dev": []
 }

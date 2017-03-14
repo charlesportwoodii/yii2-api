@@ -47,21 +47,21 @@ use Yii;
 class ExampleActions extends RestAction {}
 ```
 
-Within our action we can then implement static methods of the HTTP verbs we want to handle. For instance to support `POST` requests, we would implement the following method inside our action.
+Within our action we can then implement public methods of the HTTP verbs we want to handle. For instance to support `POST` requests, we would implement the following method inside our action.
 
 ```php
-public static function post($params) {}
+public function post($params) {}
 ```
 
 The method name should correlate to the HTTP verb you want to support inside the action. The following are all valid method names which correlate to the HTTP verb associate with your action.
 
 ```php
-public static function post($params) {}
-public static function delete($params) {}
-public static function head($params) {}
-public static function put($params) {}
-public static function patch($params) {}
-public static function options($params) {}
+public function post($params) {}
+public function delete($params) {}
+public function head($params) {}
+public function put($params) {}
+public function patch($params) {}
+public function options($params) {}
 ```
 
 This powerful framework allows you to group API endpoints in a single action and easily separate logic based upon the HTTP verb requested.
@@ -100,8 +100,6 @@ class ExampleActions extends RestAction
     public $property;
 }
 ```
-
-If you're using static actions, these properties can be retrieved from `$params['class']`. 
 
 ## Authentication
 
