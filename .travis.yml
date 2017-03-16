@@ -46,7 +46,7 @@ before_install:
 
 # Install the CLI tasks
 install:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || true
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -u root -e 'CREATE DATABASE IF NOT EXISTS root;'; cp tests/mysql-travis.yml config/config.yml; fi"
   - sh -c "if [ '$DB' = 'sqlite' ]; then cp tests/sqlite-travis.yml config/config.yml; fi"
   - composer install -ovn --no-interaction --prefer-source
