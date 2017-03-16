@@ -10,11 +10,7 @@ app:
 yii2:
   # Database configuration
   database:
-    driver: mysql
-    database: root
-    host: 127.0.0.1
-    username: root
-    password:
+    driver: sqlite
   # Redis Configuration
   redis:
     host: 127.0.0.1
@@ -23,14 +19,11 @@ yii2:
   # SwiftMailer configuration
   swiftmailer:
     host: 127.0.0.1
-    username: 
-    password: 
-    port: 587
-    encryption: 'tls'
+    port: 1025
     # The email address that system notifications should be delivered from
-    origin_email:
+    origin_email: test@example.com
     # The name to associate with the origin
-    origin_email_name:
+    origin_email_name: test
   # User Model
   user: 'app\models\User'
   access_control:

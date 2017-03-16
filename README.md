@@ -9,6 +9,21 @@
 
 A project template to reduce the overhead involved in writing RESTful JSON API's by implementing common API endpoints (such as registration and authentication) so that developers can focus on writing core application business logic rather than implementing the same components over and over again. Built ontop of Yii Framework 2 (Yii2), this project provides a _basline_ API skeleton that is easy to extend from, and implements a base API that can easily be extended from.
 
+## What is Provided?
+
+By default the following functionality is provided:
+
+- Authentication with HMAC+HKDF
+- Registration
+- Password Resets for authenticate and unauthenticated users
+
+The additional functionality is provided as well:
+
+- Two factor authentication via OTP codes + API endpoints to manage
+- Configurable Rate Limiting
+- Encrypted API session support via libsodium
+- Translation support
+
 ## Documentation
 
 For information on how to setup, configure, extend, and use this framework, please read the documentation in the [docs](docs) folder.

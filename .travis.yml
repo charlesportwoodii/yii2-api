@@ -2,23 +2,33 @@
 # Allow for container based builds
 sudo: false
 
-# Test on PHP7 and PHP-Nightly
+# Test on PHP7
 language: php
 php:
   - '7.0'
   - '7.1'
+  - hhvm
+  - nightly
+
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: nightly
+  fast_finish: true
 
 env:
-  global:
-    - DB=mysql
   matrix:
-    - TEST_SUITE=unit
-    - TEST_SUITE=api
+    - TEST_SUITE=unit DB=mysql
+    - TEST_SUITE=api DB=mysql
+    - TEST_SUITE=unit DB=sqlite
+    - TEST_SUITE=api DB=sqlite
 
 # Cache composer dependencies
 cache:
   directories:
-    - $HOME/disque
+    #- $HOME/disque
+    #- $HOME/libsodium/lib
+    #- $HOME/libsodium-php/modules
     - vendor
 
 services:
@@ -26,18 +36,27 @@ services:
   - redis-server
 
 before_install:
-  - chmod a+x tests/.travis/install_disque.sh
-  - bash tests/.travis/install_disque.sh
+  # Install Ruby 2.4.0
+  - rvm install 2.4.0
+  - rvm use 2.4.0
+  - ruby --version
+  # Install dependencies
+  - chmod a+x tests/.travis/install_dependencies.sh
+  - bash tests/.travis/install_dependencies.sh
+  # Install MailCatcher
+  - gem install mailcatcher
+  - mailcatcher catchmail &2> /dev/null
 
 # Install the CLI tasks
 install:
   - phpenv config-rm xdebug.ini
-  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -u root -e 'CREATE DATABASE IF NOT EXISTS root;'; fi"
-  - cp tests/travis.yml config/config.yml
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -u root -e 'CREATE DATABASE IF NOT EXISTS root;'; cp tests/mysql-travis.yml config/config.yml; fi"
+  - sh -c "if [ '$DB' = 'sqlite' ]; then cp tests/sqlite-travis.yml config/config.yml; fi"
   - composer install -ovn --no-interaction --prefer-source
   - ./yii migrate/up --interactive=0
 
 before_script:
+  - php -m
   - /$HOME/disque/src/disque-server &2> /dev/null
 
 script:
