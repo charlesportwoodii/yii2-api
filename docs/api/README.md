@@ -9,7 +9,7 @@ The following topics have their own page.
 | Topic                                | Description                                                        |
 |--------------------------------------|--------------------------------------------------------------------|
 | [Authentication](Authentication.md)  | This page details how to authenticate against the API              |
-| [Rate Limiting](Rate Limiting.md)    | This page provides general information on API rate limiting        |
+| [Rate Limiting](Rate%20Limiting.md)    | This page provides general information on API rate limiting        |
 | [Responses](Responses.md)            | This page outlines the response structure of the API               |
 | [Encrypted json+25519](json25519.md) | This page outlines encrypted requests and responses                |
 
