@@ -16,10 +16,8 @@ matrix:
 
 env:
   matrix:
-    - TEST_SUITE=unit DB=mysql
-    - TEST_SUITE=api DB=mysql
-    - TEST_SUITE=unit DB=sqlite
-    - TEST_SUITE=api DB=sqlite
+    - DB=mysql
+    - DB=sqlite
 
 # Cache composer dependencies
 cache:
@@ -57,4 +55,4 @@ before_script:
   - /$HOME/disque/src/disque-server &2> /dev/null
 
 script:
-  - ./vendor/bin/codecept run $TEST_SUITE
+  - ./vendor/bin/codecept run
