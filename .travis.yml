@@ -24,9 +24,8 @@ env:
 # Cache composer dependencies
 cache:
   directories:
-    #- $HOME/disque
-    #- $HOME/libsodium/lib
-    #- $HOME/libsodium-php/modules
+    - $HOME/disque/src
+    - $HOME/libsodium-lib
     - vendor
 
 services:

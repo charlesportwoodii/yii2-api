@@ -12,7 +12,7 @@ fi
 
 
 # check if libsodium is already installed
-#if [ ! -d "$HOME/libsodium/lib" ]; then
+if [ ! -d "$HOME/libsodium/lib" ]; then
   rm -rf $HOME/libsodium;
   cd $HOME;
   git clone https://github.com/jedisct1/libsodium --branch stable --depth 10;
@@ -21,11 +21,11 @@ fi
   ./configure --prefix=$HOME/libsodium-lib;
   make;
   make install;
-#else
-#  echo 'Using cached directory.'
-#fi
+else
+  echo 'Using cached directory for libsodium-lib'
+fi
 
-#if [ ! -d "$HOME/libsodium-php/modules" ]; then
+if [ ! -d "$HOME/libsodium-php/modules" ]; then
   rm -rf $HOME/libsodium-php;
   cd $HOME;
   git clone https://github.com/jedisct1/libsodium-php -b 1.0.6;
@@ -34,9 +34,6 @@ fi
   ./configure --with-libsodium=$HOME/libsodium-lib;
   make;
   make install;
-#else
-#  cd $HOME/libsodium;
-#  make install;
-#fi
+fi
 
 echo "extension = libsodium.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
