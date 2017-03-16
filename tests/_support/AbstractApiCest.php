@@ -36,7 +36,7 @@ abstract class AbstractApiCest
     public function _before(\ApiTester $I)
     {
         Yii::$app->yrc->userClass::deleteAll();
-        Yii::$app->cache->flush();
+        //Yii::$app->cache->flush();
         
         // Verify a URI is set
         expect('uri is set', $this->uri)->notEquals(null);

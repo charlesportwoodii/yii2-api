@@ -40,8 +40,9 @@ class OtkCest extends AbstractApiCest
         $signature = $response['signature'];
 
         // Verify the signature is accurate
-        expect('signature is valid', \Sodium\crypto_sign_open(
+        expect('signature is valid', \Sodium\crypto_sign_verify_detached(
             \base64_decode($signature),
+            \base64_decode($public),
             \base64_decode($signing)
         ))->notEquals(false);
     }

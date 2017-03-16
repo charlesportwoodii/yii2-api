@@ -77,7 +77,7 @@ class ApiTester extends \Codeception\Actor
      * Register a new user for testing
      * @return bool
      */
-    public function register($activate = true)
+    public function register($activate = true, $withTokens = true)
     {
         $faker = Factory::create();
         $form = new Registration;
@@ -94,9 +94,10 @@ class ApiTester extends \Codeception\Actor
         }
 
         expect('user is not null', $this->user !== null)->true();
-        $this->tokens = Token::generate($this->user->id, null);
-        $this->addTokens($this->tokens);
-        
+        if ($withTokens) {
+            $this->tokens = Token::generate($this->user->id, null);
+            $this->addTokens($this->tokens);
+        }
         return $form->password;
     }
 
@@ -105,9 +106,11 @@ class ApiTester extends \Codeception\Actor
      * @param string $uri
      * @param string $method    HTTP method
      * @param array $payload
+     * @param array $nonce
+     * @param array $kp
      * @return void
      */
-    public function sendAuthenticatedRequest($uri, $method, $payload = [])
+    public function sendAuthenticatedRequest($uri, $method, $payload = [], $nonce = null, $kp = null)
     {
         $now = new \DateTime();
         $time = $now->format(\DateTime::RFC1123);
@@ -128,6 +131,14 @@ class ApiTester extends \Codeception\Actor
         if (empty($payload)) {
             $this->$httpMethod($uri);
         } else {
+            if ($nonce !== null && $kp !== null) {
+                // The payload is now encrypted
+                $payload = \base64_encode(\Sodium\crypto_box(
+                    \json_encode($payload),
+                    $nonce,
+                    $kp
+                ));
+            }
             $this->$httpMethod($uri, $payload);
         }
 

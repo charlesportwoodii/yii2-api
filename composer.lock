@@ -273,12 +273,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/charlesportwoodii/yii2-api-rest-components.git",
-                "reference": "5800286b774bb6df0ae9b3b7be86fbf604cb6a7e"
+                "reference": "c06d7d86b3de5de780f2caa960d65e9bbab78e24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/5800286b774bb6df0ae9b3b7be86fbf604cb6a7e",
-                "reference": "5800286b774bb6df0ae9b3b7be86fbf604cb6a7e",
+                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/c06d7d86b3de5de780f2caa960d65e9bbab78e24",
+                "reference": "c06d7d86b3de5de780f2caa960d65e9bbab78e24",
                 "shasum": ""
             },
             "require": {
@@ -313,7 +313,7 @@
                 "rest",
                 "yii2"
             ],
-            "time": "2017-03-14 15:51:49"
+            "time": "2017-03-16 17:03:22"
         },
         {
             "name": "christian-riesen/base32",
@@ -2467,16 +2467,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.15",
+            "version": "5.7.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b99112aecc01f62acf3d81a3f59646700a1849e5"
+                "reference": "dafc78e2a7d12139b0e97078d1082326bd09363d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b99112aecc01f62acf3d81a3f59646700a1849e5",
-                "reference": "b99112aecc01f62acf3d81a3f59646700a1849e5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/dafc78e2a7d12139b0e97078d1082326bd09363d",
+                "reference": "dafc78e2a7d12139b0e97078d1082326bd09363d",
                 "shasum": ""
             },
             "require": {
@@ -2545,7 +2545,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-03-02T15:22:43+00:00"
+            "time": "2017-03-15T13:02:34+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
