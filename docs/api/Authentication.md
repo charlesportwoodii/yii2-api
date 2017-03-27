@@ -46,6 +46,8 @@ For successful authentications, you'll be presented with the following response 
         "access_token": "7XF56VIP7ZQQOLGHM6MRIK56S2QS363ULNB5UKNFMJRQVYHQH7IA",
         "refresh_token": "MA2JX5FXWS57DHW4OIHHQDCJVGS3ZKKFCL7XM4GNOB567I6ER4LQ",
         "ikm": "bDEyECRvKKE8w81fX4hz/52cvHsFPMGeJ+a9fGaVvWM=",
+        "signing": "ecYXfAwNVoS9ePn4xWhiJOdXQzr6LpJIeIn4AVju/Ug=",
+        "hash": "822d1a496b11ce6639fec7a2993ba5c02153150e45e5cec5132f3f16bfe95149",
         "expires_at": 1472678411
     },
     "status": 200
@@ -57,6 +59,8 @@ The `access_token` parameter is, until the `expires_at` time is reached, a uniqu
 The `refresh_token` is a special token that enables the client to extend their sessions past the `expires_at` time. More information about how to refresh your tokens can be found in the relevant documentation for the refresh endpoint `/api/v1/user/refresh`.
 
 The `ikm` parameter is the `Initial Key Material` which is used to seed the Hash-Based Key Derivation Function (HKDF), which is used to generate your `Authorization` headers (more information below). This value is 32 random bytes, base64 encoded. On your client you _must_ base64 decode this value to work with it within HKDF.
+
+The `signing` element is a 32 byte `libsodium` signature public key, which can be used to decrypt responses. While the `hash` element is a unique ID you can use to reference a specific cryptographic key on the API for `application/json+25519` requests.
 
 ## Making Authentication Requests
 

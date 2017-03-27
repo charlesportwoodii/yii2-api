@@ -3,7 +3,7 @@
 namespace tests\api\v1\user;
 
 use tests\_support\AbstractApiCest;
-use yrc\api\models\TokenKeyPair;
+use yrc\api\models\EncryptionKey;
 use yii\helpers\Json;
 use OTPHP\TOTP;
 use Faker\Factory;
@@ -227,101 +227,53 @@ class AuthenticateCest extends AbstractApiCest
     }
 
     /**
-     * Tests logging into the API with an encrypted payload
-     * @param ApiTester $I
+     * Sends a plain text request, and expects that the response is encrypted using our newly generated public key
+     * @param ApiTester
      */
-    public function testLoginWithEncryptedPayload(\ApiTester $I)
+    public function testAuthenticatePlainTextToEncryptedResponse(\ApiTester $I)
     {
+        // Create a new user
         $password = $I->register(true);
-        $I->wantTo('verify users can authenticate against the API with an encrypted payload');
-        
-        // Simulate a request to /api/v1/server/otk
-        $token = TokenKeyPair::generate(TokenKeyPair::OTK_TYPE);
-        
-        // Set the content type to application/json+25519
-        $I->haveHttpHeader('content-type', 'application/json+25519');
-        
-        // Also set the hash ID so the API knows what hash to fetch
-        $I->haveHttpHeader('x-hashid', $token->hash);
 
+        // Generate a new encryption key, mocking a request to /api/v1/server/otk
+        $key = EncryptionKey::generate();
+        
         $boxKp = \Sodium\crypto_box_keypair();
         $publicKey = \base64_encode(\Sodium\crypto_box_publickey($boxKp));
+        $nonce = \Sodium\randombytes_buf(\Sodium\CRYPTO_BOX_NONCEBYTES);
+        
+        // Send the hash id of the key we generated, and our public key along with the request
+        $I->haveHttpHeader('x-hashid', $key->hash);
+        $I->haveHttpHeader('Accept', 'application/json+25519');
+        $I->haveHttpHeader('x-pubkey', $publicKey);
+        $I->haveHttpHeader('x-nonce', \base64_encode($nonce));
 
+        $I->wantTo('Send an plain text response to authenticate and get an encrypted repsonse back');
         // The payload is now encrypted
-        $payload = \base64_encode(\Sodium\crypto_box_seal(
-            \json_encode([
-                'email' => $I->getUser()->email,
-                'password' => $password,
-                'pubkey' => $publicKey,
-            ]),
-            $token->getBoxPublicKey()
-        ));
-
-        $I->sendPOST($this->uri, $payload);
-
-        $I->seeResponseIsJson();
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseMatchesJsonType([
-            'data' => [
-                'access_token' => 'string',
-                'refresh_token' => 'string',
-                'ikm' => 'string',
-                'crypt' => [
-                    'public' => 'string',
-                    'signing' => 'string',
-                    'signature' => 'string',
-                    'hash' => 'string'
-                ],
-                'expires_at' => 'integer'
-            ],
-            'status' => 'integer'
+        $I->sendPOST($this->uri, [
+            'email' => $I->getUser()->email,
+            'password' => $password,
         ]);
-    }
 
-    /**
-     * Tests logging into the API with an encrypted payload
-     * @param ApiTester $I
-     */
-    public function testLoginWithEncryptedPayloadAndEncryptedResponse(\ApiTester $I)
-    {
-        $password = $I->register(true, false);
-        $I->wantTo('verify users can authenticate against the API with an encrypted payload and that the response payload is encrypted');
-        
-        // Simulate a request to /api/v1/server/otk
-        $token = TokenKeyPair::generate(TokenKeyPair::OTK_TYPE);
-        
-        // Set the content type to application/json+25519
-        $I->haveHttpHeader('content-type', 'application/json+25519');
-        $I->haveHttpHeader('accept', 'application/json+25519');
+        // We should get an encrypted HTTP 200 response back
+        $I->seeResponseCodeIs(200);
 
-        $boxKp = \Sodium\crypto_box_keypair();
-        $publicKey = \base64_encode(\Sodium\crypto_box_publickey($boxKp));
-
-        // Also set the hash ID so the API knows what hash to fetch
-        $I->haveHttpHeader('x-hashid', $token->hash);
-
-        // The payload is now encrypted
-        $payload = \base64_encode(\Sodium\crypto_box_seal(
-            \json_encode([
-                'email'         => $I->getUser()->email,
-                'password'      => $password,
-                'pubkey'        => $publicKey
-            ]),
-            $token->getBoxPublicKey()
-        ));
-
-        $I->sendPOST($this->uri, $payload);
-
-        $I->seeHttpHeader('x-nonce');
-        $I->seeHttpHeader('x-pubkey');
-        $serverPubKey = $I->grabHttpHeader('x-pubkey');
+        $pub = $I->grabHttpHeader('x-pubkey');
+        $sig = $I->grabHttpHeader('x-signature');
+        $signing = $I->grabHttpHeader('x-sigpubkey');
         $nonce = $I->grabHttpHeader('x-nonce');
 
         $kp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
             \Sodium\crypto_box_secretkey($boxKp),
-            \base64_decode($serverPubKey)
+            \base64_decode($pub)
         );
 
+        expect('signature is valid', \Sodium\crypto_sign_verify_detached(
+            \base64_decode($sig),
+            \base64_decode($I->grabResponse()),
+            \base64_decode($signing)
+        ))->notEquals(false);
+        
         // Decrypt the response
         $response = \Sodium\crypto_box_open(
             \base64_decode($I->grabResponse()),
@@ -329,8 +281,6 @@ class AuthenticateCest extends AbstractApiCest
             $kp
         );
 
-        $I->seeResponseCodeIs(200);
-
         expect('response is not false', $response)->notEquals(false);
         $response = \json_decode($response, true);
         expect('response can be converted into json', \is_array($response))->true();
@@ -341,97 +291,86 @@ class AuthenticateCest extends AbstractApiCest
         expect('response has key [data][refresh_token]', $response['data'])->hasKey('refresh_token');
         expect('response has key [data][ikm]', $response['data'])->hasKey('ikm');
         expect('response has key [data][expires_at]', $response['data'])->hasKey('expires_at');
-        expect('response has key [data][crypt]', $response['data'])->hasKey('crypt');
-        expect('response has key [data][crypt][public]', $response['data']['crypt'])->hasKey('public');
-        expect('response has key [data][crypt][signing]', $response['data']['crypt'])->hasKey('signing');
-        expect('response has key [data][crypt][signature]', $response['data']['crypt'])->hasKey('signature');
-        expect('response has key [data][crypt][hash]', $response['data']['crypt'])->hasKey('hash');
-
-        return [
-            'response'  => $response,
-            'boxKp'     => $boxKp,
-            'public'    => $publicKey,
-            'kp'        => $kp,
-            'serverPub' => $serverPubKey
-        ];
+        expect('response has key [data][signing]', $response['data'])->hasKey('signing');
     }
 
     /**
-     * Tests that requests after authentication can be encrypted
+     * Encrypts the response before sending it to the API for authenticate, then verifies the response itself is encrypted.
      * @param ApiTester $I
      */
-    public function testAuthAndRefreshWithEncryption(\ApiTester $I)
+    public function testAuthenticatewithEncryptedRequestAndEncryptedResponse(\ApiTester $I)
     {
-        $I2 = clone $I;
-        extract($this->testLoginWithEncryptedPayloadAndEncryptedResponse($I2));
+        // Create a new user
+        $password = $I->register(true);
 
-        // Add the new tokens
-        $I->addTokens($response['data']);
-        $I->wantTo('Verify my credentials can be refreshed');
-        $I->haveHttpHeader('content-type', 'application/json+25519');
-        $I->haveHttpHeader('accept', 'application/json+25519');
-
-        // Set the hashid that should be used so the server knows what key to pull, and the nonce for this message
+        // Generate a new encryption key, mocking a request to /api/v1/server/otk
+        $key = EncryptionKey::generate();
+        
+        $boxKp = \Sodium\crypto_box_keypair();
+        $publicKey = \base64_encode(\Sodium\crypto_box_publickey($boxKp));
         $nonce = \Sodium\randombytes_buf(\Sodium\CRYPTO_BOX_NONCEBYTES);
-        $I->haveHttpHeader('x-hashid', $response['data']['crypt']['hash']);
+
+        // Send the hash id of the key we generated, and our public key along with the request
+        $I->haveHttpHeader('x-hashid', $key->hash);
+        $I->haveHttpHeader('Accept', 'application/json+25519');
+        $I->haveHttpHeader('x-pubkey', $publicKey);
+        $I->haveHttpHeader('Content-Type', 'application/json+25519');
         $I->haveHttpHeader('x-nonce', \base64_encode($nonce));
+        $I->wantTo('Send an encrypted response to authenticate and get an encrypted response back');
+        
+        $kp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
+            \Sodium\crypto_box_secretkey($boxKp),
+            $key->getBoxPublicKey()
+        );
 
-        $newBoxKp = \Sodium\crypto_box_keypair();
-        $newPublicKey = \base64_encode(\Sodium\crypto_box_publickey($newBoxKp));
+        $payload = \base64_encode(\Sodium\crypto_box(
+            \json_encode([
+                'email'         => $I->getUser()->email,
+                'password'      => $password
+            ]),
+            $nonce,
+            $kp
+        ));
 
-        // The payload is now encrypted
-        $payload = [
-            'refresh_token' => $response['data']['refresh_token'],
-            'public_key' => $newPublicKey
-        ];
+        // Send the encrypted response
+        $I->sendPOST($this->uri, $payload);
 
-        $I->sendAuthenticatedRequest('/api/v1/user/refresh', 'POST', $payload, $nonce, $kp);
-
+        // We should get an encrypted HTTP 200 response back
         $I->seeResponseCodeIs(200);
 
-        $I->seeHttpHeader('x-nonce');
-        $I->seeHttpHeader('x-pubkey');
-        $I->seeHttpHeader('x-signature');
-        $I->seeHttpHeader('x-sigpubkey');
-        $serverPubKey = $I->grabHttpHeader('x-pubkey');
+        $pub = $I->grabHttpHeader('x-pubkey');
+        $sig = $I->grabHttpHeader('x-signature');
+        $signing = $I->grabHttpHeader('x-sigpubkey');
         $nonce = $I->grabHttpHeader('x-nonce');
-        $signature = $I->grabHttpHeader('x-signature');
-        $sigPublicKey = $I->grabHttpHeader('x-sigpubkey');
 
-        $newKp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
-            \Sodium\crypto_box_secretkey($newBoxKp),
-            \base64_decode($serverPubKey)
+        $kp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
+            \Sodium\crypto_box_secretkey($boxKp),
+            \base64_decode($pub)
         );
 
         expect('signature is valid', \Sodium\crypto_sign_verify_detached(
-            \base64_decode($signature),
+            \base64_decode($sig),
             \base64_decode($I->grabResponse()),
-            \base64_decode($sigPublicKey)
+            \base64_decode($signing)
         ))->notEquals(false);
-
+        
+        // Decrypt the response
         $response = \Sodium\crypto_box_open(
             \base64_decode($I->grabResponse()),
             \base64_decode($nonce),
-            $newKp
+            $kp
         );
 
         expect('response is not false', $response)->notEquals(false);
         $response = \json_decode($response, true);
         expect('response can be converted into json', \is_array($response))->true();
-        
+
         expect('response has key [data]', $response)->hasKey('data');
         expect('response has key [status]', $response)->hasKey('status');
         expect('response has key [data][access_token]', $response['data'])->hasKey('access_token');
         expect('response has key [data][refresh_token]', $response['data'])->hasKey('refresh_token');
         expect('response has key [data][ikm]', $response['data'])->hasKey('ikm');
         expect('response has key [data][expires_at]', $response['data'])->hasKey('expires_at');
-        expect('response has key [data][crypt]', $response['data'])->hasKey('crypt');
-        expect('response has key [data][crypt][public]', $response['data']['crypt'])->hasKey('public');
-        expect('response has key [data][crypt][signing]', $response['data']['crypt'])->hasKey('signing');
-        expect('response has key [data][crypt][signature]', $response['data']['crypt'])->hasKey('signature');
-        expect('response has key [data][crypt][hash]', $response['data']['crypt'])->hasKey('hash');
-
-        // Verify the new signing public key in the header matches what is in the response
-        expect('new signing key equals signing key in header', $response['data']['crypt']['signing'])->equals($sigPublicKey);
+        expect('response has key [data][signing]', $response['data'])->hasKey('signing');
     }
 }
