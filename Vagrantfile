@@ -26,7 +26,7 @@ Vagrant.configure(2) do |config|
 
     sudo apt-get update
     sudo apt-get remove php7.0-fpm php5.6-fpm disque-server -y
-    sudo apt-get install -y php7.1-fpm nginx-mainline apt-transport-https ca-certificates curl docker-ce -y
+    sudo apt-get install -y php7.1-fpm nginx-mainline apt-transport-https ca-certificates curl docker-ce cowsay libopts25 -y
     sudo ldconfig
 
     # Generate an ed25519 key if one doesn't exists
@@ -34,8 +34,24 @@ Vagrant.configure(2) do |config|
       cat /dev/zero | ssh-keygen -t ed25519 -f /home/vagrant/.ssh/id_ed25519 -q -N ""
     fi
 
+    # Install xdebug if PHP doesn't think it is installed
+    if [[ ! -f /etc/php/7.1/conf.d/xdebug.ini ]]
+    then
+      cd /tmp
+      wget http://xdebug.org/files/xdebug-2.5.4.tgz
+      tar -xf xdebug-2.5.4.tgz
+      cd xdebug-2.5.4
+      phpize
+      ./configure && sudo make install
+      echo "zend_extension xdebug.so" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
+      echo "[XDebug]" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
+      echo "xdebug.remote_enable = 1" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
+      echo "xdebug.remote_autostart = 1" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
+      sudo systemctl restart php-fpm-7.1
+    fi
+
     # Install libsodium if PHP doens't think it is installed
-    if [[ !-f /etc/php/7.1/conf.d/libsodium.ini ]]
+    if [[ ! -f /etc/php/7.1/conf.d/libsodium.ini ]]
     then
       # Download libsodium proper
       cd /tmp
@@ -76,6 +92,7 @@ Vagrant.configure(2) do |config|
     
     # Make composer do Parallel Downloading
     /home/vagrant/.bin/composer global require hirak/prestissimo
+    /home/vagrant/.bin/composer global require "fxp/composer-asset-plugin:^1.3.1"
 
     # Copy the Nginx configuration and restart the web server
     echo "Copying Nginx configuration"
@@ -83,6 +100,18 @@ Vagrant.configure(2) do |config|
     sudo killall nginx
 
     # Copy the new configuration files in
+    if [[ ! -f /etc/nginx/conf/ssl/server.key ]]
+    then
+      cd /tmp
+      openssl ecparam -name prime256v1 -genkey -out server.key
+      openssl req -new -x509 -key server.key -out server.crt -days 3650 \
+        -subj '/C=US/ST=State/L=City/O=localhost/OU=Development/CN=yii2-api/emailAddress=root@localhost'
+      sudo cp /tmp/server.key /etc/nginx/conf/ssl/server.key
+      sudo cp /tmp/server.crt /etc/nginx/conf/ssl/server.crt
+    fi
+
+    sudo cp /etc/nginx/conf/nginx.conf.default /etc/nginx/conf/nginx.conf
+    sudo cp /etc/nginx/conf/fastcgi.conf.default /etc/nginx/conf/fastcgi.conf
     sudo cp /var/www/config/.vagrant/http.conf /etc/nginx/conf/conf.d/http.conf
     sudo service nginx start
 
@@ -100,12 +129,27 @@ Vagrant.configure(2) do |config|
 
     # Pull down the Disque and MailCatcher docker images
     docker pull charlesportwoodii/xenial:disque
-    docker pull schickling/mailcatcher
+    docker pull mailhog/mailhog
 
     # Start the Disque container
-    docker run -d -p 7711:7711 --name disque charlesportwoodii/xenial:disque
+    docker ps | grep disque
+    if [[ $? == 1 ]]
+    then
+      docker run -d -p 7711:7711 --name disque charlesportwoodii/xenial:disque
+    fi
 
-    # Start the MailCatcher container
-    docker run -d -p 1025:1025 -p 1080:1080 --name mailcatcher schickling/mailcatcher
+    # Start the MailHog container
+    docker ps | grep mailhog
+    if [[ $? == 1 ]]
+    then
+      docker run -d -p 1025:1025 -p 8025:8025 --name mailhog mailhog/mailhog
+    fi
+
+    if [[ ! -f /var/www/config/config.yml ]]
+    then
+      cp /var/www/config/config-default.yml /var/www/config/config.yml
+    fi;
+
+    echo -e "Your IP is: $(ifconfig enp0s8 | grep "inet addr" | awk '{split($2,a,":"); print a[2] }')\n If this is your first load be sure to configure config/config.yml." | cowsay
   SHELL
 end

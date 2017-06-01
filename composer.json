@@ -7,14 +7,13 @@
             "email": "charlesportwoodii@erianna.com"
     }],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "ext-curl": "*",
         "ext-openssl": "*",
-        "ext-pdo_mysql": "*",
         "ext-PDO": "*",
         "ext-Reflection": "*",
-        "ext-libsodium": "*",
-        "yiisoft/yii2": ">=2.0.10",
+        "ext-libsodium": "1.0.6",
+        "yiisoft/yii2": ">=2.0.11.2",
         "symfony/yaml": "^3.0",
         "charlesportwoodii/yii2-api-rest-components": "dev-master",
         "yiisoft/yii2-redis": "~2.0.0",
@@ -22,8 +21,8 @@
         "mariano/disque-php": "^2.0"
     },
     "require-dev": {
-        "yiisoft/yii2-gii": "~2.0.",
-        "codeception/codeception": "^2.2.8",
+        "yiisoft/yii2-gii": "~2.0.0",
+        "codeception/codeception": "^2.3",
         "yiisoft/yii2-faker": "^2.0",
         "fzaninotto/faker": "^1.6",
         "codeception/specify": "*",
