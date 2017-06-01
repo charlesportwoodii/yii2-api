@@ -5,7 +5,6 @@ sudo: false
 # Test on PHP7
 language: php
 php:
-  - '7.0'
   - '7.1'
   - nightly
 
