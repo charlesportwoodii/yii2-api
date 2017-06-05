@@ -26,9 +26,6 @@ cache:
     - $HOME/libsodium-lib
     - vendor
 
-addons:
-  postgresql: "9.6"
-
 services:
   - mysql
   - redis-server
