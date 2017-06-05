@@ -40,7 +40,6 @@ Vagrant.configure(2) do |config|
       cat /dev/zero | ssh-keygen -t ed25519 -f /home/vagrant/.ssh/id_ed25519 -q -N ""
     fi
 
-    # Install xdebug if PHP doesn't think it is installed
     if [[ ! -f /etc/php/7.1/conf.d/xdebug.ini ]]
     then
       cd /tmp
@@ -49,10 +48,11 @@ Vagrant.configure(2) do |config|
       cd xdebug-2.5.4
       phpize
       ./configure && sudo make install
-      echo "zend_extension xdebug.so" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
-      echo "[XDebug]" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
-      echo "xdebug.remote_enable = 1" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
-      echo "xdebug.remote_autostart = 1" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
+      echo "zend_extension=xdebug.so" | sudo tee /etc/php/7.1/conf.d/xdebug.ini
+      echo "xdebug.remote_enable = 1" | sudo tee --append  /etc/php/7.1/conf.d/xdebug.ini
+      echo "xdebug.remote_autostart = 1" | sudo tee --append /etc/php/7.1/conf.d/xdebug.ini
+      echo "xdebug.remote_connect_back = 1" | sudo tee --append /etc/php/7.1/conf.d/xdebug.ini
+      echo "xdebug.remote_log = /var/www/logs/xdebug.log" | sudo tee --append /etc/php/7.1/conf.d/xdebug.ini
       sudo systemctl restart php-fpm-7.1
     fi
 
