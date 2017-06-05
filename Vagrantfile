@@ -24,9 +24,15 @@ Vagrant.configure(2) do |config|
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
+    # Install Postgresql Dependencies
+    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
     sudo apt-get update
-    sudo apt-get remove php7.0-fpm php5.6-fpm disque-server -y
-    sudo apt-get install -y php7.1-fpm nginx-mainline apt-transport-https ca-certificates curl docker-ce cowsay libopts25 -y
+    sudo apt-get remove php7.0-fpm php5.6-fpm disque-server wget -y
+
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+    sudo apt-get install -y php7.1-fpm nginx-mainline apt-transport-https ca-certificates curl docker-ce cowsay libopts25 postgresql-9.6 -y
     sudo ldconfig
 
     # Generate an ed25519 key if one doesn't exists
