@@ -26,6 +26,9 @@ cache:
     - $HOME/libsodium-lib
     - vendor
 
+addons:
+  postgresql: "9.6"
+
 services:
   - mysql
   - redis-server
@@ -48,12 +51,13 @@ install:
   - phpenv config-rm xdebug.ini || true
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -u root -e 'CREATE DATABASE IF NOT EXISTS root;'; cp tests/mysql-travis.yml config/config.yml; fi"
   - sh -c "if [ '$DB' = 'sqlite' ]; then cp tests/sqlite-travis.yml config/config.yml; fi"
-  - sh -c "if [ '$DB' = 'postgresql' ]; then psql -c 'create database travis_ci_test;' -U postgrescp; cp tests/postgresql-travis.yml config/config.yml; fi"
+  - sh -c "if [ '$DB' = 'postgresql' ]; then cp tests/postgresql-travis.yml config/config.yml; fi"
   - composer install -ovn --no-interaction --prefer-source
   - ./yii migrate/up --interactive=0
 
 before_script:
   - php -m
+  - netstat -ant | grep tcp
   - /$HOME/disque/src/disque-server &2> /dev/null
 
 script:
