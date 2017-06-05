@@ -12,9 +12,9 @@ return [
     'schemaCacheDuration'   => YII_DEBUG ? 0 : 86400,
     'schemaCache'           => 'cache',
     'schemaMap' => [
-      'pgsql'=> [
-        'class'=>'yii\db\pgsql\Schema',
-        'defaultSchema' => $config['yii2']['database']['schema']
-      ]
+        'pgsql'=> [
+            'class'=>'yii\db\pgsql\Schema',
+            'defaultSchema' => $config['yii2']['database']['schema']
+        ]
     ]
 ];
