@@ -23,6 +23,7 @@ The additional functionality is provided as well:
 - Configurable Rate Limiting
 - Encrypted API session support via libsodium
 - Translation support
+- Develop with Docker or Vagrant
 
 ## Documentation
 

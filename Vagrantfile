@@ -118,7 +118,7 @@ Vagrant.configure(2) do |config|
 
     sudo cp /etc/nginx/conf/nginx.conf.default /etc/nginx/conf/nginx.conf
     sudo cp /etc/nginx/conf/fastcgi.conf.default /etc/nginx/conf/fastcgi.conf
-    sudo cp /var/www/config/.vagrant/http.conf /etc/nginx/conf/conf.d/http.conf
+    sudo cp /var/www/config/.vagrant/nginx/conf.d/http.conf /etc/nginx/conf/conf.d/http.conf
     sudo service nginx start
 
     # Create the database

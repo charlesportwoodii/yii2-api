@@ -23,7 +23,16 @@ git clone https://github.com/charlesportwoodii/yii2-api project_dir
 cd project_dir
 ```
 
-### Local Development
+### Docker Development
+
+An environment can also be provisioned through Docker
+
+```
+docker-compose up
+docker exec -it yii2api_php_1 /bin/bash -lc "cd /var/www && /root/.bin/composer install -ovn"
+```
+
+### Vagrant Development
 
 Development is managed through the provided `Vagrant` box.
 
@@ -38,11 +47,9 @@ For non-development environments, you'll need to install the following service d
 - Redis Server
 - MySQL
 - Disque
-- MailCatcher
+- MailHog
 
-> Note, SQLite and PostgreSQL support is coming soon.
-
-> Disque and MailCatcher Docker containers can be pulled from the provided `Vagrantfile`.
+> Disque and MailCatcher Docker containers can be pulled from the provided `Vagrantfile`, or `Docker`
 
 ### Configuring
 
@@ -54,6 +61,8 @@ cp config/config-default.yml config/config.yml
 
 Be sure to configure each section before continuing. For more information see [Configuration.md](Configuration.md).
 
+> For Docker development, reference `docker-compose.yml` for the hostnames to use.
+
 ### Migrations
 
 Once you have configured your application, you can migrate the database.
@@ -62,6 +71,11 @@ Once you have configured your application, you can migrate the database.
 ./yii migrate/up
 ```
 
+> Docker migrations can be run by calling the following command. Adjust the generated box name as necessary.
+> ```
+> docker exec -it yii2api_php_1 /bin/bash -lc "cd /var/www && ./yii migrate/up --interactive=0"
+> ```
+
 ## Tests
 
 All tests are managed through [Codeception](http://codeception.com/), which is installed as a `Composer` development dependency. The API is both fully unit tested and functional tested. All tests can be run by executing:
@@ -69,5 +83,10 @@ All tests are managed through [Codeception](http://codeception.com/), which is i
 ```
 ./vendor/bin/codecept run
 ```
+
+> Tests within the docker container can be run by calling the following command.  Adjust the generated box name as necessary.
+> ```
+> docker exec -it yii2api_php_1 /bin/bash -lc "cd /var/www && ./vendor/bin/codecept run"
+> ```
 
 > Note the tests perform database and cache interactions, which include deleting data. It is not recommended to run the tests in any environment where you care about your data, as that data may be deleted.
