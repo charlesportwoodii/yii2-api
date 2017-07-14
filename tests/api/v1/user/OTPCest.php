@@ -53,14 +53,14 @@ class OTPCest extends AbstractApiCest
         \parse_str($code['query'], $options);
 
         // Convert the the otp string into an otp object
-        $totp = new TOTP(
-            $username,
+        $totp = TOTP::create(
             $options['secret'],
             30,             // 30 second window
             $options['algorithm'],
             6
         );
 
+        $totp->setLabel($username);
         $payload = [
             'code' => $totp->now()
         ];
@@ -137,13 +137,14 @@ class OTPCest extends AbstractApiCest
         $I->getUser()->enableOTP();
 
         // Convert the the otp string into an otp object
-        $totp = new TOTP(
-            $I->getUser()->username,
+        $totp = TOTP::create(
             $I->getUser()->otp_secret,
             30,
             'sha256',
             6
         );
+
+        $totp->setlabel($I->getUser()->username);
 
         $payload = [
             'code' => $totp->now()

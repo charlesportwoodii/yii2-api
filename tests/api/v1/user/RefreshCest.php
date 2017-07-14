@@ -86,9 +86,9 @@ class RefreshCest extends AbstractApiCest
         // Generate an encryption key since we don't have a previous request to initialize it off of
         $key = EncryptionKey::generate();
         
-        $boxKp = \Sodium\crypto_box_keypair();
-        $publicKey = \base64_encode(\Sodium\crypto_box_publickey($boxKp));
-        $nonce = \Sodium\randombytes_buf(\Sodium\CRYPTO_BOX_NONCEBYTES);
+        $boxKp = sodium_crypto_box_keypair();
+        $publicKey = \base64_encode(sodium_crypto_box_publickey($boxKp));
+        $nonce = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
 
         // Send the hash id of the key we generated, and our public key along with the request
         $I->haveHttpHeader('x-hashid', $key->hash);
@@ -98,8 +98,8 @@ class RefreshCest extends AbstractApiCest
         $I->haveHttpHeader('x-nonce', \base64_encode($nonce));
         $I->wantTo('Send an encrypted response to authenticate and get an encrypted response back');
         
-        $kp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
-            \Sodium\crypto_box_secretkey($boxKp),
+        $kp = sodium_crypto_box_keypair_from_secretkey_and_publickey(
+            sodium_crypto_box_secretkey($boxKp),
             $key->getBoxPublicKey()
         );
 
@@ -116,19 +116,19 @@ class RefreshCest extends AbstractApiCest
         $signing = $I->grabHttpHeader('x-sigpubkey');
         $nonce = $I->grabHttpHeader('x-nonce');
 
-        $kp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
-            \Sodium\crypto_box_secretkey($boxKp),
+        $kp = sodium_crypto_box_keypair_from_secretkey_and_publickey(
+            sodium_crypto_box_secretkey($boxKp),
             \base64_decode($pub)
         );
 
-        expect('signature is valid', \Sodium\crypto_sign_verify_detached(
+        expect('signature is valid', sodium_crypto_sign_verify_detached(
             \base64_decode($sig),
             \base64_decode($I->grabResponse()),
             \base64_decode($signing)
         ))->notEquals(false);
 
         // Decrypt the response
-        $response = \Sodium\crypto_box_open(
+        $response = sodium_crypto_box_open(
             \base64_decode($I->grabResponse()),
             \base64_decode($nonce),
             $kp

@@ -133,7 +133,7 @@ class ApiTester extends \Codeception\Actor
         } else {
             if ($nonce !== null && $kp !== null) {
                 // The payload is now encrypted
-                $payload = \base64_encode(\Sodium\crypto_box(
+                $payload = \base64_encode(sodium_crypto_box(
                     \json_encode($payload),
                     $nonce,
                     $kp

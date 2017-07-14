@@ -100,13 +100,14 @@ class LoginTest extends \app\tests\codeception\Unit
             expect('OTP is provisioned', $user->provisionOTP())->notEquals(false);
             expect('OTP is enabled', $user->enableOTP())->true();
 
-            $totp = new TOTP(
-                $user->email,
+            $totp = TOTP::create(
                 $user->otp_secret,
                 30,             // 30 second window
                 'sha256',       // SHA256 for the hashing algorithm
                 6               // 6 digits
             );
+
+            $totp->setLabel($user->email);
 
             $form = new Login;
             $form->load(['Login' => [

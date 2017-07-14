@@ -111,13 +111,14 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
 
             expect('OTP is enabled', $user->isOTPEnabled())->true();
 
-            $totp = new TOTP(
-                $user->username,
+            $totp = TOTP::create(
                 $user->otp_secret,
                 30,
                 'sha256',
                 6
             );
+
+            $totp->setLabel($user->username);
 
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
@@ -167,13 +168,14 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
 
             expect('OTP is enabled', $user->isOTPEnabled())->true();
 
-            $totp = new TOTP(
-                $user->username,
+            $totp = TOTP::create(
                 $user->otp_secret,
                 30,
                 'sha256',
                 6
             );
+
+            $totp->setLabel($user->username);
 
             $form->setUser($user);
             $form->user_id = $user;

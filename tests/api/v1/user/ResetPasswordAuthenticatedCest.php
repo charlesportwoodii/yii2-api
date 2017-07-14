@@ -78,13 +78,13 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
         ];
         $payload['password_verify'] = $payload['password'];
         // Verify the request to valid OTP keys
-        $totp = new TOTP(
-            $I->getUser()->username,
+        $totp = TOTP::create(
             $I->getUser()->otp_secret,
             30,
             'sha256',
             6
         );
+        $totp->setLabel($I->getUser()->username);
 
         $payload['otp'] = (string)$totp->now();
 

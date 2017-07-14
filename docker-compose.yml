@@ -12,8 +12,8 @@ services:
       - ./config/.docker/nginx/conf.d:/etc/nginx/conf/conf.d
   php:
     image: charlesportwoodii/xenial:php71
+    working_dir: /var/www
     ports:
-      - "9071:9071"
       - "9000:9000"
     links:
       - redis:redis
@@ -29,12 +29,9 @@ services:
   mailhog: 
     image: mailhog/mailhog
     ports:
-      - "1025:1025"
       - "8025:8025"
   mariadb:
     image: mariadb
-    ports:
-      - "3306:3306"
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_ROOT_PASSWORD=root
@@ -43,5 +40,3 @@ services:
       - MYSQL_PASSWORD=local
   disque:
     image: charlesportwoodii/xenial:disque
-    ports:
-      - "7711:7711"

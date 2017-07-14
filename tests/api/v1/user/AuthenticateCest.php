@@ -110,13 +110,13 @@ class AuthenticateCest extends AbstractApiCest
         expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
 
-        $totp = new TOTP(
-            $I->getUser()->username,
+        $totp = TOTP::create(
             $I->getUser()->otp_secret,
             30,             // 30 second window
             'sha256',       // SHA256 for the hashing algorithm
             6               // 6 digits
         );
+        $totp->setLabel($I->getUser()->username);
 
         $I->sendPOST($this->uri, [
             'email' => $I->getUser()->email,
@@ -148,13 +148,13 @@ class AuthenticateCest extends AbstractApiCest
         expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
 
-        $totp = new TOTP(
-            $I->getUser()->username,
+        $totp = TOTP::create(
             $I->getUser()->otp_secret,
             30,             // 30 second window
             'sha256',       // SHA256 for the hashing algorithm
             6               // 6 digits
         );
+        $totp->setLabel($I->getUser()->username);
 
         $I->sendPOST($this->uri, [
             'email' => $I->getUser()->email,
@@ -189,13 +189,13 @@ class AuthenticateCest extends AbstractApiCest
         expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
 
-        $totp = new TOTP(
-            $I->getUser()->username,
+        $totp = TOTP::create(
             $I->getUser()->otp_secret,
             30,             // 30 second window
             'sha256',       // SHA256 for the hashing algorithm
             6               // 6 digits
         );
+        $totp->setLabel($I->getUser()->username);
 
         $I->sendPOST($this->uri, [
             'email' => $I->getUser()->email,
@@ -238,9 +238,9 @@ class AuthenticateCest extends AbstractApiCest
         // Generate a new encryption key, mocking a request to /api/v1/server/otk
         $key = EncryptionKey::generate();
         
-        $boxKp = \Sodium\crypto_box_keypair();
-        $publicKey = \base64_encode(\Sodium\crypto_box_publickey($boxKp));
-        $nonce = \Sodium\randombytes_buf(\Sodium\CRYPTO_BOX_NONCEBYTES);
+        $boxKp = sodium_crypto_box_keypair();
+        $publicKey = \base64_encode(sodium_crypto_box_publickey($boxKp));
+        $nonce = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
         
         // Send the hash id of the key we generated, and our public key along with the request
         $I->haveHttpHeader('x-hashid', $key->hash);
@@ -263,19 +263,19 @@ class AuthenticateCest extends AbstractApiCest
         $signing = $I->grabHttpHeader('x-sigpubkey');
         $nonce = $I->grabHttpHeader('x-nonce');
 
-        $kp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
-            \Sodium\crypto_box_secretkey($boxKp),
+        $kp = sodium_crypto_box_keypair_from_secretkey_and_publickey(
+            sodium_crypto_box_secretkey($boxKp),
             \base64_decode($pub)
         );
 
-        expect('signature is valid', \Sodium\crypto_sign_verify_detached(
+        expect('signature is valid', sodium_crypto_sign_verify_detached(
             \base64_decode($sig),
             \base64_decode($I->grabResponse()),
             \base64_decode($signing)
         ))->notEquals(false);
         
         // Decrypt the response
-        $response = \Sodium\crypto_box_open(
+        $response = sodium_crypto_box_open(
             \base64_decode($I->grabResponse()),
             \base64_decode($nonce),
             $kp
@@ -306,9 +306,9 @@ class AuthenticateCest extends AbstractApiCest
         // Generate a new encryption key, mocking a request to /api/v1/server/otk
         $key = EncryptionKey::generate();
         
-        $boxKp = \Sodium\crypto_box_keypair();
-        $publicKey = \base64_encode(\Sodium\crypto_box_publickey($boxKp));
-        $nonce = \Sodium\randombytes_buf(\Sodium\CRYPTO_BOX_NONCEBYTES);
+        $boxKp = sodium_crypto_box_keypair();
+        $publicKey = \base64_encode(sodium_crypto_box_publickey($boxKp));
+        $nonce = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
 
         // Send the hash id of the key we generated, and our public key along with the request
         $I->haveHttpHeader('x-hashid', $key->hash);
@@ -318,12 +318,12 @@ class AuthenticateCest extends AbstractApiCest
         $I->haveHttpHeader('x-nonce', \base64_encode($nonce));
         $I->wantTo('Send an encrypted response to authenticate and get an encrypted response back');
         
-        $kp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
-            \Sodium\crypto_box_secretkey($boxKp),
+        $kp = sodium_crypto_box_keypair_from_secretkey_and_publickey(
+            sodium_crypto_box_secretkey($boxKp),
             $key->getBoxPublicKey()
         );
 
-        $payload = \base64_encode(\Sodium\crypto_box(
+        $payload = \base64_encode(sodium_crypto_box(
             \json_encode([
                 'email'         => $I->getUser()->email,
                 'password'      => $password
@@ -343,19 +343,19 @@ class AuthenticateCest extends AbstractApiCest
         $signing = $I->grabHttpHeader('x-sigpubkey');
         $nonce = $I->grabHttpHeader('x-nonce');
 
-        $kp = \Sodium\crypto_box_keypair_from_secretkey_and_publickey(
-            \Sodium\crypto_box_secretkey($boxKp),
+        $kp = sodium_crypto_box_keypair_from_secretkey_and_publickey(
+            sodium_crypto_box_secretkey($boxKp),
             \base64_decode($pub)
         );
 
-        expect('signature is valid', \Sodium\crypto_sign_verify_detached(
+        expect('signature is valid', sodium_crypto_sign_verify_detached(
             \base64_decode($sig),
             \base64_decode($I->grabResponse()),
             \base64_decode($signing)
         ))->notEquals(false);
         
         // Decrypt the response
-        $response = \Sodium\crypto_box_open(
+        $response = sodium_crypto_box_open(
             \base64_decode($I->grabResponse()),
             \base64_decode($nonce),
             $kp
