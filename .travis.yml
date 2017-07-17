@@ -40,7 +40,7 @@ before_install:
   - pecl install libsodium-2.0.2
   # Spin up docker contains to supplement services
   - docker run -d -p 1025:1025 mailhog/mailhog
-  - docker run -d -p 7711 charlesportwoodii/xenial:disque
+  - docker run -d -p 7711:7711 charlesportwoodii/xenial:disque
   # Check the installed PHP modules
   - php -m
 
