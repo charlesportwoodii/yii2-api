@@ -3,9 +3,11 @@
     "description": "Yii2 API Skeleton",
     "license": "BSD-3-Clause",
     "authors": [{
-            "name": "Charles R. Portwood II",
-            "email": "charlesportwoodii@erianna.com"
+        "name": "Charles R. Portwood II",
+        "email": "charlesportwoodii@erianna.com"
     }],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=7.1.2",
         "ext-curl": "*",
@@ -13,12 +15,14 @@
         "ext-PDO": "*",
         "ext-Reflection": "*",
         "ext-sodium": ">=2.0.0",
+        "yidas/yii2-composer-bower-skip": "2.0.12",
         "yiisoft/yii2": ">=2.0.12",
+        "yiisoft/yii2-redis": "~2.0.0",
         "symfony/yaml": "^3.0",
         "charlesportwoodii/yii2-api-rest-components": "dev-master",
-        "yiisoft/yii2-redis": "~2.0.0",
         "dmstr/yii2-migrate-command": "*",
-        "mariano/disque-php": "^2.0"
+        "nex/yii2-graylog2": "*",
+        "christian-riesen/base32": "1.3.1"
     },
     "require-dev": {
         "yiisoft/yii2-gii": "~2.0.0",

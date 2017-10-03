@@ -37,3 +37,7 @@ yii2:
   access_control:
     header: null
     secret: null
+  graylog:
+    host: null
+    facility: null
+    tag: null

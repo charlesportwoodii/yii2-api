@@ -32,7 +32,7 @@ class UserController extends Controller
             'reset_password_authenticated' => [
                 'class' => 'yrc\api\actions\ResetPasswordAction',
                 'scenario' => ResetPasswordAction::SCENARIO_AUTHENTICATED
-            ],
+            ]
         ];
     }
 

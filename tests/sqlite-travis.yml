@@ -29,11 +29,3 @@ yii2:
   access_control:
     header: null
     secret: null
-
-disque: 
-  clients: 
-    - 
-      host: "127.0.0.1"
-      password: null
-      port: 7711
-

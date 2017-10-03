@@ -20,10 +20,6 @@ $config = [
             'accessHeader' => $yaml['yii2']['access_control']['header'],
             'accessHeaderSecret' => $yaml['yii2']['access_control']['secret']
         ],
-        'queue' => [
-            'class' => 'yrc\components\Queue',
-            'clients' => $yaml['disque']['clients']
-        ],
         'i18n' => [
             'translations' => [
                 'app*' => [
@@ -129,16 +125,16 @@ $config = [
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
-                    'categories' => [
-                        'except' => [
-                            'yii\web\HttpException:400',
-                            'yii\web\HttpException:401',
-                            'yii\web\HttpException:404'
-                        ],
-                    ],
+                'graylog' => [
+                    'class' => 'nex\graylog\GraylogTarget',
+                    'levels' => ['error', 'warning', 'info'],
+                    'logVars' => [],
+                    'host' => $yaml['yii2']['graylog']['host'],
+                    'additionalFields' => [
+                        'user-ip' => function ($yii) {
+                            return $yii->request->getUserIP();
+                        }
+                    ]
                 ]
             ]
         ],

@@ -27,11 +27,9 @@ final class HMAC
         $accessToken = $tokens['access_token'];
         $ikm = \base64_decode($tokens['ikm']);
 
-        if ($method === 'GET') {
+        if ($method === 'GET' || empty($payload)) {
             $payload = '';
-        } elseif (empty($payload)) {
-            $payload = '';
-        } else  {
+        } else {
             $payload = JSON::encode($payload);
         }
 
@@ -49,6 +47,6 @@ final class HMAC
                      $date . "\n" .
                      \base64_encode($salt);
         
-        return \base64_encode(\hash_hmac('sha256', $signature, $hkdf, true)) . ',' . \base64_encode($salt);
+        return \base64_encode(\hash_hmac('sha256', $signature, \bin2hex($hkdf), true)) . ',' . \base64_encode($salt);
     }
 }

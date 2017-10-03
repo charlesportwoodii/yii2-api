@@ -28,16 +28,14 @@ cd project_dir
 An environment can also be provisioned through Docker
 
 ```
+make
+```
+
+Alternatively, if you are on a Windows environment that doesn't have WSL:
+
+```
 docker-compose up
 docker exec -it yii2api_php_1 /bin/bash -lc "cd /var/www && /root/.bin/composer install -ovn"
-```
-
-### Vagrant Development
-
-Development is managed through the provided `Vagrant` box.
-
-```
-vagrant up
 ```
 
 ### Service Dependencies
@@ -46,10 +44,10 @@ For non-development environments, you'll need to install the following service d
 
 - Redis Server
 - MySQL
-- Disque
 - MailHog
+- Graylog2*
 
-> Disque and MailCatcher Docker containers can be pulled from the provided `Vagrantfile`, or `Docker`
+> Graylog2 is used for centralized logging instead of file based logging.
 
 ### Configuring
 
