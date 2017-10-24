@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   nginx:
-    image: charlesportwoodii/xenial:nginx
+    image: charlesportwoodii/nginx:mainline
     ports:
       - "80:80"
       - "443:443"
@@ -12,7 +12,7 @@ services:
       - ./:/var/www
       - ./config/.docker/nginx/conf.d:/etc/nginx/conf/conf.d
   php:
-    image: charlesportwoodii/xenial:php71
+    image: charlesportwoodii/php:7.1
     working_dir: /var/www
     links:
       - redis:redis
@@ -20,7 +20,7 @@ services:
       - mariadb:mariadb
       - graylog:graylog
     volumes:
-      - ./:/var/www
+      - ${PWD-.}:/var/www
   redis:
     image: redis
     ports:
