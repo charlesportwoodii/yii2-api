@@ -9,3 +9,4 @@ web/assets/*
 .DS_Store
 .vagrant/
 tests/_output/*
+tests/_support/_generated/*.php

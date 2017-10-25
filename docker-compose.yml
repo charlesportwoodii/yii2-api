@@ -9,8 +9,8 @@ services:
       - php:php
       - graylog:graylog
     volumes:
-      - ./:/var/www
-      - ./config/.docker/nginx/conf.d:/etc/nginx/conf/conf.d
+      - ${PWD-.}:/var/www
+      - ${PWD-.}/config/.docker/nginx/conf.d:/etc/nginx/conf/conf.d
   php:
     image: charlesportwoodii/php:7.1
     working_dir: /var/www

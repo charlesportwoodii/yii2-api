@@ -2,10 +2,8 @@ class_name: ApiTester
 modules:
     enabled:
         - Yii2
-        - \Helper\Api
         - REST:
             depends: Yii2
-            part: Json
     config:
         Yii2:
             configFile: 'tests/config/api.php'
