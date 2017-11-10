@@ -41,11 +41,12 @@ before_install:
   # Spin up docker contains to supplement services
   - docker run -d -p 1025:1025 mailhog/mailhog
   # Check the installed PHP modules
+  - phpenv config-rm xdebug.ini || true
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - php -m
 
 # Install the CLI tasks
 install:
-  - phpenv config-rm xdebug.ini || true
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -u root -e 'CREATE DATABASE IF NOT EXISTS root;'; cp tests/mysql-travis.yml config/config.yml; fi"
   - sh -c "if [ '$DB' = 'sqlite' ]; then cp tests/sqlite-travis.yml config/config.yml; fi"
   - sh -c "if [ '$DB' = 'postgresql' ]; then cp tests/postgresql-travis.yml config/config.yml; fi"
