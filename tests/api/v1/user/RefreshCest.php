@@ -92,9 +92,9 @@ class RefreshCest extends AbstractApiCest
 
         // Send the hash id of the key we generated, and our public key along with the request
         $I->haveHttpHeader('x-hashid', $key->hash);
-        $I->haveHttpHeader('Accept', 'application/json+25519');
+        $I->haveHttpHeader('Accept', 'application/vnd.25519+json');
         $I->haveHttpHeader('x-pubkey', $publicKey);
-        $I->haveHttpHeader('Content-Type', 'application/json+25519');
+        $I->haveHttpHeader('Content-Type', 'application/vnd.25519+json');
         $I->haveHttpHeader('x-nonce', \base64_encode($nonce));
         $I->wantTo('Send an encrypted response to authenticate and get an encrypted response back');
         

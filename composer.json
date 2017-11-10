@@ -15,6 +15,7 @@
         "ext-PDO": "*",
         "ext-Reflection": "*",
         "ext-sodium": ">=2.0.0",
+        "ext-redis": ">=3.1.0",
         "yiisoft/yii2": "~2.0.13",
         "yiisoft/yii2-redis": "~2.0.0",
         "symfony/yaml": "^3.0",
@@ -24,13 +25,11 @@
         "christian-riesen/base32": "1.3.1"
     },
     "require-dev": {
-        "yiisoft/yii2-gii": "~2.0.0",
         "codeception/codeception": "^2.3",
         "yiisoft/yii2-faker": "^2.0",
         "fzaninotto/faker": "^1.6",
         "codeception/specify": "*",
-        "codeception/verify": "*",
-	    "codeception/phpbuiltinserver": "*"
+        "codeception/verify": "*"
     },
     "scripts": {
         "post-install-cmd": [

@@ -105,10 +105,14 @@ $config = [
 if (YII_DEBUG) {
     error_reporting(-1);
     ini_set('display_errors', 'true');
-    array_push($config['bootstrap'], 'gii');
-    $config['modules'] = [
-        'gii' => 'yii\gii\Module',
-    ];
+    if (\class_exists('yii\debug\Module')) {
+        $config['bootstrap'][] = 'debug';
+        $config['modules']['debug'] = 'yii\debug\Module';
+    }
+    if (\class_exists('yii\gii\Module')) {
+        $config['bootstrap'][] = 'gii';
+        $config['modules']['gii'] = 'yii\gii\Module';
+    }
 }
 
 return $config;

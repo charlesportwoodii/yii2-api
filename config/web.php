@@ -82,7 +82,7 @@ $config = [
             'enableCsrfValidation'      => false,
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
-                'application/json+25519' => 'yrc\web\Json25519Parser'
+                'application/vnd.25519+json' => 'yrc\web\Json25519Parser'
             ]
         ],
         'response' => [
