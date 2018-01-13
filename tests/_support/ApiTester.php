@@ -15,7 +15,7 @@
  *
  * @SuppressWarnings(PHPMD)
 */
-use app\tests\_support\app\HMAC;
+use tests\_support\HMAC;
 
 use app\forms\Registration;
 use app\models\Token;
@@ -24,6 +24,7 @@ use Faker\Factory;
 class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
+    use \tests\_support\traits\UserTrait;
 
     /**
      * Instance of user to reduce lookups
@@ -71,34 +72,6 @@ class ApiTester extends \Codeception\Actor
                 'ikm'            => $tokens['ikm'],
             ];
         }
-    }
-
-    /**
-     * Register a new user for testing
-     * @return bool
-     */
-    public function register($activate = true, $withTokens = true)
-    {
-        $faker = Factory::create();
-        $form = new Registration;
-        $form->email = $faker->safeEmail;
-        $form->username = $faker->username(10);
-        $form->password = $faker->password(20);
-        $form->password_verify = $form->password;
-
-        expect('form registers', $form->register())->true();
-        $this->user = Yii::$app->yrc->userClass::findOne(['email' => $form->email]);
-
-        if ($activate === true) {
-            $this->user->activate();
-        }
-
-        expect('user is not null', $this->user !== null)->true();
-        if ($withTokens) {
-            $this->tokens = Token::generate($this->user->id, null);
-            $this->addTokens($this->tokens);
-        }
-        return $form->password;
     }
 
     /**

@@ -8,42 +8,33 @@ use OTPHP\TOTP;
 use Base32\Base32;
 use Yii;
 
-use yrc\api\models\Code;
+use yrc\models\redis\Code;
 
-class ResetPasswordTest extends \app\tests\codeception\Unit
+class ResetPasswordTest extends \tests\codeception\Unit
 {
     use \Codeception\Specify;
 
     public function testInit()
     {
-        $user = $this->createUser();
+        $user = $this->register();
         $this->specify('test init scenario', function () use ($user) {
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_INIT]);
-            $form->email = $user->email;
+            $form->email = $this->getUser()->email;
 
             expect('form validates', $form->validate())->true();
             expect('form does init', $form->reset())->true();
-        });
-
-        $this->specify('test init scenario (with invalid email)', function () {
-            $user = Factory::create();
-            $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_INIT]);
-            $form->email = $user->email;
-
-            expect('form does not validate', $form->validate())->false();
-            expect('form does not init', $form->reset())->false();
         });
     }
 
     public function testReset()
     {
-        $user = $this->createUser();
+        $user = $this->register();
         $this->specify('test reset scenario (with token)', function () use ($user) {
             // Generate a mock activation token
             $token = Base32::encode(\random_bytes(64));
             $code = new Code();
             $code->hash = hash('sha256', $token . '_reset_token');
-            $code->user_id = $user->id;
+            $code->user_id = $this->getUser()->id;
             
             expect('code saves', $code->save())->true();
 
@@ -64,7 +55,7 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             $token = Base32::encode(\random_bytes(64));
             $code = new Code();
             $code->hash = hash('sha256', $token . '_reset_token');
-            $code->user_id = $user->id;
+            $code->user_id = $this->getUser()->id;
             
             expect('code saves', $code->save())->true();
             $form->reset_token = $token;
@@ -78,13 +69,13 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
 
     public function testResetWithOTP()
     {
-        $user = $this->createUser();
+        $user = $this->register();
         $this->specify('test that password cannot be reset if OTP is enabled', function () use ($user) {
             // Enable OTP on the account
-            $user->provisionOTP();
-            $user->enableOTP();
+            $this->getUser()->provisionOTP();
+            $this->getUser()->enableOTP();
 
-            expect('OTP is enabled', $user->isOTPEnabled())->true();
+            expect('OTP is enabled', $this->getUser()->isOTPEnabled())->true();
 
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
@@ -92,7 +83,7 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             $token = Base32::encode(\random_bytes(64));
             $code = new Code();
             $code->hash = hash('sha256', $token . '_reset_token');
-            $code->user_id = $user->id;
+            $code->user_id = $this->getUser()->id;
             
             expect('code saves', $code->save())->true();
 
@@ -106,19 +97,19 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
 
         $this->specify('tests password reset with valid OTP code', function () use ($user) {
             // Enable OTP on the account
-            $user->provisionOTP();
-            $user->enableOTP();
+            $this->getUser()->provisionOTP();
+            $this->getUser()->enableOTP();
 
-            expect('OTP is enabled', $user->isOTPEnabled())->true();
+            expect('OTP is enabled', $this->getUser()->isOTPEnabled())->true();
 
             $totp = TOTP::create(
-                $user->otp_secret,
+                $this->getUser()->otp_secret,
                 30,
                 'sha256',
                 6
             );
 
-            $totp->setLabel($user->username);
+            $totp->setLabel($this->getUser()->username);
 
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET]);
@@ -126,7 +117,7 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             $token = Base32::encode(\random_bytes(64));
             $code = new Code();
             $code->hash = hash('sha256', $token . '_reset_token');
-            $code->user_id = $user->id;
+            $code->user_id = $this->getUser()->id;
             
             expect('code saves', $code->save())->true();
 
@@ -142,7 +133,7 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
 
     public function testAuthenticatedResetScenario()
     {
-        $user = $this->createUser();
+        $user = $this->register();
         $this->specify('test authenticated password reset', function () use ($user) {
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET_AUTHENTICATED]);
@@ -157,25 +148,25 @@ class ResetPasswordTest extends \app\tests\codeception\Unit
             expect('form resets', $form->reset())->true();
         });
 
-        $user = $this->createUser();
+        $user = $this->register();
         $this->specify('test authenticated password reset with OTP', function () use ($user) {
             $faker = Factory::create();
             $form = new ResetPassword(['scenario' => ResetPassword::SCENARIO_RESET_AUTHENTICATED]);
 
             // Enable OTP on the account
-            $user->provisionOTP();
-            $user->enableOTP();
+            $this->getUser()->provisionOTP();
+            $this->getUser()->enableOTP();
 
-            expect('OTP is enabled', $user->isOTPEnabled())->true();
+            expect('OTP is enabled', $this->getUser()->isOTPEnabled())->true();
 
             $totp = TOTP::create(
-                $user->otp_secret,
+                $this->getUser()->otp_secret,
                 30,
                 'sha256',
                 6
             );
 
-            $totp->setLabel($user->username);
+            $totp->setLabel($this->getUser()->username);
 
             $form->setUser($user);
             $form->user_id = $user;

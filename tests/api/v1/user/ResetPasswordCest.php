@@ -8,7 +8,7 @@ use OTPHP\TOTP;
 use Faker\Factory;
 use Yii;
 
-use yrc\api\models\Code;
+use yrc\models\redis\Code;
 
 class ResetPasswordCest extends AbstractApiCest
 {

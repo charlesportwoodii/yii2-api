@@ -2,4 +2,4 @@
 
 namespace app\forms;
 
-final class Login extends \yrc\api\forms\Login {}
+final class Login extends \yrc\forms\Login {}

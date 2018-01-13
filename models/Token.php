@@ -2,4 +2,4 @@
 
 namespace app\models;
 
-final class Token extends \yrc\api\models\Token {}
+final class Token extends \yrc\models\redis\Token {}

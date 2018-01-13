@@ -6,30 +6,28 @@ app:
   debug: true
   env: 'dev'
 
-# Yii2 specific configuration
-yii2:
-  # Database configuration
-  database:
-    driver: postgresql
-    database: travis
-    host: 127.0.0.1
-    username: travis
-    password:
-  # Redis Configuration
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    database: 0
-  # SwiftMailer configuration
-  swiftmailer:
-    host: 127.0.0.1
-    port: 1025
-    # The email address that system notifications should be delivered from
-    origin_email: test@example.com
-    # The name to associate with the origin
-    origin_email_name: test
-  # User Model
-  user: 'app\models\User'
-  access_control:
-    header: null
-    secret: null
+# Database configuration
+database:
+  driver: postgresql
+  database: travis
+  host: 127.0.0.1
+  username: travis
+  password:
+# Redis Configuration
+redis:
+  host: 127.0.0.1
+  port: 6379
+  database: 0
+# SwiftMailer configuration
+swiftmailer:
+  host: 127.0.0.1
+  port: 1025
+  # The email address that system notifications should be delivered from
+  origin_email: test@example.com
+  # The name to associate with the origin
+  origin_email_name: test
+# User Model
+user: 'app\models\User'
+access_control:
+  header: null
+  secret: null

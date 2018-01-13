@@ -4,7 +4,7 @@ namespace tests\api\v1\user;
 
 use tests\_support\AbstractApiCest;
 use tests\api\v1\user\RegisterCest;
-use yrc\api\models\Code;
+use yrc\models\redis\Code;
 use Base32\Base32;
 use Yii;
 

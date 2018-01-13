@@ -5,7 +5,13 @@ namespace app\controllers\api\v1;
 use yrc\filters\auth\HMACSignatureAuth;
 use yrc\rest\Controller;
 
-use yrc\api\actions\ResetPasswordAction;
+use yrc\actions\ResetPasswordAction;
+use yrc\actions\ActivationAction;
+use yrc\actions\AuthenticationAction;
+use yrc\actions\ChangeEmailAction;
+use yrc\actions\OTPAction;
+use yrc\actions\RefreshAction;
+use yrc\actions\RegisterAction;
 use yii\web\HttpException;
 use Yii;
 
@@ -18,19 +24,19 @@ class UserController extends Controller
     public function actions()
     {
         return [
-            'activate'      => 'yrc\api\actions\ActivationAction',
-            'authenticate'  => 'yrc\api\actions\AuthenticationAction',
-            'change_email'  => 'yrc\api\actions\ChangeEmailAction',
-            'otp'           => 'yrc\api\actions\OTPAction',
-            'refresh'       => 'yrc\api\actions\RefreshAction',
-            'register'      => 'yrc\api\actions\RegisterAction',
+            'activate'      => ActivationAction::className(),
+            'authenticate'  => AuthenticationAction::className(),
+            'change_email'  => ChangeEmailAction::className(),
+            'otp'           => OTPAction::className(),
+            'refresh'       => RefreshAction::className(),
+            'register'      => RegisterAction::className(),
             
             // If you want verifiable tokenized password resets (for authenticated and unauthenticated)
-            'reset_password' => 'yrc\api\actions\ResetPasswordAction',
+            'reset_password' => ResetPasswordAction::className(),
 
             // If you want password resets done for authenticated userss only
             'reset_password_authenticated' => [
-                'class' => 'yrc\api\actions\ResetPasswordAction',
+                'class' => ResetPasswordAction::className(),
                 'scenario' => ResetPasswordAction::SCENARIO_AUTHENTICATED
             ]
         ];

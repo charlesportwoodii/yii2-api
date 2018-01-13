@@ -7,7 +7,7 @@ use OTPHP\TOTP;
 use Faker\Factory;
 use Yii;
 
-class LoginTest extends \app\tests\codeception\Unit
+class LoginTest extends \tests\codeception\Unit
 {
     use \Codeception\Specify;
 
@@ -22,10 +22,12 @@ class LoginTest extends \app\tests\codeception\Unit
         });
 
         $this->specify('test login requires activated user', function () {
-            $user = $this->createUser();
+            $user = $this->register();
+            $user->verified = 0;
+            $user->save();
             $form = new Login;
             $form->load(['Login' => [
-                'email' => $user->email,
+                'email' => $this->getUser()->email,
                 'password' => 'irrelevant' // The password is irrelevant for this test
             ]]);
 
@@ -33,10 +35,10 @@ class LoginTest extends \app\tests\codeception\Unit
         });
 
         $this->specify('test login with invalid password', function () {
-            $user = $this->createUser(true);
+            $user = $this->register(true);
             $form = new Login;
             $form->load(['Login' => [
-                'email' => $user->email,
+                'email' => $this->getUser()->email,
                 'password' => 'irrelevant' // The password is irrelevant for this test
             ]]);
 
@@ -45,18 +47,18 @@ class LoginTest extends \app\tests\codeception\Unit
         });
 
         $this->specify('test login fails with OTP enabled', function () {
-            $user = $this->createUser(true);
+            $user = $this->register(true);
             $faker = \Faker\Factory::create();
             $password = $faker->password(24);
-            $user->password = $password;
+            $this->getUser()->password = $password;
             
-            expect('new password saves', $user->save())->true();
-            expect('OTP is provisioned', $user->provisionOTP())->notEquals(false);
-            expect('OTP is enabled', $user->enableOTP())->true();
+            expect('new password saves', $this->getUser()->save())->true();
+            expect('OTP is provisioned', $this->getUser()->provisionOTP())->notEquals(false);
+            expect('OTP is enabled', $this->getUser()->enableOTP())->true();
 
             $form = new Login;
             $form->load(['Login' => [
-                'email' => $user->email,
+                'email' => $this->getUser()->email,
                 'password' => $password
             ]]);
 
@@ -67,19 +69,14 @@ class LoginTest extends \app\tests\codeception\Unit
     public function testLogin()
     {
         $this->specify('test login', function () {
-            $user = $this->createUser(true);
+            $user = $this->register(true);
             $faker = \Faker\Factory::create();
-            $password = $faker->password(24);
-            $user->password = $password;
-            
-            expect('new password saves', $user->save())->true();
 
             $form = new Login;
             $form->load(['Login' => [
-                'email' => $user->email,
-                'password' => $password
+                'email' => $this->getUser()->email,
+                'password' => $this->getPassword()
             ]]);
-
             expect('form validates', $form->validate())->true();
             $details = $form->authenticate();
             expect('user authenticates', $details)->notEquals(null);
@@ -90,29 +87,27 @@ class LoginTest extends \app\tests\codeception\Unit
         });
 
         $this->specify('test login OTP', function () {
-            $user = $this->createUser(true);
+            $user = $this->register(true);
             $faker = \Faker\Factory::create();
-            $password = $faker->password(24);
-            $user->password = $password;
             
-            expect('new password saves', $user->save())->true();
-            expect('new password saves', $user->save())->true();
-            expect('OTP is provisioned', $user->provisionOTP())->notEquals(false);
-            expect('OTP is enabled', $user->enableOTP())->true();
+            expect('new password saves', $this->getUser()->save())->true();
+            expect('new password saves', $this->getUser()->save())->true();
+            expect('OTP is provisioned', $this->getUser()->provisionOTP())->notEquals(false);
+            expect('OTP is enabled', $this->getUser()->enableOTP())->true();
 
             $totp = TOTP::create(
-                $user->otp_secret,
+                $this->getUser()->otp_secret,
                 30,             // 30 second window
                 'sha256',       // SHA256 for the hashing algorithm
                 6               // 6 digits
             );
 
-            $totp->setLabel($user->email);
+            $totp->setLabel($this->getUser()->email);
 
             $form = new Login;
             $form->load(['Login' => [
-                'email' => $user->email,
-                'password' => $password,
+                'email' => $this->getUser()->email,
+                'password' => $this->getPassword(),
                 'otp' => $totp->now()
             ]]);
 

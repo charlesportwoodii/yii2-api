@@ -3,7 +3,7 @@
 $config = require __DIR__ . '/loader.php';
 $params = [
     'yii.migrations' => [
-        "@restcomponents/api/migrations",
+        "@restcomponents/migrations",
     ]
 ];
 

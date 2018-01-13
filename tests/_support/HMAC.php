@@ -1,6 +1,6 @@
 <?php
 
-namespace app\tests\_support\app;
+namespace tests\_support;
 
 use yii\helpers\Json;
 use Yii;
@@ -30,7 +30,7 @@ final class HMAC
         if ($method === 'GET' || empty($payload)) {
             $payload = '';
         } else {
-            $payload = JSON::encode($payload);
+            $payload = JSON::encode($payload, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         }
 
         $salt = \random_bytes(32);
@@ -47,6 +47,10 @@ final class HMAC
                      $date . "\n" .
                      \base64_encode($salt);
         
+        Yii::info([
+            'message' => sprintf('Signature String Derived By Test Suite: %s', $signature),
+            'body' => $payload
+        ], 'hmac-signature');
         return \base64_encode(\hash_hmac('sha256', $signature, \bin2hex($hkdf), true)) . ',' . \base64_encode($salt);
     }
 }

@@ -1,5 +1,6 @@
 ._*
 config/config.yml
+config/docker/certs
 runtime/logs/*
 runtime/cache/*
 runtime/*

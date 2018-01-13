@@ -8,7 +8,7 @@ use OTPHP\TOTP;
 use Faker\Factory;
 use Yii;
 
-use yrc\api\models\Code;
+use yrc\models\redis\Code;
 
 class ResetPasswordAuthenticatedCest extends AbstractApiCest
 {
@@ -20,11 +20,11 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
     {
         $I->wantTo('reset a password as an authenticated user');
         $faker = Factory::create();
-        $oldPassword = $I->register(true);
+        $user = $I->register(true);
 
         $payload = [
             'password' => $faker->password(20),
-            'old_password' => $oldPassword
+            'old_password' => $I->getPassword()
         ];
         $payload['password_verify'] = $payload['password'];
 
@@ -43,13 +43,13 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
     {
         $I->wantTo('reset a password as an authenticated user');
         $faker = Factory::create();
-        $oldPassword = $I->register(true);
+        $user = $I->register(true);
         $I->getUser()->provisionOTP();
         $I->getUser()->enableOTP();
 
         $payload = [
             'password' => $faker->password(20),
-            'old_password' => $oldPassword
+            'old_password' => $I->getPassword()
         ];
         $payload['password_verify'] = $payload['password'];
 
@@ -68,13 +68,13 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
     {
         $I->wantTo('reset a password as an authenticated user with otp');
         $faker = Factory::create();
-        $oldPassword = $I->register(true);
+        $user = $I->register(true);
         $I->getUser()->provisionOTP();
         $I->getUser()->enableOTP();
 
         $payload = [
             'password' => $faker->password(20),
-            'old_password' => $oldPassword
+            'old_password' => $I->getPassword()
         ];
         $payload['password_verify'] = $payload['password'];
         // Verify the request to valid OTP keys

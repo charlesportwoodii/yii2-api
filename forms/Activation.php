@@ -2,4 +2,4 @@
 
 namespace app\forms;
 
-final class Activation extends \yrc\api\forms\Activation {}
+final class Activation extends \yrc\forms\Activation {}

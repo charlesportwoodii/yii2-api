@@ -3,6 +3,7 @@
 namespace app\controllers\api\v1;
 
 use yrc\rest\Controller;
+use yrc\actions\OneTimeKeyAction;
 use yii\web\HttpException;
 use Yii;
 
@@ -15,7 +16,7 @@ class ServerController extends Controller
     public function actions()
     {
         return [
-            'otk' => 'yrc\api\actions\OneTimeKeyAction',
+            'otk' => OneTimeKeyAction::className()
         ];
     }
 }

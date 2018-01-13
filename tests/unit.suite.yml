@@ -4,4 +4,3 @@ modules:
         - Yii2:
             configFile: 'tests/config/unit.php'
         - Asserts
-        

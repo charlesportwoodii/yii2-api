@@ -3,7 +3,7 @@
 namespace tests\api\v1\user;
 
 use tests\_support\AbstractApiCest;
-use yrc\api\models\EncryptionKey;
+use yrc\models\redis\EncryptionKey;
 use Yii;
 
 class RefreshCest extends AbstractApiCest
@@ -81,7 +81,7 @@ class RefreshCest extends AbstractApiCest
     public function testRefreshWithEncryptedRequestAndEncryptedResponse(\ApiTester $I)
     {
         // Register a user with token
-        $password = $I->register(true, true);
+        $user = $I->register(true, true);
 
         // Generate an encryption key since we don't have a previous request to initialize it off of
         $key = EncryptionKey::generate();

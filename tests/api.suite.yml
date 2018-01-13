@@ -1,9 +1,9 @@
 class_name: ApiTester
 modules:
     enabled:
-        - Yii2
+        - Yii2:
+            cleanup: true
+            transaction: true
+            configFile: 'tests/config/api.php'
         - REST:
             depends: Yii2
-    config:
-        Yii2:
-            configFile: 'tests/config/api.php'

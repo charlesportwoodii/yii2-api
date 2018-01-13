@@ -29,7 +29,7 @@ class ChangeEmailCest extends AbstractApiCest
         $I->wantTo('verify an email is required');
         $oldPassword = $I->register(true);
         $payload = [
-            'password' => $oldPassword
+            'password' => $I->getPassword()
         ];
 
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
@@ -45,7 +45,7 @@ class ChangeEmailCest extends AbstractApiCest
     {
         $faker = Factory::create();
         $I->wantTo('verify the users current password is required');
-        $oldPassword = $I->register(true);
+        $user = $I->register(true);
         $payload = [
             'email' => $faker->safeEmail
         ];
@@ -82,10 +82,10 @@ class ChangeEmailCest extends AbstractApiCest
     {
         $faker = Factory::create();
         $I->wantTo('verify the email address can be changed');
-        $oldPassword = $I->register(true);
+        $user = $I->register(true);
         $payload = [
             'email' => $faker->safeEmail,
-            'password' => $oldPassword
+            'password' => $I->getPassword()
         ];
 
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);

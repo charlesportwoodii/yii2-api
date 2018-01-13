@@ -3,7 +3,7 @@
 namespace tests\api\v1\user;
 
 use tests\_support\AbstractApiCest;
-use yrc\api\models\EncryptionKey;
+use yrc\models\redis\EncryptionKey;
 use yii\helpers\Json;
 use OTPHP\TOTP;
 use Faker\Factory;
@@ -24,11 +24,11 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testLoginWithValidCredentials(\ApiTester $I)
     {
-        $password = $I->register(true);
+        $user = $I->register(true);
         $I->wantTo('verify users can authenticate against the API');
         $I->sendPOST($this->uri, [
             'email' => $I->getUser()->email,
-            'password' => $password
+            'password' => $I->getPassword()
         ]);
 
         $I->seeResponseIsJson();
@@ -105,7 +105,7 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testLoginWithOTP(\ApiTester $I)
     {
-        $password = $I->register(true);
+        $user = $I->register(true);
         $I->wantTo('verify users can authenticate against the API with 2FA enabled');
         expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
@@ -120,7 +120,7 @@ class AuthenticateCest extends AbstractApiCest
 
         $I->sendPOST($this->uri, [
             'email' => $I->getUser()->email,
-            'password' => $password,
+            'password' => $I->getPassword(),
             'otp' => $totp->now()
         ]);
 
@@ -143,7 +143,7 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testLoginWithBadOTP(\ApiTester $I)
     {
-        $password = $I->register(true);
+        $user = $I->register(true);
         $I->wantTo('verify a valid TOTP 2FA code is required');
         expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
@@ -158,7 +158,7 @@ class AuthenticateCest extends AbstractApiCest
 
         $I->sendPOST($this->uri, [
             'email' => $I->getUser()->email,
-            'password' => $password,
+            'password' => $I->getPassword(),
             'otp' => $totp->at(100)
         ]);
 
@@ -184,7 +184,7 @@ class AuthenticateCest extends AbstractApiCest
      */
     public function testLoginWithoutOTP(\ApiTester $I)
     {
-        $password = $I->register(true);
+        $user = $I->register(true);
         $I->wantTo('verify if 2FA is enabled the correct status code is returned');
         expect('OTP is provisioned', $I->getUser()->provisionOTP())->notEquals(false);
         expect('OTP is enabled', $I->getUser()->enableOTP())->true();
@@ -199,7 +199,7 @@ class AuthenticateCest extends AbstractApiCest
 
         $I->sendPOST($this->uri, [
             'email' => $I->getUser()->email,
-            'password' => $password
+            'password' => $I->getPassword()
         ]);
 
         $I->seeResponseIsJson();
@@ -233,7 +233,7 @@ class AuthenticateCest extends AbstractApiCest
     public function testAuthenticatePlainTextToEncryptedResponse(\ApiTester $I)
     {
         // Create a new user
-        $password = $I->register(true);
+        $user = $I->register(true);
 
         // Generate a new encryption key, mocking a request to /api/v1/server/otk
         $key = EncryptionKey::generate();
@@ -252,7 +252,7 @@ class AuthenticateCest extends AbstractApiCest
         // The payload is now encrypted
         $I->sendPOST($this->uri, [
             'email' => $I->getUser()->email,
-            'password' => $password,
+            'password' => $I->getPassword(),
         ]);
 
         // We should get an encrypted HTTP 200 response back
@@ -301,7 +301,7 @@ class AuthenticateCest extends AbstractApiCest
     public function testAuthenticatewithEncryptedRequestAndEncryptedResponse(\ApiTester $I)
     {
         // Create a new user
-        $password = $I->register(true);
+        $user = $I->register(true);
 
         // Generate a new encryption key, mocking a request to /api/v1/server/otk
         $key = EncryptionKey::generate();
@@ -326,7 +326,7 @@ class AuthenticateCest extends AbstractApiCest
         $payload = \base64_encode(sodium_crypto_box(
             \json_encode([
                 'email'         => $I->getUser()->email,
-                'password'      => $password
+                'password'      => $I->getPassword()
             ]),
             $nonce,
             $kp

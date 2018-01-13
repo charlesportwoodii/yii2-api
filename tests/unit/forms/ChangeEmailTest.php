@@ -6,7 +6,7 @@ use app\forms\ChangeEmail;
 use Faker\Factory;
 use Yii;
 
-class ChangeEmailTest extends \app\tests\codeception\Unit
+class ChangeEmailTest extends \tests\codeception\Unit
 {
     use \Codeception\Specify;
 
@@ -19,23 +19,13 @@ class ChangeEmailTest extends \app\tests\codeception\Unit
             expect('form has errors', $form->hasErrors())->true();
             expect('form has email error', $form->getErrors())->hasKey('email');
             expect('form has password error', $form->getErrors())->hasKey('password');
-        });
-
-        $this->specify('test user object is set', function () {
-            $faker = Factory::create();
-            $form = new ChangeEmail;
-            $form->email = $faker->safeEmail;
-            $form->password = $faker->password(24);
-            
-            expect('form does not validate', $form->validate())->false();
-            expect('form has errors', $form->hasErrors())->true();
         }, [
-            'throws' => 'Exception'
+            'throws' => '\yii\base\Exception'
         ]);
 
         $this->specify('test a valid user is required', function () {
             $faker = Factory::create();
-            $user = $this->createUser(true);
+            $user = $this->register(true);
             $form = new ChangeEmail;
             $form->email = $faker->safeEmail;
             $form->password = $this->getPassword();
@@ -47,9 +37,9 @@ class ChangeEmailTest extends \app\tests\codeception\Unit
 
         $this->specify('tests that the email cannot be the users current email', function () {
             $faker = Factory::create();
-            $user = $this->createUser(true);
+            $user = $this->register(true);
             $form = new ChangeEmail;
-            $form->email = $user->email;
+            $form->email = $this->getUser()->email;
             $form->password = $this->getPassword();
             $form->setUser($user);
 
@@ -63,7 +53,7 @@ class ChangeEmailTest extends \app\tests\codeception\Unit
     {
         $this->specify('tests a user can actually change their email', function () {
             $faker = Factory::create();
-            $user = $this->createUser(true);
+            $user = $this->register(true);
             $form = new ChangeEmail;
             $form->email = $faker->safeEmail;
             $form->password = $this->getPassword();
@@ -73,8 +63,8 @@ class ChangeEmailTest extends \app\tests\codeception\Unit
             expect('form does not have errors', $form->hasErrors())->false();
 
             expect('form changes user object', $form->change())->true();
-            $user->refresh();
-            expect('user email has been changed', $user->email)->equals($form->email);
+            $this->getUser()->refresh();
+            expect('user email has been changed', $this->getUser()->email)->equals($form->email);
         });
     }
 }

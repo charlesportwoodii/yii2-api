@@ -2,4 +2,4 @@
 
 namespace app\forms;
 
-final class ResetPassword extends \yrc\api\forms\ResetPassword {}
+final class ResetPassword extends \yrc\forms\ResetPassword {}

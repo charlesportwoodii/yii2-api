@@ -8,7 +8,7 @@ use Yii;
 /**
  * Tests implementation of the Registration form
  */
-class RegistrationTest extends \app\tests\codeception\Unit
+class RegistrationTest extends \tests\codeception\Unit
 {
     use \Codeception\Specify;
     

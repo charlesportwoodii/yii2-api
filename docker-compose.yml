@@ -7,71 +7,47 @@ services:
       - "443:443"
     links:
       - php:php
-      - graylog:graylog
     volumes:
       - ${PWD-.}:/var/www
       - ${PWD-.}/config/.docker/nginx/conf.d:/etc/nginx/conf/conf.d
+      - ${PWD-.}/config/.docker/certs/server.crt:/etc/nginx/conf/ssl/server.crt
+      - ${PWD-.}/config/.docker/certs/server.key:/etc/nginx/conf/ssl/server.key
   php:
-    image: charlesportwoodii/php:7.1
+    image: charlesportwoodii/php:7.2
     working_dir: /var/www
     links:
       - redis:redis
       - mailhog:mailhog
       - mariadb:mariadb
-      - graylog:graylog
+    volumes:
+      - ${PWD-.}:/var/www
+  rpq:
+    image: charlesportwoodii/php:7.2
+    entrypoint: >
+      /bin/bash -lc "./vendor/bin/rpq queue -c /var/www/config/config.yml"
+    working_dir: /var/www
+    links:
+      - redis:redis
+      - mailhog:mailhog
+      - mariadb:mariadb
     volumes:
       - ${PWD-.}:/var/www
   redis:
     image: redis:4.0-alpine
-    ports:
-      - "6379:6379"
   mailhog: 
     image: mailhog/mailhog
     ports:
       - "8025:8025"
   mariadb:
     image: mariadb
+    volumes:
+      - mariadb:/var/lib/mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=root
       - MYSQL_USER=local
       - MYSQL_PASSWORD=local
-  mongo:
-    image: mongo:3
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.2
-    environment:
-      - http.host=0.0.0.0
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-  graylog:
-    image: graylog/graylog:2.3
-    volumes:
-      - ${PWD-.}/config/.docker/graylog/udp-input-graylog.json:/usr/share/graylog/data/contentpacks/udp-input-graylog.json
-    environment:
-      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
-      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      - GRAYLOG_WEB_ENDPOINT_URI=http://127.0.0.1:9000/api
-      - GRAYLOG_TRANSPORT_EMAIL_ENABLED=true
-      - GRAYLOG_TRANSPORT_EMAIL_HOSTNAME=mailog
-      - GRAYLOG_TRANSPORT_EMAIL_PORT=1025
-      - GRAYLOG_TRANSPORT_EMAIL_USE_AUTH=false
-      - GRAYLOG_TRANSPORT_EMAIL_USE_TLS=false
-      - GRAYLOG_TRANSPORT_EMAIL_USE_SSL=false
-      - GRAYLOG_CONTENT_PACKS_AUTO_LOAD=grok-patterns.json,udp-input-graylog.json
-      - GRAYLOG_CONTENT_PACKS_LOADER_ENABLED=true
-      - GRAYLOG_CONTENT_PACKS_DIR=data/contentpacks
-    links:
-      - mongo
-      - elasticsearch
-    ports:
-      - 9000:9000
-      - 514:514
-      - 514:514/udp
-      - 12201:12201
-      - 12201:12201/udp
+
+volumes:
+  mariadb:
