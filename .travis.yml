@@ -37,7 +37,7 @@ before_install:
   # Install dependencies
   - chmod a+x tests/.travis/install_dependencies.sh
   - bash tests/.travis/install_dependencies.sh
-  - pecl install libsodium-2.0.8
+  - pecl install libsodium-2.0.10
   # Spin up docker contains to supplement services
   - docker run -d -p 1025:1025 mailhog/mailhog
   - docker run -d -p 6379:6379 redis:4.0-alpine
