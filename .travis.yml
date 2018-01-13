@@ -55,7 +55,7 @@ install:
   - ./yii migrate/up --interactive=0
 
 script:
-  - ./vendor/bin/codecept run
+  - ./vendor/bin/codecept run -vvv
 
 after_script:
   - docker stop $(docker ps -a -q) -f
