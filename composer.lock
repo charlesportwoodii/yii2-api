@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cbe4b58b152735e3cb5eac1d07613a56",
+    "content-hash": "06e17c7624734c40dc8391b48095ceb8",
     "packages": [
         {
             "name": "2amigos/yii2-arrayquery-component",
@@ -366,19 +366,37 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/charlesportwoodii/yii2-api-rest-components.git",
-                "reference": "0fae22c81d8a58f1fbf27c2468f477eb7dcbf81f"
+                "reference": "15648265d7f19616bde2658d0589c33d272b8686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/0fae22c81d8a58f1fbf27c2468f477eb7dcbf81f",
-                "reference": "0fae22c81d8a58f1fbf27c2468f477eb7dcbf81f",
+                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/15648265d7f19616bde2658d0589c33d272b8686",
+                "reference": "15648265d7f19616bde2658d0589c33d272b8686",
                 "shasum": ""
             },
             "require": {
+                "christian-riesen/base32": "1.3.1",
+                "ext-curl": "*",
+                "ext-hash": "*",
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "ext-pcntl": "*",
+                "ext-pcre": "*",
+                "ext-pdo": "*",
+                "ext-posix": "*",
+                "ext-redis": ">=3.1.0",
+                "ext-reflection": "*",
                 "ext-sodium": ">=2.0.0",
+                "monolog/monolog": "^1.23",
                 "php": ">=7.1.2",
+                "rpq/server": "dev-master",
                 "spomky-labs/otphp": ">=8.2.0",
+                "symfony/yaml": "^3.0",
+                "yii2mod/yii2-rbac": "*",
                 "yiisoft/yii2": "~2.0.13",
+                "yiisoft/yii2-httpclient": "^2.0",
+                "yiisoft/yii2-redis": "~2.0.0",
+                "yiisoft/yii2-smarty": "~2.0.0",
                 "yiisoft/yii2-swiftmailer": "~2.0.0",
                 "yiisoft/yii2-twig": "~2.0.0"
             },
@@ -418,7 +436,7 @@
                 "rest",
                 "yii2"
             ],
-            "time": "2018-01-13T00:37:00+00:00"
+            "time": "2018-01-13T18:07:48+00:00"
         },
         {
             "name": "christian-riesen/base32",
@@ -844,12 +862,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/charlesportwoodii/rpq-client.git",
-                "reference": "0cd03d61dba3d67c67e9f44b7bb8ec58b512d8d5"
+                "reference": "940e47f7121c3e6533dbf0f66655931b410f09c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charlesportwoodii/rpq-client/zipball/0cd03d61dba3d67c67e9f44b7bb8ec58b512d8d5",
-                "reference": "0cd03d61dba3d67c67e9f44b7bb8ec58b512d8d5",
+                "url": "https://api.github.com/repos/charlesportwoodii/rpq-client/zipball/940e47f7121c3e6533dbf0f66655931b410f09c5",
+                "reference": "940e47f7121c3e6533dbf0f66655931b410f09c5",
                 "shasum": ""
             },
             "require": {
@@ -877,7 +895,7 @@
                 }
             ],
             "description": "Redis Priority Queue Client implementation in pure PHP",
-            "time": "2017-12-13T19:07:30+00:00"
+            "time": "2018-01-13T17:53:53+00:00"
         },
         {
             "name": "rpq/server",
@@ -885,12 +903,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/charlesportwoodii/rpq-server.git",
-                "reference": "659e9a95a050d0cfa4c0e7f8984ea0bd4bd9e362"
+                "reference": "4fbdd858331bcc6085333cfdd2caeee9472bfe93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charlesportwoodii/rpq-server/zipball/659e9a95a050d0cfa4c0e7f8984ea0bd4bd9e362",
-                "reference": "659e9a95a050d0cfa4c0e7f8984ea0bd4bd9e362",
+                "url": "https://api.github.com/repos/charlesportwoodii/rpq-server/zipball/4fbdd858331bcc6085333cfdd2caeee9472bfe93",
+                "reference": "4fbdd858331bcc6085333cfdd2caeee9472bfe93",
                 "shasum": ""
             },
             "require": {
@@ -899,7 +917,7 @@
                 "ext-redis": "^3.1.0",
                 "monolog/monolog": "^1.23",
                 "php": "^7.1",
-                "rpq/client": "@dev",
+                "rpq/client": "dev-master",
                 "symfony/console": "^3.3",
                 "symfony/yaml": "^3.3"
             },
@@ -923,7 +941,7 @@
                 }
             ],
             "description": "Redis Priority Queue Server implementation in pure PHP",
-            "time": "2017-12-13T19:11:51+00:00"
+            "time": "2018-01-13T17:57:25+00:00"
         },
         {
             "name": "smarty/smarty",
@@ -5038,25 +5056,10 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "charlesportwoodii/yii2-api-rest-components": 20,
-        "rpq/server": 20,
         "mohrekopp/php-mailhog-client": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": {
-        "php": ">=7.1.2",
-        "ext-curl": "*",
-        "ext-openssl": "*",
-        "ext-pdo": "*",
-        "ext-reflection": "*",
-        "ext-sodium": ">=2.0.0",
-        "ext-redis": ">=3.1.0",
-        "ext-pdo_mysql": "*",
-        "ext-hash": "*",
-        "ext-json": "*",
-        "ext-pcntl": "*",
-        "ext-pcre": "*",
-        "ext-posix": "*"
-    },
+    "platform": [],
     "platform-dev": []
 }

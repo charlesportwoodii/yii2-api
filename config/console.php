@@ -20,11 +20,38 @@ $console = [
         ],
     ],
     'components' => [
-        'rpq' => [
-            'class' => 'yrc\components\RPQComponent',
-            'redis' => $yaml['redis'],
-            'queues' => $yaml['queue']
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath'      => '@app/views/email',
+            'htmlLayout'    => 'email/html.twig',
+            'textLayout'    => 'email/text.twig',
+            'transport' => [
+                'class'         => 'Swift_SmtpTransport',
+                'host'          => $yaml['swiftmailer']['host'],
+                'username'      => $yaml['swiftmailer']['username'],
+                'password'      => $yaml['swiftmailer']['password'],
+                'port'          => $yaml['swiftmailer']['port'],
+                'encryption'    => $yaml['swiftmailer']['encryption'],
+            ],
         ],
+        'view' => [
+            'class' => 'yii\web\View',
+            'renderers' => [
+                'twig' => [
+                    'class' => 'yii\twig\ViewRenderer',
+                    'cachePath' => YII_DEBUG ? false : '@runtime/Twig/cache',
+                    'options' => [
+                        'auto_reload' => true,
+                    ],
+                    'extensions' => [
+                        '\Twig_Extension_Debug',
+                    ],
+                    'globals' => [
+                        'html' => ['class' => '\yii\helpers\Html'],
+                    ],
+                ],
+            ],
+        ]
     ]
 ];
 

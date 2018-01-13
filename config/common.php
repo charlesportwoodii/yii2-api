@@ -70,6 +70,11 @@ $config = [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => require(__DIR__ . '/logs.php'),
         ],
+        'rpq' => [
+            'class' => 'yrc\components\RPQComponent',
+            'redis' => $yaml['redis'],
+            'queues' => $yaml['queue']
+        ],
         'db' => require(__DIR__ . '/database.php')
     ],
     'params' => require(__DIR__ . '/params.php')
