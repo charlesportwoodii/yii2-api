@@ -366,12 +366,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/charlesportwoodii/yii2-api-rest-components.git",
-                "reference": "88ccf254d3375fac5bd3f97d732e7b3db1d30c0f"
+                "reference": "0fae22c81d8a58f1fbf27c2468f477eb7dcbf81f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/88ccf254d3375fac5bd3f97d732e7b3db1d30c0f",
-                "reference": "88ccf254d3375fac5bd3f97d732e7b3db1d30c0f",
+                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/0fae22c81d8a58f1fbf27c2468f477eb7dcbf81f",
+                "reference": "0fae22c81d8a58f1fbf27c2468f477eb7dcbf81f",
                 "shasum": ""
             },
             "require": {
@@ -418,7 +418,7 @@
                 "rest",
                 "yii2"
             ],
-            "time": "2018-01-12T23:26:29+00:00"
+            "time": "2018-01-13T00:37:00+00:00"
         },
         {
             "name": "christian-riesen/base32",

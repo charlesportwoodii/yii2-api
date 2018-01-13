@@ -21,7 +21,7 @@ $console = [
     ],
     'components' => [
         'rpq' => [
-            'class' => 'app\components\RPQComponent',
+            'class' => 'yrc\components\RPQComponent',
             'redis' => $yaml['redis'],
             'queues' => $yaml['queue']
         ],

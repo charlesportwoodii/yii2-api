@@ -30,7 +30,6 @@ addons:
       
 services:
   - mysql
-  - redis-server
   - postgresql
   - docker
 
@@ -41,6 +40,7 @@ before_install:
   - pecl install libsodium-2.0.8
   # Spin up docker contains to supplement services
   - docker run -d -p 1025:1025 mailhog/mailhog
+  - docker run -d -p 6379:6379 redis:4.0-alpine
   # Check the installed PHP modules
   - phpenv config-rm xdebug.ini || true
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
@@ -55,7 +55,7 @@ install:
   - ./yii migrate/up --interactive=0
 
 script:
-  - ./vendor/bin/codecept run -vvv
+  - ./vendor/bin/codecept run
 
 after_script:
   - docker stop $(docker ps -a -q) -f

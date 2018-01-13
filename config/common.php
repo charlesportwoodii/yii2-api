@@ -22,7 +22,7 @@ $config = [
             'accessHeaderSecret' => $yaml['access_control']['secret']
         ],
         'httpclient' => [
-            'class' => 'app\components\HttpClientComponent',
+            'class' => 'yrc\components\HttpClientComponent',
             'transport' => 'yii\httpclient\CurlTransport',
             'options' => [
                 'timeout' => 5

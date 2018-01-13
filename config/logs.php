@@ -24,7 +24,7 @@ $logger->pushHandler($handler, $yaml['log']['level']);
 
 return [
     [
-        'class' => 'app\components\log\PsrTarget',
+        'class' => 'yrc\components\log\PsrTarget',
         'logger' => $logger,
         'levels' => ['info', 'error', 'warning']
     ]
