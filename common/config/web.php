@@ -7,7 +7,6 @@ $web = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        
         'request' => [
             'enableCookieValidation'    => false,
             'enableCsrfValidation'      => false,

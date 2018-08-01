@@ -104,8 +104,13 @@ class ApiTester extends \Codeception\Actor
             $payload
         );
 
-        $this->haveHttpHeader('X-DATE', $time);
-        $this->haveHttpHeader('Authorization', 'HMAC ' . $tokens['access_token'] . ',' . $HMAC);
+        $this->haveHttpHeader('Authorization', 'HMAC ' . \base64_encode(json_encode([
+            'hmac' => $HMAC['hmac'],
+            'v' => $HMAC['v'],
+            'access_token' => $tokens['access_token'],
+            'salt' => $HMAC['salt'],
+            'date' => $HMAC['date']
+        ])));
         $httpMethod = 'send' . $method;
 
         if (empty($payload)) {

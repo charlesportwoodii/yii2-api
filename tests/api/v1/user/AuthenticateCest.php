@@ -104,19 +104,15 @@ class AuthenticateCest extends AbstractApiCest
         $I->sendAuthenticatedRequest($this->uri, 'DELETE');
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson(
-            [
+        $I->seeResponseContainsJson([
             'status' => 200,
             'data' => true
-            ]
-        );
+        ]);
 
-        $I->seeResponseMatchesJsonType(
-            [
+        $I->seeResponseMatchesJsonType([
             'data' => 'boolean',
             'status' => 'integer'
-            ]
-        );
+        ]);
     }
 
     /**

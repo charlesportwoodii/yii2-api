@@ -11,7 +11,7 @@ defined('ROOT') or define('ROOT', __DIR__ . '/../..');
 defined('LOGGER_APP_NAME') or define('LOGGER_APP_NAME', 'application');
 
 // Fetch our YAML configuration
-$yaml = include ROOT . '/config/loader.php';
+$yaml = require __DIR__ . '/loader.php';
 
 // Use Yii::getAlias if is available, otherwise define our runtime directory
 $path = defined('Yii') ? Yii::getAlias('@runtime') : ROOT . '/runtime';

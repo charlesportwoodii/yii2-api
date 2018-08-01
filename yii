@@ -4,7 +4,7 @@
 defined('ROOT') or define('ROOT', __DIR__);
 
 require ROOT .'/vendor/autoload.php';
-$loader = require ROOT . '/config/loader.php';
+$loader = require ROOT . '/common/config/loader.php';
 
 defined('YII_DEBUG') or define('YII_DEBUG', $loader['app']['debug']);
 defined('YII_ENV') or define('YII_ENV', $loader['app']['env'] === 'prod' ? 'prod' : 'dev');
@@ -12,7 +12,7 @@ defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 
 require ROOT . '/vendor/yiisoft/yii2/Yii.php';
-$config = require ROOT . '/config/console.php';
+$config = require ROOT . '/common/config/console.php';
 
 $application = new yii\console\Application($config);
 $exitCode = $application->run();

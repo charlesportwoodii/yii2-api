@@ -2,12 +2,12 @@
 
 $yaml = include __DIR__ . '/loader.php';
 
-Yii::setAlias('@restcomponents', dirname(__DIR__) . '/vendor/charlesportwoodii/yii2-api-rest-components');
+Yii::setAlias('@yrc', ROOT . '/vendor/charlesportwoodii/yii2-api-rest-components');
 
 $config = [
     'id' => $yaml['app']['id'],
     'name' => $yaml['app']['name'],
-    'basePath' => dirname(__DIR__),
+    'basePath' => ROOT,
     'bootstrap' => [ 'log' ],
     'language' => 'en-US',
     'sourceLanguage' => 'en-US',

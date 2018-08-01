@@ -47,16 +47,23 @@ final class HMAC
         );
 
         $signature = hash('sha256', $payload) . "\n" .
-                     $method . "+" . $uri . "\n" .
+                     $method . '+' . $uri . "\n" .
                      $date . "\n" .
                      \base64_encode($salt);
         
-        Yii::debug(
-            [
-            'message' => sprintf('Signature String Derived By Test Suite: %s', $signature),
+        Yii::info([
+            'message' => sprintf(
+                'Signature String Derived By Test Suite: %s',
+                $signature
+            ),
             'body' => $payload
-            ], 'hmac-signature'
-        );
-        return \base64_encode(\hash_hmac('sha256', $signature, \bin2hex($hkdf), true)) . ',' . \base64_encode($salt);
+        ]);
+        
+        return [
+            'date' => $date,
+            'hmac' => \base64_encode(\hash_hmac('sha256', $signature, \bin2hex($hkdf), true)),
+            'salt' => \base64_encode($salt),
+            'v' => 2
+        ];
     }
 }

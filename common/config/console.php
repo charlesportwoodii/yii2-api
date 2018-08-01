@@ -2,8 +2,6 @@
 
 $config = include __DIR__ . '/common.php';
 
-Yii::setAlias('@tests', dirname(__DIR__) . '/tests');
-
 $console = [
     'id' => $config['id'] . '-console',
     'name' => $config['name'] . '-console',
@@ -13,7 +11,7 @@ $console = [
         'migrate' => [
             'class' => 'yii\console\controllers\MigrateController',
             'migrationPath' => [
-                '@restcomponents/migrations',
+                '@yrc/migrations',
                 '@app/migrations',
                 '@yii/rbac/migrations'
             ]

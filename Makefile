@@ -9,7 +9,11 @@ composer:
 	docker-compose exec php /bin/bash -lc "/root/.bin/composer install -ovn --prefer-source"
 
 sql:
+ifeq (, $(shell which mysqlsh))
 	docker-compose exec mariadb mysql -u local -plocal root
+else
+	mysqlsh -u local -plocal -h 127.0.0.1 --database=root --sql
+endif
 
 redis:
 	docker-compose exec redis redis-cli

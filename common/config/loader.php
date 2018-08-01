@@ -3,8 +3,8 @@
 use Symfony\Component\Yaml\Yaml;
 use yii\helpers\ArrayHelper;
 
-$configFile = __DIR__ . '/config.yml';
-$defaultConfig = __DIR__ . '/config-default.yml';
+$configFile = ROOT . '/config/config.yml';
+$defaultConfig = ROOT .'/config/config-default.yml';
 
 if (!file_exists($configFile)) {
     throw new Exception('Missing config/config.yml file.');

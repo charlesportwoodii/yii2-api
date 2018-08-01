@@ -5,10 +5,6 @@
     <exclude-pattern type="relative-root">^/vendor/*</exclude-pattern>
     <exclude-pattern type="relative-root">^/tests/*</exclude-pattern>
     <exclude-pattern type="relative-root">^/runtime/*</exclude-pattern>
-    <exclude-pattern type="relative-root">^/admin/web/dist/*</exclude-pattern>
-    <exclude-pattern type="relative-root">^/admin/web/assets/*</exclude-pattern>
-    <exclude-pattern type="relative-root">^/admin/views/*</exclude-pattern>
-    <exclude-pattern type="relative-root">^/console/views/*</exclude-pattern>
     <exclude-pattern type="relative-root">^/config/*</exclude-pattern>
 
     <rule ref="PSR2">
@@ -54,7 +50,7 @@
     <!-- Ignore declare new symbols and execute logic with side effects same file -->
     <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
         <exclude-pattern>/tests?*/_bootstrap.php$</exclude-pattern>
-        <exclude-pattern>/(admin|api)/web/(index|index-test).php$</exclude-pattern>
+        <exclude-pattern>//web/(index|index-test).php$</exclude-pattern>
     </rule>
 
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">

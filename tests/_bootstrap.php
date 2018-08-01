@@ -15,4 +15,5 @@ Codeception\Util\Autoload::addNamespace('tests\fixtures', '@tests/fixtures');
 Codeception\Util\Autoload::addNamespace('tests\codeception', '@tests/codeception');
 Codeception\Util\Autoload::addNamespace('tests\_support', '@tests/_support');
 Codeception\Util\Autoload::addNamespace('tests\_support\traits', '@tests/_support/traits');
-Codeception\Util\Autoload::addNamespace('_generated', '@tests/_support/_generated');
+
+Codeception\Util\Autoload::addNamespace('app', ROOT);
