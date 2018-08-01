@@ -12,24 +12,28 @@ trait UserTrait
 {
     /**
      * Instance of user to reduce lookups
+     *
      * @var User
      */
     protected $user;
     
     /**
      * The tokens
+     *
      * @var array
      */
     protected $tokens = [];
 
     /**
      * The user's password
+     *
      * @var string
      */
     protected $password;
 
     /**
      * Retrieves the user
+     *
      * @return User
      */
     public function getUser()
@@ -40,6 +44,7 @@ trait UserTrait
 
     /**
      * Retrieves the token
+     *
      * @return array
      */
     public function getTokens()
@@ -57,6 +62,7 @@ trait UserTrait
 
     /**
      * Sets tokens
+     *
      * @param array $tokens
      */
     public function addTokens($tokens)
@@ -74,6 +80,7 @@ trait UserTrait
 
     /**
      * Register a new user for testing
+     *
      * @return bool
      */
     public function register($activate = true, $withTokens = true)
@@ -86,7 +93,7 @@ trait UserTrait
         $form->password_verify = $form->password;
 
         expect('form registers', $form->register())->true();
-        $this->user = Yii::$app->yrc->userClass::findOne(['email' => $form->email]);
+        $this->user = User::findOne(['email' => $form->email]);
 
         if ($activate === true) {
             $this->user->activate();

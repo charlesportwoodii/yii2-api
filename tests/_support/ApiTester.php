@@ -2,6 +2,7 @@
 
 /**
  * Inherited Methods
+ *
  * @method void wantToTest($text)
  * @method void wantTo($text)
  * @method void execute($callable)
@@ -28,18 +29,21 @@ class ApiTester extends \Codeception\Actor
 
     /**
      * Instance of user to reduce lookups
+     *
      * @var User
      */
     protected $user;
 
     /**
      * The tokens
+     *
      * @var array
      */
     protected $tokens = [];
 
     /**
      * Retrieves the user
+     *
      * @return User
      */
     public function getUser()
@@ -50,6 +54,7 @@ class ApiTester extends \Codeception\Actor
 
     /**
      * Retrieves the token
+     *
      * @return array
      */
     public function getTokens()
@@ -59,6 +64,7 @@ class ApiTester extends \Codeception\Actor
 
     /**
      * Sets tokens
+     *
      * @param array $tokens
      */
     public function addTokens($tokens)
@@ -76,11 +82,12 @@ class ApiTester extends \Codeception\Actor
 
     /**
      * Helper method to send an authenticated Request
-     * @param string $uri
-     * @param string $method    HTTP method
-     * @param array $payload
-     * @param array $nonce
-     * @param array $kp
+     *
+     * @param  string $uri
+     * @param  string $method  HTTP method
+     * @param  array  $payload
+     * @param  array  $nonce
+     * @param  array  $kp
      * @return void
      */
     public function sendAuthenticatedRequest($uri, $method, $payload = [], $nonce = null, $kp = null)
@@ -106,11 +113,13 @@ class ApiTester extends \Codeception\Actor
         } else {
             if ($nonce !== null && $kp !== null) {
                 // The payload is now encrypted
-                $payload = \base64_encode(sodium_crypto_box(
-                    \json_encode($payload),
-                    $nonce,
-                    $kp
-                ));
+                $payload = \base64_encode(
+                    sodium_crypto_box(
+                        \json_encode($payload),
+                        $nonce,
+                        $kp
+                    )
+                );
             }
             $this->$httpMethod($uri, $payload);
         }
@@ -118,4 +127,3 @@ class ApiTester extends \Codeception\Actor
         return $this;
     }
 }
-

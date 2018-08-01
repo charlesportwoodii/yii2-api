@@ -18,6 +18,5 @@ class Unit extends UnitTest
     protected function _before()
     {
         parent::_before();
-        Yii::$app->yrc->userClass::deleteAll();
     }
 }

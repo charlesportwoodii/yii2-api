@@ -1,9 +1,9 @@
 <?php
 
-$config = require __DIR__ . '/loader.php';
+$config = include __DIR__ . '/loader.php';
 $params = [
     'yii.migrations' => [
-        "@restcomponents/migrations",
+        '@restcomponents/migrations',
     ]
 ];
 

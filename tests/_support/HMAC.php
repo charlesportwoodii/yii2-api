@@ -15,22 +15,26 @@ final class HMAC
 
     /**
      * Static method to generate the HMAC
-     * @param string $uri
-     * @param array $tokens
-     * @param string $method
-     * @param string $date
-     * @param array $payload
+     *
+     * @param  string  $uri
+     * @param  array   $tokens
+     * @param  string  $method
+     * @param  string  $date
+     * @param  array   $payload
+     * @param  boolean $payloadIsJson
      * @return string
      */
-    public static function generate($uri, $tokens, $method, $date, $payload = [])
+    public static function generate($uri, $tokens, $method, $date, $payload = [], $payloadIsJson = false)
     {
         $accessToken = $tokens['access_token'];
         $ikm = \base64_decode($tokens['ikm']);
 
-        if ($method === 'GET' || empty($payload)) {
-            $payload = '';
-        } else {
-            $payload = JSON::encode($payload, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if (!$payloadIsJson) {
+            if ($method === 'GET' || empty($payload)) {
+                $payload = '';
+            } else {
+                $payload = Json::encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
+            }
         }
 
         $salt = \random_bytes(32);
@@ -47,10 +51,12 @@ final class HMAC
                      $date . "\n" .
                      \base64_encode($salt);
         
-        Yii::info([
+        Yii::debug(
+            [
             'message' => sprintf('Signature String Derived By Test Suite: %s', $signature),
             'body' => $payload
-        ], 'hmac-signature');
+            ], 'hmac-signature'
+        );
         return \base64_encode(\hash_hmac('sha256', $signature, \bin2hex($hkdf), true)) . ',' . \base64_encode($salt);
     }
 }

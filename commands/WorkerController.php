@@ -2,4 +2,7 @@
 
 namespace app\commands;
 
-final class WorkerController extends \yrc\commands\WorkerController {}
+final class WorkerController extends \yrc\commands\WorkerController
+{
+
+}

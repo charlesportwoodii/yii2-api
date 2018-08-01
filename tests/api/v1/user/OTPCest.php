@@ -34,12 +34,14 @@ class OTPCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => [
                 'provisioning_code' => 'string',
             ],
             'status' => 'integer',
-        ]);
+            ]
+        );
     }
 
     public function testEnablingOPT(\ApiTester $I)
@@ -70,15 +72,19 @@ class OTPCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'boolean',
             'status' => 'integer',
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true,
-        ]);
+            ]
+        );
     }
 
     public function testEnablingOPTWithBadProvisioningCode(\ApiTester $I)
@@ -96,15 +102,19 @@ class OTPCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'boolean',
             'status' => 'integer',
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => false,
-        ]);
+            ]
+        );
     }
 
     public function testEnablingOTPWhenEnabled(\ApiTester $I)
@@ -118,15 +128,19 @@ class OTPCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'null',
             'status' => 'integer',
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null,
-        ]);
+            ]
+        );
     }
 
     public function testDisablingOTP(\ApiTester $I)
@@ -155,15 +169,19 @@ class OTPCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'boolean',
             'status' => 'integer',
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true,
-        ]);
+            ]
+        );
     }
 
     public function testDisablingOTPWhenNotEnabled(\ApiTester $I)
@@ -177,15 +195,19 @@ class OTPCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'null',
             'status' => 'integer',
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null,
-        ]);
+            ]
+        );
     }
 
     public function testDisablingOTPWithBadCode(\ApiTester $I)
@@ -203,14 +225,18 @@ class OTPCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'boolean',
             'status' => 'integer',
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => false,
-        ]);
+            ]
+        );
     }
 }

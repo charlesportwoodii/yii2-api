@@ -9,24 +9,21 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "charlesportwoodii/yii2-api-rest-components": "dev-master"
+        "charlesportwoodii/yii2-api-rest-components": "^0.1.1"
     },
     "require-dev": {
-        "codeception/codeception": "^2.3",
+        "codeception/codeception": "2.4.1",
         "yiisoft/yii2-faker": "^2.0",
+        "yiisoft/yii2-gii": "^2.0.5",
+        "yiisoft/yii2-debug": "~2.0.0",
+        "yiisoft/yii2-shell": "~2.0.0",
         "fzaninotto/faker": "^1.6",
         "codeception/specify": "*",
         "codeception/verify": "*",
         "flow/jsonpath": "^0.3.4",
         "php-http/curl-client": "^1.7",
         "mohrekopp/php-mailhog-client": "dev-master",
-        "yiisoft/yii2-gii": "^2.0.5"
-    },
-    "replace": {
-		"bower-asset/typeahead.js": "*"
-	},
-	"conflict": {
-        "bower-asset/typeahead.js": "*"
+        "yiisoft/yii2-coding-standards": "^2.0"
     },
     "scripts": {
         "post-install-cmd": [

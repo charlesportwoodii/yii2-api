@@ -19,24 +19,25 @@ class UserController extends Controller
 {
     /**
      * Map actions to the appropriate action class
+     *
      * @return array
      */
     public function actions()
     {
         return [
-            'activate'      => ActivationAction::className(),
-            'authenticate'  => AuthenticationAction::className(),
-            'change_email'  => ChangeEmailAction::className(),
-            'otp'           => OTPAction::className(),
-            'refresh'       => RefreshAction::className(),
-            'register'      => RegisterAction::className(),
+            'activate'      => ActivationAction::class,
+            'authenticate'  => AuthenticationAction::class,
+            'change_email'  => ChangeEmailAction::class,
+            'otp'           => OTPAction::class,
+            'refresh'       => RefreshAction::class,
+            'register'      => RegisterAction::class,
             
             // If you want verifiable tokenized password resets (for authenticated and unauthenticated)
-            'reset_password' => ResetPasswordAction::className(),
+            'reset_password' => ResetPasswordAction::class,
 
             // If you want password resets done for authenticated userss only
             'reset_password_authenticated' => [
-                'class' => ResetPasswordAction::className(),
+                'class' => ResetPasswordAction::class,
                 'scenario' => ResetPasswordAction::SCENARIO_AUTHENTICATED
             ]
         ];
@@ -44,6 +45,7 @@ class UserController extends Controller
 
     /**
      * Yii2 behaviors
+     *
      * @return array
      */
     public function behaviors()
@@ -51,7 +53,7 @@ class UserController extends Controller
         $behaviors = parent::behaviors();
 
         $behaviors['authenticator'] = [
-            'class'     => HMACSignatureAuth::className(),
+            'class'     => HMACSignatureAuth::class,
             'only'      => ['refresh', 'authenticate', 'otp', 'reset_password', 'change_email', 'reset_password_authenticated'],
             'optional'  => ['authenticate', 'reset_password']
         ];

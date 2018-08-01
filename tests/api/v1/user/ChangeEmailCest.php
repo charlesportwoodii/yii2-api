@@ -18,10 +18,12 @@ class ChangeEmailCest extends AbstractApiCest
         $I->sendPOST($this->uri);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(401);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 401,
             'data' => null
-        ]);
+            ]
+        );
     }
 
     public function testWithoutEmail(\ApiTester $I)
@@ -35,10 +37,12 @@ class ChangeEmailCest extends AbstractApiCest
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null
-        ]);
+            ]
+        );
     }
 
     public function testWithoutPassword(\ApiTester $I)
@@ -53,10 +57,12 @@ class ChangeEmailCest extends AbstractApiCest
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null
-        ]);
+            ]
+        );
     }
 
     public function testWithInvalidPassword(\ApiTester $I)
@@ -72,10 +78,12 @@ class ChangeEmailCest extends AbstractApiCest
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null
-        ]);
+            ]
+        );
     }
 
     public function testEmailCanBeChanged(\ApiTester $I)
@@ -91,9 +99,11 @@ class ChangeEmailCest extends AbstractApiCest
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 }

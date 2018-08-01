@@ -1,6 +1,6 @@
 <?php
 
-$config = require __DIR__ . '/common.php';
+$config = include __DIR__ . '/common.php';
 
 $web = [
     'components' => [

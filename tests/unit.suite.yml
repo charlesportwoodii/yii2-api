@@ -2,5 +2,9 @@ actor: UnitTester
 modules:
     enabled:
         - Yii2:
+            cleanup: true
+            transaction: true
+            recreateApplication: true
             configFile: 'tests/config/unit.php'
         - Asserts
+        

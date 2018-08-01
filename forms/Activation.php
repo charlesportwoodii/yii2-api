@@ -2,4 +2,6 @@
 
 namespace app\forms;
 
-final class Activation extends \yrc\forms\Activation {}
+final class Activation extends \yrc\forms\Activation
+{
+}

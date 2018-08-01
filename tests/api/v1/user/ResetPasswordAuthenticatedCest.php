@@ -33,10 +33,12 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 
     public function testAuthenticatedPasswordResetFlowWithOTPEnabled(\ApiTester $I)
@@ -58,10 +60,12 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null
-        ]);
+            ]
+        );
     }
 
     public function testAuthenticatedPasswordResetFlowWithOTPEnabledAndPresent(\ApiTester $I)
@@ -93,9 +97,11 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 }

@@ -22,12 +22,14 @@ class OtkCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'status' => 'integer',
             'data' => [
                 'public' => 'string',
                 'hash' => 'string'
             ]
-        ]);
+            ]
+        );
     }
 }

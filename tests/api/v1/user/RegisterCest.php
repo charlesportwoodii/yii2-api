@@ -16,16 +16,19 @@ class RegisterCest extends AbstractApiCest
     {
         $faker = Factory::create();
         $I->wantTo('verify user registration fails');
-        $I->sendPOST($this->uri, [
+        $I->sendPOST(
+            $this->uri, [
             'email'             => $faker->email,
             'username'          => $faker->username,
             'password'          => $faker->password(24),
             'password_verify'   => $faker->password(24),
-        ]);
+            ]
+        );
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'null',
             'error' => [
                 'message' => [
@@ -33,12 +36,15 @@ class RegisterCest extends AbstractApiCest
                 ]
             ],
             'status' => 'integer'
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null,
-        ]);
+            ]
+        );
     }
 
     public function testRegistration(\ApiTester $I)
@@ -57,14 +63,18 @@ class RegisterCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'boolean',
             'status' => 'integer'
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 }

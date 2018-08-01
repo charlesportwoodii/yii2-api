@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-$config = require __DIR__ . '/../loader.php';
+$config = include __DIR__ . '/../loader.php';
 
 return [
     'class'                 => 'yii\db\Connection',

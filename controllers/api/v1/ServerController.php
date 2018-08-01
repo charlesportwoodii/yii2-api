@@ -11,12 +11,13 @@ class ServerController extends Controller
 {
     /**
      * Map actions to the appropriate action class
+     *
      * @return array
      */
     public function actions()
     {
         return [
-            'otk' => OneTimeKeyAction::className()
+            'otk' => OneTimeKeyAction::class
         ];
     }
 }

@@ -2,4 +2,6 @@
 
 namespace app\forms;
 
-final class ChangeEmail extends \yrc\forms\ChangeEmail {}
+final class ChangeEmail extends \yrc\forms\ChangeEmail
+{
+}

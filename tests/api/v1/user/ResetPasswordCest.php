@@ -26,10 +26,12 @@ class ResetPasswordCest extends AbstractApiCest
         // Init the password request request
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
     
     public function testAuthenticatedPasswordResetFlowPhase2(\ApiTester $I)
@@ -57,10 +59,12 @@ class ResetPasswordCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 
     public function testAuthenticatedPasswordResetFlowPhase3(\ApiTester $I)
@@ -79,10 +83,12 @@ class ResetPasswordCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null
-        ]);
+            ]
+        );
     }
 
     public function testUnauthenticatedPasswordResetFlowPhase1(\ApiTester $I)
@@ -91,17 +97,21 @@ class ResetPasswordCest extends AbstractApiCest
         $I->wantTo('reset a password as an unauthenticated user phase 1');
         $oldPassword = $I->register(true);
         
-        $I->sendPOST($this->uri, [
+        $I->sendPOST(
+            $this->uri, [
             'email' => $I->getUser()->email
-        ]);
+            ]
+        );
 
         // Init the password request request
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 
     public function testUnauthenticatedPasswordResetFlowPhase2(\ApiTester $I)
@@ -128,10 +138,12 @@ class ResetPasswordCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 
     public function testUnauthenticatedPasswordResetFlowPhase3(\ApiTester $I)
@@ -155,10 +167,12 @@ class ResetPasswordCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null
-        ]);
+            ]
+        );
     }
 
     public function testResetWithOTPPhase1(\ApiTester $I)
@@ -173,10 +187,12 @@ class ResetPasswordCest extends AbstractApiCest
         // Init the password request request
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 
     public function testResetWithOTPPhase2(\ApiTester $I)
@@ -215,10 +231,12 @@ class ResetPasswordCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
     
     public function testResetWithoutOTPPhase1(\ApiTester $I)
@@ -233,10 +251,12 @@ class ResetPasswordCest extends AbstractApiCest
         // Init the password request request
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
     }
 
     public function testResetWithoutOTPPhase2(\ApiTester $I)
@@ -264,9 +284,11 @@ class ResetPasswordCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 400,
             'data' => null
-        ]);
+            ]
+        );
     }
 }

@@ -14,6 +14,7 @@ class RefreshCest extends AbstractApiCest
 
     /**
      * Verifies refresh succeeds with a valid token
+     *
      * @param ApiTester $I
      */
     public function testRefreshWithValidToken(\ApiTester $I)
@@ -28,7 +29,8 @@ class RefreshCest extends AbstractApiCest
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => [
                 'access_token' => 'string',
                 'refresh_token' => 'string',
@@ -36,11 +38,13 @@ class RefreshCest extends AbstractApiCest
                 'expires_at' => 'integer'
             ],
             'status' => 'integer'
-        ]);
+            ]
+        );
     }
 
     /**
      * Verifies refresh fails with an invalid token
+     *
      * @param ApiTester $I
      */
     public function testRefreshWithInvalidToken(\ApiTester $I)
@@ -56,14 +60,17 @@ class RefreshCest extends AbstractApiCest
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => false,
-        ]);
+            ]
+        );
     }
 
     /**
      * Verifies authentication is required on this endpoint
+     *
      * @param ApiTester $I
      */
     public function testAuthenticationIsRequired(\ApiTester $I)
@@ -76,6 +83,7 @@ class RefreshCest extends AbstractApiCest
 
     /**
      * Verifies that an encrypted refresh can be made
+     *
      * @param ApiTester $I
      */
     public function testRefreshWithEncryptedRequestAndEncryptedResponse(\ApiTester $I)
@@ -121,11 +129,13 @@ class RefreshCest extends AbstractApiCest
             \base64_decode($pub)
         );
 
-        expect('signature is valid', sodium_crypto_sign_verify_detached(
-            \base64_decode($sig),
-            \base64_decode($I->grabResponse()),
-            \base64_decode($signing)
-        ))->notEquals(false);
+        expect(
+            'signature is valid', sodium_crypto_sign_verify_detached(
+                \base64_decode($sig),
+                \base64_decode($I->grabResponse()),
+                \base64_decode($signing)
+            )
+        )->notEquals(false);
 
         // Decrypt the response
         $response = sodium_crypto_box_open(

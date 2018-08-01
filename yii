@@ -1,20 +1,18 @@
 #!/usr/bin/env php
 <?php
-/**
- * Yii console bootstrap file.
- */
-// Define our application_env variable as provided by nginx/apache
-require __DIR__ . '/vendor/autoload.php';
 
-$config = require __DIR__ . '/config/loader.php';
+defined('ROOT') or define('ROOT', __DIR__);
 
-defined('YII_DEBUG') or define('YII_DEBUG', $config['app']['debug']);
-defined('YII_ENV') or define('YII_ENV', $config['app']['env'] ?? 'prod');
+require ROOT .'/vendor/autoload.php';
+$loader = require ROOT . '/config/loader.php';
+
+defined('YII_DEBUG') or define('YII_DEBUG', $loader['app']['debug']);
+defined('YII_ENV') or define('YII_ENV', $loader['app']['env'] === 'prod' ? 'prod' : 'dev');
 defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 
-require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
-$config = require __DIR__ . '/config/console.php';
+require ROOT . '/vendor/yiisoft/yii2/Yii.php';
+$config = require ROOT . '/config/console.php';
 
 $application = new yii\console\Application($config);
 $exitCode = $application->run();

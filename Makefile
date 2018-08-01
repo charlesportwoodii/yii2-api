@@ -1,14 +1,6 @@
 SHELL := /bin/bash
 
-BASENAME=$(shell echo $(shell basename $(shell pwd)) | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
-CURRENTDIR=$(shell pwd)
-
 all: docker composer migrate
-
-enable-xdebug:
-	docker-compose exec php /bin/bash -lc "echo xdebug.remote_host=$(IP) | tee -a /etc/php/7.1/conf.d/xdebug.ini"
-	docker-compose restart php
-	docker-compose exec php php -i | grep xdebug.remote_host
 
 composer-update:
 	docker-compose exec php /bin/bash -lc "/root/.bin/composer update -ovn --prefer-source"
@@ -35,6 +27,8 @@ ifeq ($(REBUILD), true)
 else
 	docker-compose up -d --remove-orphans
 endif
+	
+	docker-compose exec php /bin/bash -lc "if grep -r 'host.docker.internal' /etc/php/7.2/conf.d/xdebug.ini; then echo 'XDebug Remote host is already defined'; else echo xdebug.remote_host=host.docker.internal | tee -a /etc/php/7.2/conf.d/xdebug.ini; fi"
 
 tls:
 	if [ ! -f ./config/.docker/certs/server.crt ]; then \

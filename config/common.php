@@ -1,6 +1,6 @@
 <?php
 
-$yaml = require __DIR__ . '/loader.php';
+$yaml = include __DIR__ . '/loader.php';
 
 Yii::setAlias('@restcomponents', dirname(__DIR__) . '/vendor/charlesportwoodii/yii2-api-rest-components');
 
@@ -17,7 +17,6 @@ $config = [
         ],
         'yrc' => [
             'class' => 'yrc\components\YRC',
-            'userClass' => $yaml['user'],
             'accessHeader' => $yaml['access_control']['header'],
             'accessHeaderSecret' => $yaml['access_control']['secret']
         ],
@@ -68,16 +67,16 @@ $config = [
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => require(__DIR__ . '/logs.php'),
+            'targets' => include __DIR__ . '/logs.php',
         ],
         'rpq' => [
             'class' => 'yrc\components\RPQComponent',
             'redis' => $yaml['redis'],
             'queues' => $yaml['queue']
         ],
-        'db' => require(__DIR__ . '/database.php')
+        'db' => include __DIR__ . '/database.php'
     ],
-    'params' => require(__DIR__ . '/params.php')
+    'params' => include __DIR__ . '/params.php'
 ];
 
 return $config;

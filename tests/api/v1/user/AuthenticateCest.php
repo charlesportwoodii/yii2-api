@@ -10,6 +10,7 @@ use Faker\Factory;
 
 /**
  * Tests API authentication
+ *
  * @class AuthenticationCest
  */
 class AuthenticateCest extends AbstractApiCest
@@ -20,20 +21,25 @@ class AuthenticateCest extends AbstractApiCest
 
     /**
      * Tests logging into the API
+     *
      * @param ApiTester $I
      */
     public function testLoginWithValidCredentials(\ApiTester $I)
     {
         $user = $I->register(true);
         $I->wantTo('verify users can authenticate against the API');
-        $I->sendPOST($this->uri, [
-            'email' => $I->getUser()->email,
-            'password' => $I->getPassword()
-        ]);
+        $I->sendPOST(
+            $this->uri,
+            [
+                'email' => $I->getUser()->email,
+                'password' => $I->getPassword()
+            ]
+        );
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => [
                 'access_token' => 'string',
                 'refresh_token' => 'string',
@@ -41,13 +47,15 @@ class AuthenticateCest extends AbstractApiCest
                 'expires_at' => 'integer'
             ],
             'status' => 'integer'
-        ]);
+            ]
+        );
 
         return \json_decode($I->grabResponse(), true)['data'];
     }
 
     /**
      * Tests logging into the API
+     *
      * @param ApiTester $I
      */
     public function testLoginWithInvalidCredentials(\ApiTester $I)
@@ -56,29 +64,37 @@ class AuthenticateCest extends AbstractApiCest
         $faker = Factory::create();
 
         $I->wantTo('verify authentication API endpoint work');
-        $I->sendPOST($this->uri, [
-            'email' => $I->getUser()->email,
-            'password' => $faker->password(20)
-        ]);
+        $I->sendPOST(
+            $this->uri,
+            [
+                'email' => $I->getUser()->email,
+                'password' => $faker->password(20)
+            ]
+        );
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(401);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 401
-        ]);
+            ]
+        );
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'null',
             'status' => 'integer',
             'error' => [
                 'message' => 'string',
                 'code' => 'integer'
             ]
-        ]);
+            ]
+        );
     }
 
     /**
      * Tests an authenticated request to the API to deauthenticate the current request
+     *
      * @param ApiTester $I
      */
     public function testDeauthenticate(\ApiTester $I)
@@ -88,19 +104,24 @@ class AuthenticateCest extends AbstractApiCest
         $I->sendAuthenticatedRequest($this->uri, 'DELETE');
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 200,
             'data' => true
-        ]);
+            ]
+        );
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'boolean',
             'status' => 'integer'
-        ]);
+            ]
+        );
     }
 
     /**
      * Tests logging into the API with OTP enabled
+     *
      * @param ApiTester $I
      */
     public function testLoginWithOTP(\ApiTester $I)
@@ -118,15 +139,19 @@ class AuthenticateCest extends AbstractApiCest
         );
         $totp->setLabel($I->getUser()->username);
 
-        $I->sendPOST($this->uri, [
-            'email' => $I->getUser()->email,
-            'password' => $I->getPassword(),
-            'otp' => $totp->now()
-        ]);
+        $I->sendPOST(
+            $this->uri,
+            [
+                'email' => $I->getUser()->email,
+                'password' => $I->getPassword(),
+                'otp' => $totp->now()
+            ]
+        );
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => [
                 'access_token' => 'string',
                 'refresh_token' => 'string',
@@ -134,11 +159,13 @@ class AuthenticateCest extends AbstractApiCest
                 'expires_at' => 'integer'
             ],
             'status' => 'integer'
-        ]);
+            ]
+        );
     }
 
     /**
      * Tests logging into the API with OTP enabled
+     *
      * @param ApiTester $I
      */
     public function testLoginWithBadOTP(\ApiTester $I)
@@ -156,30 +183,38 @@ class AuthenticateCest extends AbstractApiCest
         );
         $totp->setLabel($I->getUser()->username);
 
-        $I->sendPOST($this->uri, [
-            'email' => $I->getUser()->email,
-            'password' => $I->getPassword(),
-            'otp' => $totp->at(100)
-        ]);
+        $I->sendPOST(
+            $this->uri,
+            [
+                'email' => $I->getUser()->email,
+                'password' => $I->getPassword(),
+                'otp' => $totp->at(100)
+            ]
+        );
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(401);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 401
-        ]);
+            ]
+        );
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'null',
             'status' => 'integer',
             'error' => [
                 'message' => 'string',
                 'code' => 'integer'
             ]
-        ]);
+            ]
+        );
     }
 
     /**
      * Tests logging into the API with OTP enabled, but not provided
+     *
      * @param ApiTester $I
      */
     public function testLoginWithoutOTP(\ApiTester $I)
@@ -197,37 +232,47 @@ class AuthenticateCest extends AbstractApiCest
         );
         $totp->setLabel($I->getUser()->username);
 
-        $I->sendPOST($this->uri, [
-            'email' => $I->getUser()->email,
-            'password' => $I->getPassword()
-        ]);
+        $I->sendPOST(
+            $this->uri,
+            [
+                'email' => $I->getUser()->email,
+                'password' => $I->getPassword()
+            ]
+        );
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(401);
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 401
-        ]);
+            ]
+        );
 
-        $I->seeResponseMatchesJsonType([
+        $I->seeResponseMatchesJsonType(
+            [
             'data' => 'null',
             'status' => 'integer',
             'error' => [
                 'message' => 'string',
                 'code' => 'integer'
             ]
-        ]);
+            ]
+        );
 
-        $I->seeResponseContainsJson([
+        $I->seeResponseContainsJson(
+            [
             'status' => 401,
             'data' => null,
             'error' => [
                 'code' => 1
             ]
-        ]);
+            ]
+        );
     }
 
     /**
      * Sends a plain text request, and expects that the response is encrypted using our newly generated public key
+     *
      * @param ApiTester
      */
     public function testAuthenticatePlainTextToEncryptedResponse(\ApiTester $I)
@@ -250,10 +295,13 @@ class AuthenticateCest extends AbstractApiCest
 
         $I->wantTo('Send an plain text response to authenticate and get an encrypted repsonse back');
         // The payload is now encrypted
-        $I->sendPOST($this->uri, [
-            'email' => $I->getUser()->email,
-            'password' => $I->getPassword(),
-        ]);
+        $I->sendPOST(
+            $this->uri,
+            [
+                'email' => $I->getUser()->email,
+                'password' => $I->getPassword(),
+            ]
+        );
 
         // We should get an encrypted HTTP 200 response back
         $I->seeResponseCodeIs(200);
@@ -268,11 +316,14 @@ class AuthenticateCest extends AbstractApiCest
             \base64_decode($pub)
         );
 
-        expect('signature is valid', sodium_crypto_sign_verify_detached(
-            \base64_decode($sig),
-            \base64_decode($I->grabResponse()),
-            \base64_decode($signing)
-        ))->notEquals(false);
+        expect(
+            'signature is valid',
+            sodium_crypto_sign_verify_detached(
+                \base64_decode($sig),
+                \base64_decode($I->grabResponse()),
+                \base64_decode($signing)
+            )
+        )->notEquals(false);
         
         // Decrypt the response
         $response = sodium_crypto_box_open(
@@ -296,6 +347,7 @@ class AuthenticateCest extends AbstractApiCest
 
     /**
      * Encrypts the response before sending it to the API for authenticate, then verifies the response itself is encrypted.
+     *
      * @param ApiTester $I
      */
     public function testAuthenticatewithEncryptedRequestAndEncryptedResponse(\ApiTester $I)
@@ -323,14 +375,18 @@ class AuthenticateCest extends AbstractApiCest
             $key->getBoxPublicKey()
         );
 
-        $payload = \base64_encode(sodium_crypto_box(
-            \json_encode([
-                'email'         => $I->getUser()->email,
-                'password'      => $I->getPassword()
-            ]),
-            $nonce,
-            $kp
-        ));
+        $payload = \base64_encode(
+            sodium_crypto_box(
+                \json_encode(
+                    [
+                    'email'         => $I->getUser()->email,
+                    'password'      => $I->getPassword()
+                    ]
+                ),
+                $nonce,
+                $kp
+            )
+        );
 
         // Send the encrypted response
         $I->sendPOST($this->uri, $payload);
@@ -348,11 +404,14 @@ class AuthenticateCest extends AbstractApiCest
             \base64_decode($pub)
         );
 
-        expect('signature is valid', sodium_crypto_sign_verify_detached(
-            \base64_decode($sig),
-            \base64_decode($I->grabResponse()),
-            \base64_decode($signing)
-        ))->notEquals(false);
+        expect(
+            'signature is valid',
+            sodium_crypto_sign_verify_detached(
+                \base64_decode($sig),
+                \base64_decode($I->grabResponse()),
+                \base64_decode($signing)
+            )
+        )->notEquals(false);
         
         // Decrypt the response
         $response = sodium_crypto_box_open(
