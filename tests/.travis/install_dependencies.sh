@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-LIBSODIUMVERSION=1.0.15
+LIBSODIUMVERSION=1.0.16
 
 cd $HOME;
 git clone -b $LIBSODIUMVERSION https://github.com/jedisct1/libsodium.git libsodium-$LIBSODIUMVERSION;
