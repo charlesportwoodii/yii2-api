@@ -46,7 +46,7 @@ final class HMAC
             0
         );
 
-        $signature = hash('sha256', $payload) . "\n" .
+        $signature = \base64_encode(\sodium_crypto_generichash($payload, $salt, 64)) . "\n" .
                      $method . '+' . $uri . "\n" .
                      $date . "\n" .
                      \base64_encode($salt);
