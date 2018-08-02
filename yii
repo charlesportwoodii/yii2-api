@@ -12,7 +12,7 @@ defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 
 require ROOT . '/vendor/yiisoft/yii2/Yii.php';
-$config = require ROOT . '/common/config/console.php';
+$config = require ROOT . '/console/config/config.php';
 
 $application = new yii\console\Application($config);
 $exitCode = $application->run();

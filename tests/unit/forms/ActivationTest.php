@@ -1,8 +1,8 @@
 <?php
 
-namespace app\tests\unit;
+namespace tests\unit;
 
-use app\forms\Activation;
+use common\forms\Activation;
 use Base32\Base32;
 use Yii;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace app\tests\unit;
+namespace tests\unit;
 
-use app\forms\ChangeEmail;
+use common\forms\ChangeEmail;
 use Faker\Factory;
 use Yii;
 

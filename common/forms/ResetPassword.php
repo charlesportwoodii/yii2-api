@@ -1,6 +1,6 @@
 <?php
 
-namespace app\forms;
+namespace common\forms;
 
 final class ResetPassword extends \yrc\forms\ResetPassword
 {

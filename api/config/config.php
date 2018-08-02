@@ -1,15 +1,21 @@
 <?php
 
-$config = include __DIR__ . '/common.php';
+$yaml = require ROOT . '/common/config/loader.php';
+$common = require ROOT . '/common/config/config.php';
 
-$web = [
+return \yii\helpers\ArrayHelper::merge($common, [
+    'controllerNamespace' => 'api\controllers',
+    'homeUrl' => '/api',
+    'basePath' => dirname(__DIR__),
+    'language' => 'en-US',
+    'sourceLanguage' => 'en-US',
     'components' => [
-        'errorHandler' => [
-            'errorAction' => 'site/error',
-        ],
         'request' => [
-            'enableCookieValidation'    => false,
-            'enableCsrfValidation'      => false,
+            'class' => 'yii\web\Request',
+            'enableCookieValidation' => false,
+            'enableCsrfValidation' => false,
+            'enableCsrfCookie' => false,
+            'baseUrl' => '/api',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
                 'application/vnd.25519+json' => 'yrc\web\Json25519Parser'
@@ -32,6 +38,9 @@ $web = [
                 ]
             ],
         ],
+        'errorHandler' => [
+            'errorAction' => 'site/error',
+        ],
         'urlManager' => [
             'class'                 => 'yii\web\UrlManager',
             'showScriptName'        => false,
@@ -39,12 +48,14 @@ $web = [
             'enablePrettyUrl'       => true,
             'rules' => [
                 [
-                    'pattern'   => '/api/v1/<controller>/<action>',
-                    'route'     => 'api/v1/<controller>/<action>'
+                    'pattern'   => '/v1/<controller>/<action>',
+                    'route'     => 'v1/<controller>/<action>'
+                ],
+                [
+                    'pattern' => '/VERSION',
+                    'route' => 'v1/info/version'
                 ]
             ]
-        ],
+        ]
     ]
-];
-
-return \yii\helpers\ArrayHelper::merge($config, $web);
+]);

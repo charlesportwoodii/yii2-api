@@ -1,8 +1,8 @@
 <?php
 
-namespace app\tests\unit;
+namespace tests\unit;
 
-use app\forms\ResetPassword;
+use common\forms\ResetPassword;
 use Faker\Factory;
 use OTPHP\TOTP;
 use Base32\Base32;

@@ -58,14 +58,7 @@ class RefreshCest extends AbstractApiCest
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
         $I->seeResponseIsJson();
-        $I->seeResponseCodeIs(200);
-
-        $I->seeResponseContainsJson(
-            [
-            'status' => 200,
-            'data' => false,
-            ]
-        );
+        $I->seeResponseCodeIs(401);
     }
 
     /**

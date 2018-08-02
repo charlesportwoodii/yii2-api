@@ -31,7 +31,7 @@ swiftmailer:
   password: null
   encryption: null
 
-user: '\app\models\User'
+user: '\common\models\User'
 
 access_control:
   header: null

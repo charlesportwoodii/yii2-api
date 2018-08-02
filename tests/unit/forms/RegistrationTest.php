@@ -1,8 +1,8 @@
 <?php
 
-namespace app\tests\unit;
+namespace tests\unit;
 
-use app\forms\Registration;
+use common\forms\Registration;
 use Yii;
 
 /**

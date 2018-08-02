@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers\api\v1;
+namespace api\controllers\v1;
 
 use yrc\rest\Controller;
 use yrc\actions\OneTimeKeyAction;

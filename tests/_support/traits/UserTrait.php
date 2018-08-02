@@ -2,9 +2,9 @@
 
 namespace tests\_support\traits;
 
-use app\models\User;
-use app\models\Token;
-use app\forms\Registration;
+use common\models\User;
+use common\models\Token;
+use common\forms\Registration;
 use Faker\Factory;
 use Yii;
 
@@ -101,7 +101,7 @@ trait UserTrait
 
         expect('user is not null', $this->user !== null)->true();
         if ($withTokens) {
-            $this->tokens = Token::generate($this->user->id, null);
+            $this->tokens = Token::generate($this->user->id);
             $this->addTokens($this->tokens);
         }
         

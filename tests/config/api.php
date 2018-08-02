@@ -4,7 +4,7 @@
  */
 require __DIR__ . '/../api/_bootstrap.php';
 $config = yii\helpers\ArrayHelper::merge(
-    require ROOT . '/common/config/web.php',
+    require ROOT . '/api/config/config.php',
     require __DIR__ . '/config.php'
 );
 

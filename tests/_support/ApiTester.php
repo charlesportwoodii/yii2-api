@@ -18,8 +18,8 @@
 */
 use tests\_support\HMAC;
 
-use app\forms\Registration;
-use app\models\Token;
+use common\forms\Registration;
+use common\models\Token;
 use Faker\Factory;
 
 class ApiTester extends \Codeception\Actor

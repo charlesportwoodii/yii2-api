@@ -1,6 +1,6 @@
-<?php declare(strict_typoes=1);
+<?php declare(strict_types=1);
 
-namespace app\commands;
+namespace console\commands;
 
 final class WorkerController extends \yrc\commands\WorkerController
 {

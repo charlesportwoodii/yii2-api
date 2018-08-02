@@ -2,6 +2,13 @@
 
 $yaml = include __DIR__ . '/loader.php';
 
+Yii::setAlias('@root', ROOT);
+Yii::setAlias('@console', '@root/console');
+Yii::setAlias('@common', '@root/common');
+Yii::setAlias('@api', '@root/api');
+Yii::setAlias('@vendor', '@root/vendor');
+Yii::setAlias('@runtime', '@root/runtime');
+
 Yii::setAlias('@yrc', ROOT . '/vendor/charlesportwoodii/yii2-api-rest-components');
 
 $config = [
@@ -32,7 +39,7 @@ $config = [
                 'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'sourceLanguage' => 'en-US',
-                    'basePath' => '@app/messages',
+                    'basePath' => '@root/messages',
                     'fileMap' => [
                         'app' => 'app.php',
                         'app/error' => 'error.php',
@@ -42,7 +49,7 @@ $config = [
                 'yrc*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'sourceLanguage' => 'en-US',
-                    'basePath' => '@app/vendor/charlesportwoodii/yii2-api-reset-components/messages',
+                    'basePath' => '@root/vendor/charlesportwoodii/yii2-api-reset-components/messages',
                     'fileMap' => [
                         'yrc' => 'yrc.php',
                     ],
@@ -67,7 +74,30 @@ $config = [
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => include __DIR__ . '/logs.php',
+            'targets' => [
+                'file' => [
+                    'enabled' => true,
+                    'class' => '\yrc\components\log\PsrTarget',
+                    'logger' => require $yaml['log']['logger'],
+                    'levels' => ['info', 'error', 'warning'],
+                    'logVars' => [],
+                    'except' => [
+                        'yii\web\HttpException:400',
+                        'yii\web\HttpException:401',
+                        'yii\web\HttpException:403',
+                        'yii\web\HttpException:404',
+                        'yii\web\HttpException:408',
+                        'yii\web\HttpException:428',
+                        'yii\db\Command:*',
+                        'yrc\filters\auth\HMACSignatureAuth:*',
+                        'yii\db\Connection:*',
+                        'yii\filters\RateLimiter:*',
+                        'yii\mail\BaseMailer::send',
+                        'yii\web\User::login',
+                        'yii\web\Session::open'
+                    ]
+                ],
+            ]
         ],
         'rpq' => [
             'class' => 'yrc\components\RPQComponent',

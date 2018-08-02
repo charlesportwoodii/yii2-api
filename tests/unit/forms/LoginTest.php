@@ -1,8 +1,8 @@
 <?php
 
-namespace app\tests\unit;
+namespace tests\unit;
 
-use app\forms\Login;
+use common\forms\Login;
 use OTPHP\TOTP;
 use Faker\Factory;
 use Yii;
