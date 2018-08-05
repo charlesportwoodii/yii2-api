@@ -2,10 +2,10 @@
 <ruleset name="Yii2 App Basic Standard">
     <description>Yii2 App Basic coding standard</description>
 
-    <exclude-pattern type="relative-root">^/vendor/*</exclude-pattern>
-    <exclude-pattern type="relative-root">^/tests/*</exclude-pattern>
-    <exclude-pattern type="relative-root">^/runtime/*</exclude-pattern>
-    <exclude-pattern type="relative-root">^/config/*</exclude-pattern>
+    <exclude-pattern type="relative-root">/vendor/*</exclude-pattern>
+    <exclude-pattern type="relative-root">/tests/*</exclude-pattern>
+    <exclude-pattern type="relative-root">/runtime/*</exclude-pattern>
+    <exclude-pattern type="relative-root">/config/*</exclude-pattern>
 
     <rule ref="PSR2">
         <!-- Property names MUST start with an initial underscore if they are private. -->

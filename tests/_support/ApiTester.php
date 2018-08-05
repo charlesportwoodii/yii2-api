@@ -93,24 +93,17 @@ class ApiTester extends \Codeception\Actor
     public function sendAuthenticatedRequest($uri, $method, $payload = [], $nonce = null, $kp = null)
     {
         $now = new \DateTime();
-        $time = $now->format(\DateTime::RFC1123);
 
         $tokens = $this->getTokens();
         $HMAC = HMAC::generate(
             $uri,
             $tokens,
             $method,
-            $time,
+            $now,
             $payload
         );
 
-        $this->haveHttpHeader('Authorization', 'HMAC ' . \base64_encode(json_encode([
-            'hmac' => $HMAC['hmac'],
-            'v' => $HMAC['v'],
-            'access_token' => $tokens['access_token'],
-            'salt' => $HMAC['salt'],
-            'date' => $HMAC['date']
-        ])));
+        $this->haveHttpHeader('Authorization', $HMAC);
         $httpMethod = 'send' . $method;
 
         if (empty($payload)) {
