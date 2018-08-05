@@ -23,7 +23,7 @@ final class HMAC
      * @param  boolean $payloadIsJson
      * @return string
      */
-    public static function generate($uri, $tokens, $method, $date, $payload = [], $payloadIsJson = false)
+    public static function generate($uri, $tokens, $method, $date, $payload = '', $payloadIsJson = false)
     {
         $token = new Token(
             $tokens['access_token'],
