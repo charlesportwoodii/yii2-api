@@ -39,6 +39,9 @@ final class HMAC
 
         $auth = new Authorization($method, $uri, $token, $date, $payload);
         
+        Yii::info([
+            'signature' => $auth->getSignatureString()
+        ]);
 
         return $auth->getHeader();
     }
