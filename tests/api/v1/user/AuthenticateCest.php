@@ -2,6 +2,8 @@
 
 namespace tests\api\v1\user;
 
+use ncryptf\Request;
+use ncryptf\Response;
 use tests\_support\AbstractApiCest;
 use yrc\models\redis\EncryptionKey;
 use yii\helpers\Json;
@@ -307,26 +309,24 @@ class AuthenticateCest extends AbstractApiCest
         $signing = $I->grabHttpHeader('x-sigpubkey');
         $nonce = $I->grabHttpHeader('x-nonce');
 
-        $kp = sodium_crypto_box_keypair_from_secretkey_and_publickey(
+        $r = new Response(
             sodium_crypto_box_secretkey($boxKp),
             \base64_decode($pub)
         );
 
+        $response = $r->decrypt(
+            \base64_decode($I->grabResponse()),
+            \base64_decode($nonce)
+        );
+
         expect(
             'signature is valid',
-            sodium_crypto_sign_verify_detached(
+            $r->isSignatureValid(
+                $response,
                 \base64_decode($sig),
-                \base64_decode($I->grabResponse()),
                 \base64_decode($signing)
             )
         )->notEquals(false);
-        
-        // Decrypt the response
-        $response = sodium_crypto_box_open(
-            \base64_decode($I->grabResponse()),
-            \base64_decode($nonce),
-            $kp
-        );
 
         expect('response is not false', $response)->notEquals(false);
         $response = \json_decode($response, true);
@@ -366,23 +366,15 @@ class AuthenticateCest extends AbstractApiCest
         $I->haveHttpHeader('x-nonce', \base64_encode($nonce));
         $I->wantTo('Send an encrypted response to authenticate and get an encrypted response back');
         
-        $kp = sodium_crypto_box_keypair_from_secretkey_and_publickey(
+        $request = new Request(
             sodium_crypto_box_secretkey($boxKp),
             $key->getBoxPublicKey()
         );
 
-        $payload = \base64_encode(
-            sodium_crypto_box(
-                \json_encode(
-                    [
-                    'email'         => $I->getUser()->email,
-                    'password'      => $I->getPassword()
-                    ]
-                ),
-                $nonce,
-                $kp
-            )
-        );
+        $payload = \base64_encode($request->encrypt(\json_encode([
+            'email'         => $I->getUser()->email,
+            'password'      => $I->getPassword()
+        ]), $nonce));
 
         // Send the encrypted response
         $I->sendPOST($this->uri, $payload);
@@ -395,26 +387,24 @@ class AuthenticateCest extends AbstractApiCest
         $signing = $I->grabHttpHeader('x-sigpubkey');
         $nonce = $I->grabHttpHeader('x-nonce');
 
-        $kp = sodium_crypto_box_keypair_from_secretkey_and_publickey(
+        $r = new Response(
             sodium_crypto_box_secretkey($boxKp),
             \base64_decode($pub)
         );
 
+        $response = $r->decrypt(
+            \base64_decode($I->grabResponse()),
+            \base64_decode($nonce)
+        );
+
         expect(
             'signature is valid',
-            sodium_crypto_sign_verify_detached(
+            $r->isSignatureValid(
+                $response,
                 \base64_decode($sig),
-                \base64_decode($I->grabResponse()),
                 \base64_decode($signing)
             )
         )->notEquals(false);
-        
-        // Decrypt the response
-        $response = sodium_crypto_box_open(
-            \base64_decode($I->grabResponse()),
-            \base64_decode($nonce),
-            $kp
-        );
 
         expect('response is not false', $response)->notEquals(false);
         $response = \json_decode($response, true);
