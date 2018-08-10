@@ -18,6 +18,7 @@
 */
 use tests\_support\HMAC;
 
+use ncryptf\Request;
 use common\forms\Registration;
 use common\models\Token;
 use Faker\Factory;
@@ -86,11 +87,10 @@ class ApiTester extends \Codeception\Actor
      * @param  string $uri
      * @param  string $method  HTTP method
      * @param  array  $payload
-     * @param  array  $nonce
-     * @param  array  $kp
+     * @param  ncryptf\Request $request
      * @return void
      */
-    public function sendAuthenticatedRequest($uri, $method, $payload = [], $nonce = null, $kp = null)
+    public function sendAuthenticatedRequest($uri, $method, $payload = '', Request $request = null)
     {
         $now = new \DateTime();
 
@@ -109,15 +109,10 @@ class ApiTester extends \Codeception\Actor
         if (empty($payload)) {
             $this->$httpMethod($uri);
         } else {
-            if ($nonce !== null && $kp !== null) {
-                // The payload is now encrypted
-                $payload = \base64_encode(
-                    sodium_crypto_box(
-                        \json_encode($payload),
-                        $nonce,
-                        $kp
-                    )
-                );
+            if ($request !== null) {
+                $payload = \base64_encode($request->encrypt(\json_encode($payload)));
+
+                $this->haveHttpHeader('x-nonce', \base64_encode($request->getNonce()));
             }
             $this->$httpMethod($uri, $payload);
         }
