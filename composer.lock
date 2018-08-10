@@ -369,16 +369,16 @@
         },
         {
             "name": "charlesportwoodii/ncryptf",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/charlesportwoodii/ncryptf-php.git",
-                "reference": "2e741c64b34a37f629e1f26cc1033e0eb10cffad"
+                "reference": "2e2d053082cc5b720b01a62805d0b5cf640c331c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charlesportwoodii/ncryptf-php/zipball/2e741c64b34a37f629e1f26cc1033e0eb10cffad",
-                "reference": "2e741c64b34a37f629e1f26cc1033e0eb10cffad",
+                "url": "https://api.github.com/repos/charlesportwoodii/ncryptf-php/zipball/2e2d053082cc5b720b01a62805d0b5cf640c331c",
+                "reference": "2e2d053082cc5b720b01a62805d0b5cf640c331c",
                 "shasum": ""
             },
             "require": {
@@ -406,7 +406,7 @@
                 }
             ],
             "description": "ncryptf for PHP",
-            "time": "2018-08-10T00:09:26+00:00"
+            "time": "2018-08-10T13:59:48+00:00"
         },
         {
             "name": "charlesportwoodii/yii2-api-rest-components",
@@ -414,16 +414,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/charlesportwoodii/yii2-api-rest-components.git",
-                "reference": "436bae160f24638d20c16d24c0d705b5a577a4b8"
+                "reference": "07feba3c2460a98412024c7f54897dd8de7765c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/436bae160f24638d20c16d24c0d705b5a577a4b8",
-                "reference": "436bae160f24638d20c16d24c0d705b5a577a4b8",
+                "url": "https://api.github.com/repos/charlesportwoodii/yii2-api-rest-components/zipball/07feba3c2460a98412024c7f54897dd8de7765c1",
+                "reference": "07feba3c2460a98412024c7f54897dd8de7765c1",
                 "shasum": ""
             },
             "require": {
-                "charlesportwoodii/ncryptf": "^0.1.1",
+                "charlesportwoodii/ncryptf": "^0.1.2",
                 "christian-riesen/base32": "1.3.1",
                 "ext-curl": "*",
                 "ext-hash": "*",
@@ -476,7 +476,7 @@
                 "rest",
                 "yii2"
             ],
-            "time": "2018-08-10T00:12:37+00:00"
+            "time": "2018-08-10T14:08:46+00:00"
         },
         {
             "name": "christian-riesen/base32",
