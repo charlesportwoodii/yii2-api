@@ -23,7 +23,7 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
         $user = $I->register(true);
 
         $payload = [
-            'password' => $faker->password(20),
+            'password' => 'Correct h0rse b@ttery st@ple',
             'old_password' => $I->getPassword()
         ];
         $payload['password_verify'] = $payload['password'];
@@ -52,7 +52,7 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
         $I->getUser()->enableOTP();
 
         $payload = [
-            'password' => $faker->password(20),
+            'password' => 'Correct h0rse b@ttery st@ple',
             'old_password' => $I->getPassword()
         ];
         $payload['password_verify'] = $payload['password'];
@@ -81,7 +81,7 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
         $I->getUser()->enableOTP();
 
         $payload = [
-            'password' => $faker->password(20),
+            'password' => 'Correct h0rse b@ttery st@ple',
             'old_password' => $I->getPassword()
         ];
         $payload['password_verify'] = $payload['password'];

@@ -89,7 +89,7 @@ trait UserTrait
         $form = new Registration;
         $form->email = $faker->safeEmail;
         $form->username = $faker->username(10);
-        $form->password = $faker->password(20);
+        $form->password = 'Correct h0rse b@ttery staple';
         $form->password_verify = $form->password;
 
         expect('form registers', $form->register())->true();
