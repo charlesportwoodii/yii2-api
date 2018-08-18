@@ -17,6 +17,8 @@ class ActivateCest extends AbstractApiCest
     public function testActivateWithInvalidToken(\ApiTester $I)
     {
         $I->wantTo('verify user cannot be activated with an invalid activation code');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri,
             [
@@ -59,6 +61,8 @@ class ActivateCest extends AbstractApiCest
         expect('code saves', $code->save())->true();
 
         $I->wantTo('verify user can be activated with a valid activation code');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri, [
             'activation_code' => $token

@@ -30,6 +30,8 @@ class OTPCest extends AbstractApiCest
         $I->register(true);
 
         // Retrieve a provisioning URL
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST');
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
@@ -68,6 +70,8 @@ class OTPCest extends AbstractApiCest
         ];
 
         $I->wantTo('enable OTP with provisioning code');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
@@ -98,6 +102,8 @@ class OTPCest extends AbstractApiCest
         ];
 
         $I->wantTo('enable OTP with badprovisioning code');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
@@ -124,6 +130,8 @@ class OTPCest extends AbstractApiCest
         $I->getUser()->provisionOTP();
         $I->getUser()->enableOTP();
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST');
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
@@ -164,6 +172,8 @@ class OTPCest extends AbstractApiCest
             'code' => $totp->now()
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'DELETE', $payload);
 
         $I->seeResponseIsJson();
@@ -189,7 +199,8 @@ class OTPCest extends AbstractApiCest
         $I->wantTo('verify OTP cannot be disable when it is not enabled');
         $I->register(true);
 
-        
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'DELETE');
 
         $I->seeResponseIsJson();
@@ -220,6 +231,8 @@ class OTPCest extends AbstractApiCest
             'code' => 'foo'
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'DELETE', $payload);
 
         $I->seeResponseIsJson();

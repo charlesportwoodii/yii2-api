@@ -30,6 +30,8 @@ class AuthenticateCest extends AbstractApiCest
     {
         $user = $I->register(true);
         $I->wantTo('verify users can authenticate against the API');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri,
             [
@@ -66,6 +68,8 @@ class AuthenticateCest extends AbstractApiCest
         $faker = Factory::create();
 
         $I->wantTo('verify authentication API endpoint work');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri,
             [
@@ -103,6 +107,8 @@ class AuthenticateCest extends AbstractApiCest
     {
         $I->register(true);
         $I->wantTo('verify users can de-authenticate via HMAC authentication');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'DELETE');
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
@@ -137,6 +143,8 @@ class AuthenticateCest extends AbstractApiCest
         );
         $totp->setLabel($I->getUser()->username);
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri,
             [
@@ -181,6 +189,8 @@ class AuthenticateCest extends AbstractApiCest
         );
         $totp->setLabel($I->getUser()->username);
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri,
             [
@@ -230,6 +240,8 @@ class AuthenticateCest extends AbstractApiCest
         );
         $totp->setLabel($I->getUser()->username);
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri,
             [

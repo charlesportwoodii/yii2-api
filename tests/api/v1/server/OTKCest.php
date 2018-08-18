@@ -18,6 +18,8 @@ class OtkCest extends AbstractApiCest
     public function testGetOTK(\ApiTester $I)
     {
         $I->wantTo('get otk tokens');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendGET($this->uri);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);

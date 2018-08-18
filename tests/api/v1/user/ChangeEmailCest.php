@@ -15,6 +15,8 @@ class ChangeEmailCest extends AbstractApiCest
     public function testAuthenticationIsRequired(\ApiTester $I)
     {
         $I->wantTo('verify POST requires authentication');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST($this->uri);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(401);
@@ -34,6 +36,8 @@ class ChangeEmailCest extends AbstractApiCest
             'password' => $I->getPassword()
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
@@ -54,6 +58,8 @@ class ChangeEmailCest extends AbstractApiCest
             'email' => $faker->safeEmail
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
@@ -75,6 +81,8 @@ class ChangeEmailCest extends AbstractApiCest
             'password' => 'random password not valid'
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
@@ -96,6 +104,8 @@ class ChangeEmailCest extends AbstractApiCest
             'password' => $I->getPassword()
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);

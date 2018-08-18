@@ -16,6 +16,8 @@ class RegisterCest extends AbstractApiCest
     {
         $faker = Factory::create();
         $I->wantTo('verify user registration fails');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri, [
             'email'             => $faker->email,
@@ -59,6 +61,8 @@ class RegisterCest extends AbstractApiCest
             'password_verify'   => $password
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST($this->uri, $payload);
 
         $I->seeResponseIsJson();

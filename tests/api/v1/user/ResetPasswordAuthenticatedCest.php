@@ -29,6 +29,8 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
         $payload['password_verify'] = $payload['password'];
 
         $I->wantTo('verify a user can reset their password');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
         $I->seeResponseIsJson();
@@ -56,6 +58,8 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
         $payload['password_verify'] = $payload['password'];
 
         $I->wantTo('verify a user can reset their password');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
         $I->seeResponseIsJson();
@@ -93,6 +97,8 @@ class ResetPasswordAuthenticatedCest extends AbstractApiCest
         $payload['otp'] = (string)$totp->now();
 
         $I->wantTo('verify a user can reset their password');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
         $I->seeResponseIsJson();

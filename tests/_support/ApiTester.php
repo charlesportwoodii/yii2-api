@@ -107,7 +107,7 @@ class ApiTester extends \Codeception\Actor
         $httpMethod = 'send' . $method;
 
         if (empty($payload)) {
-            $this->$httpMethod($uri);
+            $this->$httpMethod($uri, '');
         } else {
             if ($request !== null) {
                 $payload = \base64_encode($request->encrypt(\json_encode($payload)));

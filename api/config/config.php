@@ -11,7 +11,7 @@ return \yii\helpers\ArrayHelper::merge($common, [
     'sourceLanguage' => 'en-US',
     'components' => [
         'request' => [
-            'class' => 'yii\web\Request',
+            'class' => 'yrc\web\Request',
             'enableCookieValidation' => false,
             'enableCsrfValidation' => false,
             'enableCsrfCookie' => false,

@@ -21,6 +21,8 @@ class ResetPasswordCest extends AbstractApiCest
         $faker = Factory::create();
         $I->wantTo('reset a password as an authenticated user phase 1');
         $oldPassword = $I->register(true);
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST');
 
         // Init the password request request
@@ -55,6 +57,8 @@ class ResetPasswordCest extends AbstractApiCest
         $payload['password_verify'] = $payload['password'];
 
         $I->wantTo('verify a user can reset their password');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
 
         $I->seeResponseIsJson();
@@ -79,6 +83,8 @@ class ResetPasswordCest extends AbstractApiCest
         ];
         $payload['password_verify'] = $payload['password'];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri . '?reset_token=foo', 'POST', $payload);
 
         $I->seeResponseIsJson();
@@ -97,6 +103,8 @@ class ResetPasswordCest extends AbstractApiCest
         $I->wantTo('reset a password as an unauthenticated user phase 1');
         $oldPassword = $I->register(true);
         
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendPOST(
             $this->uri, [
             'email' => $I->getUser()->email
@@ -134,6 +142,8 @@ class ResetPasswordCest extends AbstractApiCest
         $payload['password_verify'] = $payload['password'];
 
         $I->wantTo('verify a user can reset their password');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
 
         $I->seeResponseIsJson();
@@ -163,6 +173,8 @@ class ResetPasswordCest extends AbstractApiCest
         ];
         $payload['password_verify'] = $payload['password'];
         
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri . '?reset_token=foo', 'POST', $payload);
 
         $I->seeResponseIsJson();
@@ -182,6 +194,9 @@ class ResetPasswordCest extends AbstractApiCest
         $I->getUser()->provisionOTP();
         $I->getUser()->enableOTP();
         $I->wantTo('verify password cannot be reset if OTP is enabled phase1');
+
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST');
 
         // Init the password request request
@@ -227,6 +242,8 @@ class ResetPasswordCest extends AbstractApiCest
 
         $payload['otp'] = (string)$totp->now();
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
 
         $I->seeResponseIsJson();
@@ -246,6 +263,8 @@ class ResetPasswordCest extends AbstractApiCest
         $I->getUser()->provisionOTP();
         $I->getUser()->enableOTP();
         $I->wantTo('verify password cannot be reset if OTP is enabled phase 1');
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST');
 
         // Init the password request request
@@ -280,6 +299,8 @@ class ResetPasswordCest extends AbstractApiCest
         ];
         $payload['password_verify'] = $payload['password'];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri . '?reset_token=' . $token, 'POST', $payload);
 
         $I->seeResponseIsJson();

@@ -33,8 +33,8 @@ final class HMAC
             $tokens['expires_at'] ?? \time() + (60*60*60)
         );
 
-        if ($payloadIsJson) {
-            $payload = Json::decode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
+        if (!$payloadIsJson && $payload !== '') {
+            $payload = Json::encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
         }
 
         $auth = new Authorization($method, $uri, $token, $date, $payload);

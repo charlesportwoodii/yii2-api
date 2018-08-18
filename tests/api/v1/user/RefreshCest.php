@@ -27,6 +27,8 @@ class RefreshCest extends AbstractApiCest
             'refresh_token' => $I->getTokens()['refresh_token']
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
         $I->seeResponseIsJson();
@@ -57,6 +59,8 @@ class RefreshCest extends AbstractApiCest
             'refresh_token' => $I->getTokens()['access_token']
         ];
 
+        $I->haveHttpHeader('Content-Type', 'application/json');
+        $I->haveHttpHeader('Accept', 'application/json');
         $I->sendAuthenticatedRequest($this->uri, 'POST', $payload);
 
         $I->seeResponseIsJson();
