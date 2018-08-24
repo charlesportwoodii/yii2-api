@@ -79,7 +79,9 @@ $config = [
                     'enabled' => true,
                     'class' => '\yrc\components\log\PsrTarget',
                     'logger' => require $yaml['log']['logger'],
-                    'levels' => ['info', 'error', 'warning'],
+                    'levels' => \array_merge([
+                        'info', 'error', 'warning'
+                    ], YII_DEBUG ? ['trace'] : []),
                     'logVars' => [],
                     'except' => [
                         'yii\web\HttpException:400',
