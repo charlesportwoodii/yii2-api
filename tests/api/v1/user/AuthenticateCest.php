@@ -300,6 +300,7 @@ class AuthenticateCest extends AbstractApiCest
         // Send the hash id of the key we generated, and our public key along with the request
         $I->haveHttpHeader('x-hashid', $key->hash);
         $I->haveHttpHeader('Accept', 'application/vnd.25519+json');
+        $I->haveHttpHeader('Content-Type', 'application/json');
         $I->haveHttpHeader('x-pubkey', $publicKey);
         $I->haveHttpHeader('x-nonce', \base64_encode($nonce));
 
@@ -322,12 +323,12 @@ class AuthenticateCest extends AbstractApiCest
         $nonce = $I->grabHttpHeader('x-nonce');
 
         $r = new Response(
-            sodium_crypto_box_secretkey($boxKp),
-            \base64_decode($pub)
+            sodium_crypto_box_secretkey($boxKp)
         );
 
         $response = $r->decrypt(
             \base64_decode($I->grabResponse()),
+            \base64_decode($pub),
             \base64_decode($nonce)
         );
 
@@ -358,7 +359,65 @@ class AuthenticateCest extends AbstractApiCest
      *
      * @param ApiTester $I
      */
-    public function testAuthenticatewithEncryptedRequestAndEncryptedResponse(\ApiTester $I)
+    public function testAuthenticateWithNcryptf(\ApiTester $I)
+    {
+        // Create a new user
+        $user = $I->register(true);
+
+        // Generate a new encryption key, mocking a request to /api/v1/server/otk
+        $key = EncryptionKey::generate();
+        
+        $boxKp = sodium_crypto_box_keypair();
+
+        // Send the hash id of the key we generated, and our public key along with the request
+        $I->haveHttpHeader('x-hashid', $key->hash);
+        $I->haveHttpHeader('Accept', 'application/vnd.ncryptf+json');
+        $I->haveHttpHeader('Content-Type', 'application/vnd.ncryptf+json');
+        $I->wantTo('Send an encrypted response to authenticate and get an encrypted response back with ncryptf');
+        
+        $request = new Request(
+            sodium_crypto_box_secretkey($boxKp),
+            \base64_decode($I->getTokens()->secret_sign_kp)
+        );
+
+        $payload = \base64_encode($request->encrypt(\json_encode([
+            'email'         => $I->getUser()->email,
+            'password'      => $I->getPassword()
+        ]), $key->getBoxPublicKey()));
+
+        // Send the encrypted response
+        $I->sendPOST($this->uri, $payload);
+
+        // We should get an encrypted HTTP 200 response back
+        $I->seeResponseCodeIs(200);
+
+        $r = new Response(
+            sodium_crypto_box_secretkey($boxKp)
+        );
+
+        $response = $r->decrypt(
+            \base64_decode($I->grabResponse())
+        );
+
+        expect('response is not false', $response)->notEquals(false);
+        $response = \json_decode($response, true);
+        expect('response can be converted into json', \is_array($response))->true();
+
+        expect('response has key [data]', $response)->hasKey('data');
+        expect('response has key [status]', $response)->hasKey('status');
+        expect('response has key [data][access_token]', $response['data'])->hasKey('access_token');
+        expect('response has key [data][refresh_token]', $response['data'])->hasKey('refresh_token');
+        expect('response has key [data][ikm]', $response['data'])->hasKey('ikm');
+        expect('response has key [data][expires_at]', $response['data'])->hasKey('expires_at');
+        expect('response has key [data][signing]', $response['data'])->hasKey('signing');
+    }
+
+    /**
+     * Encrypts the response before sending it to the API for authenticate, then verifies the response itself is encrypted.
+     *
+     * @param ApiTester $I
+     */
+    public function testAuthenticateWithEncryptedRequestAndEncryptedResponse(\ApiTester $I)
     {
         // Create a new user
         $user = $I->register(true);
@@ -368,26 +427,26 @@ class AuthenticateCest extends AbstractApiCest
         
         $boxKp = sodium_crypto_box_keypair();
         $publicKey = \base64_encode(sodium_crypto_box_publickey($boxKp));
-        $nonce = random_bytes(SODIUM_CRYPTO_BOX_NONCEBYTES);
 
         // Send the hash id of the key we generated, and our public key along with the request
         $I->haveHttpHeader('x-hashid', $key->hash);
         $I->haveHttpHeader('Accept', 'application/vnd.25519+json');
         $I->haveHttpHeader('x-pubkey', $publicKey);
         $I->haveHttpHeader('Content-Type', 'application/vnd.25519+json');
-        $I->haveHttpHeader('x-nonce', \base64_encode($nonce));
         $I->wantTo('Send an encrypted response to authenticate and get an encrypted response back');
         
         $request = new Request(
             sodium_crypto_box_secretkey($boxKp),
-            $key->getBoxPublicKey()
+            \base64_decode($I->getTokens()->secret_sign_kp)
         );
 
         $payload = \base64_encode($request->encrypt(\json_encode([
             'email'         => $I->getUser()->email,
             'password'      => $I->getPassword()
-        ]), $nonce));
-
+        ]), $key->getBoxPublicKey(), 1));
+        
+        $I->haveHttpHeader('x-nonce', \base64_encode($request->getNonce()));
+        
         // Send the encrypted response
         $I->sendPOST($this->uri, $payload);
 
@@ -400,12 +459,12 @@ class AuthenticateCest extends AbstractApiCest
         $nonce = $I->grabHttpHeader('x-nonce');
 
         $r = new Response(
-            sodium_crypto_box_secretkey($boxKp),
-            \base64_decode($pub)
+            sodium_crypto_box_secretkey($boxKp)
         );
 
         $response = $r->decrypt(
             \base64_decode($I->grabResponse()),
+            \base64_decode($pub),
             \base64_decode($nonce)
         );
 

@@ -88,9 +88,10 @@ class ApiTester extends \Codeception\Actor
      * @param  string $method  HTTP method
      * @param  array  $payload
      * @param  ncryptf\Request $request
+     * @param int $ncryptfVersion
      * @return void
      */
-    public function sendAuthenticatedRequest($uri, $method, $payload = '', Request $request = null)
+    public function sendAuthenticatedRequest($uri, $method, $payload = '', Request $request = null, string $publicKey = null, int $ncryptfVersion = 2)
     {
         $now = new \DateTime();
 
@@ -110,7 +111,11 @@ class ApiTester extends \Codeception\Actor
             $this->$httpMethod($uri, '');
         } else {
             if ($request !== null) {
-                $payload = \base64_encode($request->encrypt(\json_encode($payload)));
+                $payload = \base64_encode($request->encrypt(
+                    \json_encode($payload), 
+                    $publicKey, 
+                    1
+                ));
 
                 $this->haveHttpHeader('x-nonce', \base64_encode($request->getNonce()));
             }

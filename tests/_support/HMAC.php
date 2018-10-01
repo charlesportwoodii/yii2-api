@@ -29,7 +29,7 @@ final class HMAC
             $tokens['access_token'],
             $tokens['refresh_token'],
             \base64_decode($tokens['ikm']),
-            $tokens['signature'] ?? '',
+            $tokens['secret_sign_kp'] ?? '',
             $tokens['expires_at'] ?? \time() + (60*60*60)
         );
 
@@ -38,7 +38,7 @@ final class HMAC
         }
 
         $auth = new Authorization($method, $uri, $token, $date, $payload);
-        
+
         Yii::info([
             'signature' => $auth->getSignatureString()
         ]);

@@ -19,17 +19,13 @@ class ActivateCest extends AbstractApiCest
         $I->wantTo('verify user cannot be activated with an invalid activation code');
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->haveHttpHeader('Accept', 'application/json');
-        $I->sendPOST(
-            $this->uri,
-            [
+        $I->sendPOST($this->uri, [
                 'activation_code' => 'foo'
-            ]
-        );
+        ]);
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(400);
-        $I->seeResponseMatchesJsonType(
-            [
+        $I->seeResponseMatchesJsonType([
             'data' => 'null',
             'error' => [
                 'message' => [
@@ -37,15 +33,12 @@ class ActivateCest extends AbstractApiCest
                 ]
             ],
             'status' => 'integer'
-            ]
-        );
+        ]);
 
-        $I->seeResponseContainsJson(
-            [
+        $I->seeResponseContainsJson([
             'status' => 400,
             'data' => null,
-            ]
-        );
+        ]);
     }
 
     public function testActivateWithValidToken(\ApiTester $I)
@@ -63,20 +56,16 @@ class ActivateCest extends AbstractApiCest
         $I->wantTo('verify user can be activated with a valid activation code');
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->haveHttpHeader('Accept', 'application/json');
-        $I->sendPOST(
-            $this->uri, [
+        $I->sendPOST($this->uri, [
             'activation_code' => $token
-            ]
-        );
+        ]);
 
         $I->seeResponseIsJson();
         $I->seeResponseCodeIs(200);
 
-        $I->seeResponseContainsJson(
-            [
+        $I->seeResponseContainsJson([
             'status' => 200,
             'data' => true,
-            ]
-        );
+        ]);
     }
 }

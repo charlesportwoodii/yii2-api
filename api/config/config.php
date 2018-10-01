@@ -15,28 +15,12 @@ return \yii\helpers\ArrayHelper::merge($common, [
             'enableCookieValidation' => false,
             'enableCsrfValidation' => false,
             'enableCsrfCookie' => false,
-            'baseUrl' => '/api',
-            'parsers' => [
-                'application/json' => 'yii\web\JsonParser',
-                'application/vnd.25519+json' => 'yrc\web\Json25519Parser'
-            ]
+            'baseUrl' => '/api'
         ],
         'response' => [
-            'class'      => 'yrc\web\Response',
+            'class'      => \yrc\web\Response::class,
             'format'     => \yrc\web\Response::FORMAT_JSON,
-            'charset'    => 'UTF-8',
-            'formatters' => [
-                \yrc\web\Response::FORMAT_JSON25519 => [
-                    'class'         => 'yrc\web\Json25519ResponseFormatter',
-                    'prettyPrint'   => YII_DEBUG,
-                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION,
-                ],
-                \yrc\web\Response::FORMAT_JSON => [
-                    'class'         => 'yrc\web\JsonResponseFormatter',
-                    'prettyPrint'   => YII_DEBUG,
-                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION,
-                ]
-            ],
+            'charset'    => 'UTF-8'
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

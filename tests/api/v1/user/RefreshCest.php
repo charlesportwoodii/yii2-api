@@ -105,14 +105,14 @@ class RefreshCest extends AbstractApiCest
         
         $request = new Request(
             sodium_crypto_box_secretkey($boxKp),
-            $key->getBoxPublicKey()
+            \base64_decode($I->getTokens()->secret_sign_kp)
         );
 
         $payload = [
             'refresh_token' => $I->getTokens()['refresh_token']
         ];
 
-        $I->sendAuthenticatedRequest('/api/v1/user/refresh', 'POST', $payload, $request);
+        $I->sendAuthenticatedRequest('/api/v1/user/refresh', 'POST', $payload, $request, $key->getBoxPublicKey(), 1);
 
         $I->seeResponseCodeIs(200);
 
@@ -122,12 +122,12 @@ class RefreshCest extends AbstractApiCest
         $nonce = $I->grabHttpHeader('x-nonce');
 
         $r = new Response(
-            sodium_crypto_box_secretkey($boxKp),
-            \base64_decode($pub)
+            sodium_crypto_box_secretkey($boxKp)
         );
 
         $response = $r->decrypt(
             \base64_decode($I->grabResponse()),
+            \base64_decode($pub),
             \base64_decode($nonce)
         );
 
