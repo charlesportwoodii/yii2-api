@@ -29,7 +29,7 @@ final class HMAC
             $tokens['access_token'],
             $tokens['refresh_token'],
             \base64_decode($tokens['ikm']),
-            $tokens['secret_sign_kp'] ?? '',
+            \base64_decode($tokens['secret_sign_kp']) ?? '',
             $tokens['expires_at'] ?? \time() + (60*60*60)
         );
 
