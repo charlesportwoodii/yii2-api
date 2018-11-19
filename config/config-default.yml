@@ -40,7 +40,6 @@ access_control:
 log:
   logger: "/var/www/common/config/logs.php"
   level: "\\Monolog\\Logger::DEBUG"
-  log_changes_to_database: false
 
 queue:
   default:

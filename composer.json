@@ -9,7 +9,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "charlesportwoodii/yii2-api-rest-components": "dev-master"
+        "charlesportwoodii/yii2-api-rest-components": "^0.2.0"
     },
     "require-dev": {
         "codeception/codeception": "2.4.1",

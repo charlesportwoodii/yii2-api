@@ -21,7 +21,6 @@ services:
       - mariadb:mariadb
     volumes:
       - ${PWD-.}:/var/www
-      - ${PWD-.}/config/.docker/php/7.2/php-fpm.d/pool.conf:/etc/php/7.2/php-fpm.d/pool.conf
   rpq:
     image: charlesportwoodii/php:7.2
     entrypoint: >
@@ -33,10 +32,9 @@ services:
       - mariadb:mariadb
     volumes:
       - ${PWD-.}:/var/www
-      - ${PWD-.}/config/.docker/php/7.2/php-fpm.d/pool.conf:/etc/php/7.2/php-fpm.d/pool.conf
   redis:
     image: redis:4.0-alpine
-  mailhog: 
+  mailhog:
     image: mailhog/mailhog
     ports:
       - "8025:8025"
