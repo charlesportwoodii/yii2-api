@@ -37,8 +37,8 @@ else
 	docker-compose up -d --remove-orphans
 endif
 	
-	docker-compose exec php /bin/bash -lc "if grep -r 'host.docker.internal' /etc/php/7.2/conf.d/xdebug.ini; then echo 'XDebug Remote host is already defined'; else echo xdebug.remote_host=host.docker.internal | tee -a /etc/php/7.2/conf.d/xdebug.ini; fi"
-	docker-compose exec rpq /bin/bash -lc "rm /etc/php/7.2/conf.d/opcache.ini"
+	docker-compose exec php /bin/bash -lc "if grep -r 'host.docker.internal' /etc/php/7.4/conf.d/xdebug.ini; then echo 'XDebug Remote host is already defined'; else echo xdebug.remote_host=host.docker.internal | tee -a /etc/php/7.4/conf.d/xdebug.ini; fi"
+	docker-compose exec rpq /bin/bash -lc "rm /etc/php/7.4/conf.d/opcache.ini"
 
 test:
 	docker-compose exec php ./vendor/bin/codecept run $(TEST) --html	
